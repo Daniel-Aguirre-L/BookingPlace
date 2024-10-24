@@ -50,8 +50,6 @@ To set up the Rustik application, follow the instructions below for both the bac
    - Open your MySQL client and run the following command:
      ```sql
      CREATE DATABASE rustik;
-     or
-     CREATE SCHEMA `rustik`;
      ```
 
 4. **Run the Spring Boot application**:
