@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -14,17 +16,13 @@ public class Detail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "cabin_id", nullable = false)
-    private Cabin cabin;
+    private Cabin cabin; // Relación con Cabin
 
-    @ManyToMany
-    @JoinTable(
-            name = "detail_feature",
-            joinColumns = @JoinColumn(name = "detail_id"),
-            inverseJoinColumns = @JoinColumn(name = "feature_id")
-    )
-    private List<FeatureList> features; // Esta es la lista de características
+    @ManyToOne
+    @JoinColumn(name = "feature_id", nullable = false)
+    private Feature feature; // Relación con Feature
+
+    private Integer quantity; // Cantidad de la característica
 }

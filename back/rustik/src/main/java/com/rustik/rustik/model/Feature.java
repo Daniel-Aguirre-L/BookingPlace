@@ -9,13 +9,12 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class FeatureList {
+public class Feature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String featureName; // Nombre de la característica
+    private String name; // Nombre de la característica
 
-    @ManyToMany(mappedBy = "features")
-    private List<Detail> details; // Relación inversa con Detail
+
 }

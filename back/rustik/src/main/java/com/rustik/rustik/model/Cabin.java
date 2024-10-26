@@ -3,8 +3,8 @@ package com.rustik.rustik.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,17 +15,15 @@ public class Cabin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @UniqueElements
     private String name;
     private String location;
     private Integer capacity;
     private String description;
-    private String category;
-    private double price;
+    private Double price;
 
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+    private List<Detail> cabinFeatures = new ArrayList<>(); // Relación con CabinFeature
 
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Detail> details;
+    private List<Image> images = new ArrayList<>(); // Relación con Image
 }

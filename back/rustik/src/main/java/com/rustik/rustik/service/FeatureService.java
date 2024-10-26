@@ -1,32 +1,32 @@
 package com.rustik.rustik.service;
 
 
-import com.rustik.rustik.model.FeatureList;
-import com.rustik.rustik.repository.FeatureListRepository;
+import com.rustik.rustik.model.Feature;
+import com.rustik.rustik.repository.FeatureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class FeatureListService {
+public class FeatureService {
 
-    private final FeatureListRepository featureRepository;
+    private final FeatureRepository featureRepository;
 
     @Autowired
-    public FeatureListService(FeatureListRepository featureRepository) {
+    public FeatureService(FeatureRepository featureRepository) {
         this.featureRepository = featureRepository;
     }
 
-    public List<FeatureList> findAll() {
+    public List<Feature> findAll() {
         return featureRepository.findAll();
     }
 
-    public FeatureList findById(Long id) {
+    public Feature findById(Long id) {
         return featureRepository.findById(id).orElse(null);
     }
 
-    public FeatureList save(FeatureList feature) {
+    public Feature save(Feature feature) {
         return featureRepository.save(feature);
     }
 
