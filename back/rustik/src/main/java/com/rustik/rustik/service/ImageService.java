@@ -45,11 +45,15 @@ public class ImageService {
             // Subir el archivo a Cloudinary
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
             String imageUrl = (String) uploadResult.get("url");
+            String imageId  = (String) uploadResult.get("public_id");
 
             // Crear y guardar la entidad Image
             Image image = new Image();
             image.setUrl(imageUrl);
             image.setCabin(cabin);
+            image.setImagePublicId(imageId);
+
+
             return imageRepository.save(image);
         } catch (IOException e) {
             throw new RuntimeException("Error al subir la imagen", e);
@@ -72,6 +76,15 @@ public class ImageService {
     public boolean deleteImage(Long imageId) {
         if (!imageRepository.existsById(imageId)) {
             return false;
+        }
+
+
+        Image imageSelected = imageRepository.findById(imageId).get();
+
+        try {
+            cloudinary.uploader().destroy(imageSelected.getImagePublicId(),ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            throw new RuntimeException("Error al eliminar imagen",e);
         }
         imageRepository.deleteById(imageId);
         return true;
