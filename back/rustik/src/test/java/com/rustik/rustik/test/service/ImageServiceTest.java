@@ -48,6 +48,7 @@ public class ImageServiceTest {
     }
 
     @BeforeEach
+    //Guardo una cabaña en BD para los test
     void cabinSetup(){
         Cabin cabin = new Cabin();
 
@@ -60,20 +61,26 @@ public class ImageServiceTest {
 
     @Test
     @Order(1)
+    //Prueba de guardado de imagen positiva
     public void uploadImage () {
 
-
+        //Configuro el archivo de la imagen cargada en "resources"
         Path path = Paths.get("src/test/resources/test-image.jpeg");
         MultipartFile file;
 
         try {
+            //Creo un archivo Multipartfile con la imagen configurada
             file = new MockMultipartFile("file", "test-image.jpeg", "image/jpeg", Files.readAllBytes(path));
         } catch (IOException e) {
             fail("Failed to read the test image: " + e.getMessage());
             return;
         }
+        //Carlo la imagen a BD
         Image uploadImage = imageService.uploadImage(testCabin.getId(),file);
 
+        //Verifico que la imagen cargada no sea nula,
+        // que la url devuelta por claudinary no este vacia
+        // y que la cabaña asosiada sea la configurada mas arriba.
         assertNotNull(uploadImage);
         assertFalse(uploadImage.getUrl().isEmpty());
         assertEquals(uploadImage.getCabin().getName(),testCabin.getName());
@@ -83,17 +90,22 @@ public class ImageServiceTest {
 
 
     @Test
+    //Prueba de guardado de archivo vacio
     public void uploadEmptyFileImage (){
 
+        //Se crea un archivo multipartFile vacio (0 bytes)
         MultipartFile file = new MockMultipartFile("file", "test-image.jpeg", "image/jpeg", new byte[0]);
 
+        //Se verifica que al intentar guardar ese archivo tira una excepción
         assertThrows(RuntimeException.class,() -> imageService.uploadImage(testCabin.getId(), file));
 
     }
 
     @Test
+    //Prueba de guardado de imagen a una cabaña inexistente
     public void uploadCabinNotFound () {
 
+        //Configuro de forma correcta la imagen (Como en el primer test)
         Path path = Paths.get("src/test/resources/test-image.jpeg");
         MultipartFile file;
 
@@ -104,12 +116,14 @@ public class ImageServiceTest {
             return;
         }
 
+        //Verifico que al asignarlo a una cabaña que no se encuentra en BD tira una excepción.
         assertThrows(RuntimeException.class, () -> imageService.uploadImage(999l,file));
 
     }
 
     @Test
     @Order(2)
+    //Prueba listado de imagenes guardadas
     public void getAllImages () {
 
         List<Image> images = imageService.getAllImages();
@@ -120,6 +134,7 @@ public class ImageServiceTest {
 
     @Test
     @Order(3)
+    //Prueba busqueda de imagen por Id
     public void findById (){
 
         Image image = imageService.findById(1l);
@@ -130,8 +145,10 @@ public class ImageServiceTest {
 
     @Test
     @Order(4)
+    //Prueba eliminación de imagen de BD
     public void deleteImage (){
 
+        //Verifico que al eliminar la imagen con id 1 retorna "true"
         assertTrue(imageService.deleteImage(1l));
     }
 

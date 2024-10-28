@@ -18,7 +18,11 @@ public class Image {
 
     private String url;
 
+    private String imagePublicId;
+
     @ManyToOne // Relación muchos a uno con Cabin
     @JoinColumn(name = "cabin_id", nullable = false)
     private Cabin cabin; // Cabaña asociada
+
+
 }
