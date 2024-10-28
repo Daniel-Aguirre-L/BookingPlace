@@ -6,8 +6,6 @@ import ManageUser from "./Pages/ManageUser";
 import ManageBooking from "./Pages/ManageBooking";
 import ManageCatalog from "./Pages/ManageCatalog";
 import ErrorPage from "./Pages/ErrorPage";
-import './App.css'
-
 
 
 function App() {
