@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/features")
 public class FeatureController {
 
-    private final FeatureService featureService; // Corrección del nombre de la variable
+    private final FeatureService featureService;
 
     @Autowired
     public FeatureController(FeatureService featureService) {
@@ -34,9 +34,9 @@ public class FeatureController {
 
     @PostMapping
     public ResponseEntity<Feature> createFeature(@RequestBody Feature feature) {
-        // Aquí puedes agregar validaciones
+
         Feature savedFeature = featureService.save(feature);
-        return ResponseEntity.status(201).body(savedFeature); // Retorna un estado 201 para recurso creado
+        return ResponseEntity.status(201).body(savedFeature);
     }
 
     @PutMapping("/{id}")
@@ -45,14 +45,14 @@ public class FeatureController {
         if (existingFeature == null) {
             return ResponseEntity.notFound().build();
         }
-        feature.setId(id); // Asegúrate de que el ID sea correcto
+        feature.setId(id);
         Feature updatedFeature = featureService.save(feature);
-        return ResponseEntity.ok(updatedFeature); // Retorna el objeto actualizado
+        return ResponseEntity.ok(updatedFeature);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFeatureList(@PathVariable Long id) {
         featureService.delete(id);
-        return ResponseEntity.noContent().build(); // Retorna un estado 204 para no contenido
+        return ResponseEntity.noContent().build();
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CabinServiceTest {
@@ -24,6 +27,7 @@ public class CabinServiceTest {
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
+        System.setProperty("CLOUDINARY_URL", dotenv.get("CLOUDINARY_URL"));
     }
 
 
@@ -45,7 +49,7 @@ public class CabinServiceTest {
         Cabin cabinSaved= cabinService.save(cabin);
 
         //Se verifica si se le ha agregado el id esperado.
-        Assertions.assertEquals(1l,cabinSaved.getId());
+        assertEquals(1l,cabinSaved.getId());
 
     }
 
@@ -63,7 +67,7 @@ public class CabinServiceTest {
         cabin.setDescription("Cabaña para 6 personas");
         cabin.setPrice(12.0);
 
-        //Se guarad esta segunda cabaña.
+        //Se guarda esta segunda cabaña.
         cabinService.save(cabin);
 
 
@@ -71,7 +75,7 @@ public class CabinServiceTest {
         List<Cabin> cabins = cabinService.findAll();
 
         //Se espera que La lista de cabañas tenga 2 componentes
-        Assertions.assertEquals(2,cabins.size());
+        assertEquals(2,cabins.size());
 
     }
 
@@ -88,7 +92,7 @@ public class CabinServiceTest {
 
 
         // Se verifica que sea el mismo nombre
-        Assertions.assertEquals(nameExpected,cabin.getName());
+        assertEquals(nameExpected,cabin.getName());
 
 
     }
@@ -108,7 +112,7 @@ public class CabinServiceTest {
         List<Cabin> cabinsAfter = cabinService.findAll();
 
         //se verifica que la cantidad de elementos no sea la misma
-        Assertions.assertNotEquals(cabinsBefore.size(),cabinsAfter.size());
+        assertNotEquals(cabinsBefore.size(),cabinsAfter.size());
     }
 
 

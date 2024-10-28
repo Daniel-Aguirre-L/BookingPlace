@@ -24,7 +24,7 @@ public class CabinController {
         this.cabinService = cabinService;
     }
 
-    // Obtener todas las cabañas con sus detalles como DTOs
+
     @GetMapping
     public List<CabinDTO> getAllCabins() {
         return cabinService.findAll().stream()
@@ -32,7 +32,7 @@ public class CabinController {
                 .collect(Collectors.toList());
     }
 
-    // Obtener una cabaña por su ID como DTO
+
     @GetMapping("/{id}")
     public ResponseEntity<CabinDTO> getCabinById(@PathVariable Long id) {
         Cabin cabin = cabinService.findById(id);
@@ -43,7 +43,7 @@ public class CabinController {
         return ResponseEntity.ok(cabinDTO);
     }
 
-    // Crear una nueva cabaña a partir del DTO recibido
+
     @PostMapping
     public ResponseEntity<CabinDTO> createCabin(@RequestBody CabinDTO cabinDTO) {
         Cabin cabin = CabinMapper.toEntity(cabinDTO);
@@ -52,15 +52,13 @@ public class CabinController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
     }
 
-    // Actualizar una cabaña por su ID a partir del DTO recibido
+
     @PutMapping("/{id}")
     public ResponseEntity<CabinDTO> updateCabin(@PathVariable Long id, @RequestBody CabinDTO cabinDTO) {
         Cabin existingCabin = cabinService.findById(id);
         if (existingCabin == null) {
             return ResponseEntity.notFound().build();
         }
-
-        // Actualizar los datos de la cabaña
         cabinDTO.setId(id);
         Cabin updatedCabin = CabinMapper.toEntity(cabinDTO);
         Cabin savedCabin = cabinService.save(updatedCabin);
@@ -69,7 +67,7 @@ public class CabinController {
         return ResponseEntity.ok(savedCabinDTO);
     }
 
-    // Eliminar una cabaña por su ID
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
         cabinService.delete(id);
