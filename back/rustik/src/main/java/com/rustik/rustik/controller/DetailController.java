@@ -2,14 +2,16 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.DetailDTO;
+import com.rustik.rustik.mapper.DetailMapper;
 import com.rustik.rustik.model.Detail;
 import com.rustik.rustik.service.DetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.rustik.rustik.mapper.DetailMapper.toDTO;
 
 @RestController
 @RequestMapping("/api/v1/details")
@@ -27,20 +29,20 @@ public class DetailController {
         // Convertir la lista de detalles a DTOs
         return detailService.findAll()
                 .stream()
-                .map(this::convertToDTO) // Mapeo a DTO
+                .map(DetailMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DetailDTO> getDetailById(@PathVariable Long id) {
         Detail detail = detailService.findById(id);
-        return detail != null ? ResponseEntity.ok(convertToDTO(detail)) : ResponseEntity.notFound().build();
+        return detail != null ? ResponseEntity.ok(toDTO(detail)) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public DetailDTO createDetail(@RequestBody Detail detail) {
         Detail savedDetail = detailService.save(detail);
-        return convertToDTO(savedDetail);
+        return toDTO(savedDetail);
     }
 
     @PutMapping("/{id}")
@@ -49,9 +51,9 @@ public class DetailController {
         if (existingDetail == null) {
             return ResponseEntity.notFound().build();
         }
-        detail.setId(id); // Asegúrate de que el ID sea correcto
+        detail.setId(id);
         Detail updatedDetail = detailService.save(detail);
-        return ResponseEntity.ok(convertToDTO(updatedDetail));
+        return ResponseEntity.ok(toDTO(updatedDetail));
     }
 
     @DeleteMapping("/{id}")
@@ -60,13 +62,4 @@ public class DetailController {
         return ResponseEntity.noContent().build();
     }
 
-    // Método para convertir Detail a DetailDTO
-    private DetailDTO convertToDTO(Detail detail) {
-        DetailDTO dto = new DetailDTO();
-        dto.setId(detail.getId());
-        dto.setFeatureId(detail.getFeature().getId());
-        dto.setFeatureName(detail.getFeature().getName());
-        dto.setQuantity(detail.getQuantity());
-        return dto;
-    }
 }

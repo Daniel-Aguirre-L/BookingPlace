@@ -21,7 +21,7 @@ public class ImageService {
     private final CabinService cabinService; // Para asociar imágenes con cabañas
     private final Cloudinary cloudinary;
 
-    // Inyección de dependencias a través del constructor
+
     @Autowired
     public ImageService(ImageRepository imageRepository, CabinService cabinService, Cloudinary cloudinary) {
         this.imageRepository = imageRepository;
@@ -58,17 +58,17 @@ public class ImageService {
         }
     }
 
-    // Método para obtener todas las imágenes
+
     public List<Image> getAllImages() {
         return imageRepository.findAll();
     }
 
-    // Obtener una imagen por su ID
+
     public Image findById(Long id) {
         return imageRepository.findById(id).orElse(null);
     }
 
-    // Eliminar una imagen por su ID
+
     public boolean deleteImage(Long imageId) {
         if (!imageRepository.existsById(imageId)) {
             return false;

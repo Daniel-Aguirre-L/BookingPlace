@@ -1,9 +1,9 @@
 package com.rustik.rustik.mapper;
+
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.DetailDTO;
-import com.rustik.rustik.dto.ImageDTO; // Asegúrate de importar tu ImageDTO
+import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.model.Cabin;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +57,6 @@ public class CabinMapper {
         cabin.setDescription(dto.getDescription());
         cabin.setPrice(dto.getPrice());
 
-        // Aquí podrías agregar la conversión de los detalles y las imágenes si lo necesitas
         return cabin;
     }
 }

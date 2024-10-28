@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-
 
 @Entity
 @Data
@@ -24,5 +21,5 @@ public class Detail {
     @JoinColumn(name = "feature_id", nullable = false)
     private Feature feature; // Relación con Feature
 
-    private Integer quantity; // Cantidad de la característica
+    private Integer quantity;
 }

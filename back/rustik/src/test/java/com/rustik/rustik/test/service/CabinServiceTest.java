@@ -27,6 +27,7 @@ public class CabinServiceTest {
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
+        System.setProperty("CLOUDINARY_URL", dotenv.get("CLOUDINARY_URL"));
     }
 
 
@@ -66,7 +67,7 @@ public class CabinServiceTest {
         cabin.setDescription("Cabaña para 6 personas");
         cabin.setPrice(12.0);
 
-        //Se guarad esta segunda cabaña.
+        //Se guarda esta segunda cabaña.
         cabinService.save(cabin);
 
 
