@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./Pages/Home"
+
 import AdminPanel from "./Pages/AdminPanel";
 import CatalogDetail from "./Pages/CatalogDetail";
 import ManageUser from "./Pages/ManageUser";
 import ManageBooking from "./Pages/ManageBooking";
 import ManageCatalog from "./Pages/ManageCatalog";
 import ErrorPage from "./Pages/ErrorPage";
+import Home from "./Pages/Home";
 
 
 function App() {
