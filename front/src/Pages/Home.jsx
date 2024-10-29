@@ -28,10 +28,8 @@ const Home = () => {
 
     return (
         <>
-            <Navbar />
             <CatalogList />
             <h1 className="text-3xl font-bold underline text-red-700 h-screen " >prueba Tailwind</h1>
-            <Footer />
         </>
     )
 }
