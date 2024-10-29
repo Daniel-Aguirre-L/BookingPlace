@@ -2,3 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background-dark: #0c1123;
+  --primary-color: #088395;
+  --secondary-color: #fbffbd;
+  --light-text: #eeeeee;
+  --dark-text: #595858;
+  --background-light: #dedede;
+}
+
+.card {
+  background: rgb(12, 17, 35);
+  background: linear-gradient(
+      0deg,
+      rgba(12, 17, 35, 0.85) 0%,
+      rgba(0, 0, 0, 0) 80%
+    ),
+    url("./img/card.png");
+}
