@@ -33,4 +33,8 @@ public class CabinService {
     public void delete(Long id) {
         cabinRepository.deleteById(id);
     }
+
+    public void saveCabins(List<Cabin> cabins) {
+        cabinRepository.saveAll(cabins);
+    }
 }
