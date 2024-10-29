@@ -42,8 +42,9 @@ public class ImageService {
                 throw new IllegalArgumentException("Cabaña no encontrada");
             }
 
+            Map<String,Object> uploadParams = ObjectUtils.asMap("folder", "cabin "+ cabinId);
             // Subir el archivo a Cloudinary
-            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), uploadParams);
             String imageUrl = (String) uploadResult.get("url");
             String imageId  = (String) uploadResult.get("public_id");
 

@@ -65,12 +65,13 @@ public class ImageServiceTest {
     public void uploadImage () {
 
         //Configuro el archivo de la imagen cargada en "resources"
-        Path path = Paths.get("src/test/resources/test-image.jpeg");
+        //Path path = Paths.get("src/test/resources/test-image.jpeg");
+        Path path = Paths.get("D:\\Proyecto Integrador\\Fotos\\c2\\1.jpeg");
         MultipartFile file;
 
         try {
             //Creo un archivo Multipartfile con la imagen configurada
-            file = new MockMultipartFile("file", "test-image.jpeg", "image/jpeg", Files.readAllBytes(path));
+            file = new MockMultipartFile("file", "1.jpeg", "image/jpeg", Files.readAllBytes(path));
         } catch (IOException e) {
             fail("Failed to read the test image: " + e.getMessage());
             return;

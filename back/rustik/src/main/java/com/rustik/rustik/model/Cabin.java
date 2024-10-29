@@ -26,4 +26,14 @@ public class Cabin {
 
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>(); // Relación con Image
+
+
+    //Se crea constructor especifico para data inicial manual.
+    public Cabin(String name, String location, Integer capacity, String description, Double price) {
+        this.name = name;
+        this.location = location;
+        this.capacity = capacity;
+        this.description = description;
+        this.price = price;
+    }
 }
