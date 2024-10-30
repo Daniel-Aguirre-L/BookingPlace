@@ -1,6 +1,5 @@
-import Navbar from "../Components/Navbar";
-import CatalogList from "../Components/CatalogList";
-import Footer from "../Components/Footer";
+import Landing from "../Components/Landing";
+import Headline from "../Components/Headline";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
@@ -21,12 +20,12 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
-      <CatalogList />
-      <h1 className="text-3xl font-bold underline text-red-700 h-screen ">
-        prueba Tailwind
-      </h1>
-      <Footer />
+      <Landing></Landing>
+      <Headline title="Lo mas visitado">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
+        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      </Headline>
     </>
   );
 };

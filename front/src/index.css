@@ -11,6 +11,14 @@
   --background-light: #dedede;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-dark);
+  color: var(--light-text);
+}
+
 .card {
   background: rgb(12, 17, 35);
   background: linear-gradient(
@@ -19,4 +27,22 @@
       rgba(0, 0, 0, 0) 80%
     ),
     url("./img/card.png");
+}
+
+.landing {
+  background: rgb(12, 17, 35);
+  background: linear-gradient(
+      0deg,
+      rgba(12, 17, 35, 1) 0%,
+      rgba(0, 0, 0, 0) 30%
+    ),
+    url("./img/landing.png");
+  background-size: cover;
+}
+
+.alignAbsolute {
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin-block: auto;
 }
