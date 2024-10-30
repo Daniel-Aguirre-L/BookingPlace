@@ -2,7 +2,7 @@ import React from "react";
 
 function Headline({ title, children }) {
   return (
-    <div className="relative mx-[8rem] flex flex-col my-[7rem]">
+    <div className="relative pageMargin flex flex-col my-[7rem]">
       <h2 className="text-[2.65rem] text-primary-color font-semibold">
         {title}
       </h2>

@@ -27,6 +27,7 @@ body {
       rgba(0, 0, 0, 0) 80%
     ),
     url("./img/card.png");
+  background-size: cover;
 }
 
 .landing {
@@ -45,4 +46,8 @@ body {
   bottom: 0;
   height: fit-content;
   margin-block: auto;
+}
+
+.pageMargin {
+  margin-inline: 13rem;
 }
