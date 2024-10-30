@@ -2,9 +2,12 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.CabinDTO;
+import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
+import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
+import com.rustik.rustik.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +21,12 @@ import java.util.stream.Collectors;
 public class CabinController {
 
     private final CabinService cabinService;
+    private final ImageService imageService;
 
     @Autowired
-    public CabinController(CabinService cabinService) {
+    public CabinController(CabinService cabinService, ImageService imageService) {
         this.cabinService = cabinService;
+        this.imageService = imageService;
     }
 
 
@@ -43,15 +48,31 @@ public class CabinController {
         return ResponseEntity.ok(cabinDTO);
     }
 
-
-    @PostMapping
-    public ResponseEntity<CabinDTO> createCabin(@RequestBody CabinDTO cabinDTO) {
-        Cabin cabin = CabinMapper.toEntity(cabinDTO);
-        Cabin savedCabin = cabinService.save(cabin);
-        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
+    @GetMapping("/random")
+    //Llama 10 cabañas random con su priemra imagen
+    public ResponseEntity<List<CabinDTO>> getRandomCabins(@RequestParam(defaultValue = "10") int count) {
+        List<CabinDTO> randomCabins = cabinService.getRandomCabins(count);
+        return ResponseEntity.ok(randomCabins);
     }
 
+    @PostMapping
+    public ResponseEntity<CabinDTO> createCabin(@ModelAttribute CabinDTO cabinDTO) {
+        // Validar que se hayan subido al menos 5 imágenes
+        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
+            return ResponseEntity.badRequest().body(null); //
+        }
+
+        // Guardar cabaña sin imágenes
+        Cabin cabin = CabinMapper.toEntity(cabinDTO);
+        Cabin savedCabin = cabinService.save(cabin);
+
+        // Subir imágenes y obtener URLs
+        List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
+        savedCabin.setImages(imageUrls);
+        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<CabinDTO> updateCabin(@PathVariable Long id, @RequestBody CabinDTO cabinDTO) {
