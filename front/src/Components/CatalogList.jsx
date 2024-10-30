@@ -1,6 +1,6 @@
-const CatalogList = () => {
+const CatalogList = ()=> {
     return (
-        <h1>Lista de Cabañas</h1>
+        <h1>lista de la cabaña</h1>
     )
 }
 

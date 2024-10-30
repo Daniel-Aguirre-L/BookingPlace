@@ -4,6 +4,7 @@ import Footer from "../Components/Footer";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
+import CatalogDetail from "./CatalogDetail";
 
 
 
@@ -30,7 +31,11 @@ const Home = () => {
         <>
             <CatalogList />
             <h1 className="text-3xl font-bold underline text-red-700 h-screen " >prueba Tailwind</h1>
+            <CatalogDetail/>
+            
         </>
+
+       
     )
 }
 
