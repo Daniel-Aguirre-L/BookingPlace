@@ -5,7 +5,7 @@ import DisplayCard from "../Components/DisplayCard";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-import CatalogList from "../Components/CatalogList";
+
 
 const Home = () => {
   // Ejemplo del uso de rustikApi para hacer llamados al BACK
