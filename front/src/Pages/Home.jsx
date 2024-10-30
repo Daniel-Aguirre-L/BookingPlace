@@ -1,13 +1,7 @@
-import Navbar from "../Components/Navbar"
-import CatalogList from "../Components/CatalogList";
-import Footer from "../Components/Footer";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-
-
-
-
+import CatalogList from "../Components/CatalogList";
 
 const Home = () => {
 
@@ -29,7 +23,6 @@ const Home = () => {
     return (
         <>
             <CatalogList />
-            <h1 className="text-3xl font-bold underline text-red-700 h-screen " >prueba Tailwind</h1>
         </>
     )
 }
