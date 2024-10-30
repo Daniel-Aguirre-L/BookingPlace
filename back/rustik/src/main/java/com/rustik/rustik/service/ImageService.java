@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 public class ImageService {
 
     private final ImageRepository imageRepository;
-    private final CabinService cabinService; // Para asociar imágenes con cabañas
+    private final CabinService cabinService;
     private final Cloudinary cloudinary;
 
 
@@ -63,16 +64,45 @@ public class ImageService {
         }
     }
 
+    public List<Image> uploadImages(Long cabinId, List<MultipartFile> files) {
+        List<Image> imageUrls = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                try {
+                    // Sube la imagen a Cloudinary
+                    Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                            ObjectUtils.asMap("folder", "cabin " + cabinId));
+                    String url = (String) uploadResult.get("url");
+
+                    // Crea un objeto Image y guarda la URL en la base de datos
+                    Image image = new Image();
+                    image.setUrl(url);
+                    image.setImagePublicId((String) uploadResult.get("public_id")); // Guarda el ID público si lo necesitas
+
+                    // Establece la cabaña
+                    Cabin cabin = new Cabin();
+                    cabin.setId(cabinId);
+                    image.setCabin(cabin); // Asocia la imagen a la cabaña
+
+                    imageUrls.add(imageRepository.save(image)); // Guarda la imagen en la base de datos
+                    System.out.println(imageUrls.get(0));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return imageUrls;
+    }
 
     public List<Image> getAllImages() {
         return imageRepository.findAll();
     }
 
-
     public Image findById(Long id) {
         return imageRepository.findById(id).orElse(null);
     }
-
 
     public boolean deleteImage(Long imageId) {
         if (!imageRepository.existsById(imageId)) {
