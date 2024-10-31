@@ -11,9 +11,11 @@ function ImageCard({ src }) {
 
 function DisplayCard() {
   return (
-    <section className="pageMargin relative grid grid-cols-2 gap-6 mb-10">
+    <section className="pageMargin relative grid grid-cols-2 gap-6 mb-10 max-xl:grid-cols-1 max-xl:max-w-[600px] justify-self-center">
       <div className="relative bg-primary-color rounded-[1.2rem] p-8 flex flex-col">
-        <h2 className="text-[2.5rem] font-bold mb-10">Snow Cottage</h2>
+        <h2 className="text-[2.5rem] font-bold mb-10 montserrat">
+          Snow Cottage
+        </h2>
         <p>
           Traveling is a unique experience as it's the best way to unplug from
           the pushes and pulls of daily life. It helps us to forget about our
@@ -21,13 +23,13 @@ function DisplayCard() {
           experience life in different ways. We explore new places, cultures,
           cuisines, traditions, and ways of living.
         </p>
-        <span className="absolute mt-6 mr-6 flex p-2 rounded-[0.6rem] flex-col justify-center items-center w-fit top-0 right-0 bg-secondary-color text-black">
+        <span className="absolute mt-6 mr-6 flex p-2 rounded-[0.6rem] flex-col justify-center items-center w-fit top-0 right-0 bg-secondary-color text-black montserrat">
           <p className="w-fit text-[1.1rem]">From</p>
           <h2 className="text-[1.5rem] bottom-1 right-0 font-semibold w-fit">
             $700
           </h2>
         </span>
-        <button className="bottom-0 text-[1.2rem] bg-secondary-color text-background-dark h-12 rounded-[0.6rem] font-semibold mt-10">
+        <button className="justify-self-end bottom-0 text-[1.2rem] bg-secondary-color text-background-dark h-12 rounded-[0.6rem] font-semibold mt-10">
           Reserva
         </button>
       </div>

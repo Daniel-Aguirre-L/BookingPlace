@@ -5,19 +5,15 @@ import Navbar from "../Components/Navbar";
 // className="grid min-h-screen grid-rows-[auto 1fr auto]"
 // style={{ display: "grid", gridTemplateRows: "auto 1fr auto", minHeight: "100vh" }}
 const Layout = () => {
-    return (
-        <div className='grid grid-rows-[auto_1fr_auto] min-h-screen max-w-[1440px] mx-auto'>
-          <header className="w-full" >
-            <Navbar />
-          </header>
-          <main className="w-full" >
-            <Outlet />
-          </main>
-          <footer className="w-full" >
-            <Footer />
-          </footer>
-        </div>
-    )
-}
+  return (
+    <div className="flex flex-col justify-center">
+      <Navbar />
+      <main className="self-center max-w-[1600px]">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
 export default Layout;

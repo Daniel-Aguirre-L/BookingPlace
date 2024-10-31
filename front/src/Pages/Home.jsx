@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
 
-
 const Home = () => {
   // Ejemplo del uso de rustikApi para hacer llamados al BACK
   useEffect(() => {
@@ -24,13 +23,13 @@ const Home = () => {
   return (
     <>
       <Landing></Landing>
-      <Headline title="Lo mas visitado">
+      <Headline title="Nuestras Cabañas">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <CatalogList></CatalogList>
-      <Headline title="El mas reservado">
+      <Headline title="El más reservado">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
