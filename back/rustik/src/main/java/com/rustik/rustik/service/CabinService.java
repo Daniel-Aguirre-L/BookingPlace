@@ -52,12 +52,14 @@ public class CabinService {
                 .limit(count)
                 .collect(Collectors.toList());
 
+        System.out.println(randomCabins.get(0).getImages().size());
+
         return randomCabins.stream()
                 .map(cabin -> {
                     CabinDTO dto = CabinMapper.toDTO(cabin);
-                    if (!cabin.getImages().isEmpty()) {
+                    /*if (!cabin.getImages().isEmpty()) {
                         dto.setImages(Collections.singletonList(new ImageDTO(cabin.getImages().get(0).getUrl())));
-                    }
+                    }*/
                     return dto;
                 }).collect(Collectors.toList());
     }

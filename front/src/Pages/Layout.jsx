@@ -7,7 +7,9 @@ import Navbar from "../Components/Navbar";
 const Layout = () => {
   return (
     <div className="flex flex-col justify-center">
-      <Navbar />
+      <div className="sticky top-0 bg-opacity-70 bg-background-dark " >
+        <Navbar />
+      </div>
       <main className="self-center max-w-[1600px]">
         <Outlet />
       </main>

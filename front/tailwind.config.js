@@ -11,7 +11,12 @@ export default {
         "dark-text": "#595858",
         "background-light": "#dedede",
       },
+      fontFamily: {
+        'montserrat': ['Montserrat', 'sans-serif'],
+        'roboto': ['Roboto', 'sans-serif'],
+      }
     },
   },
+
   plugins: [],
 };

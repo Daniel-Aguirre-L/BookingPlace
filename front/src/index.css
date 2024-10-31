@@ -16,27 +16,12 @@
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--background-dark);
-  color: var(--light-text);
-  font-family: Roboto;
+  @apply bg-background-dark text-light-text m-0 p-0 font-roboto ;
 }
 
 .montserrat,
 button {
-  font-family: Montserrat;
-}
-
-.card {
-  background: rgb(12, 17, 35);
-  background: linear-gradient(
-      0deg,
-      rgba(12, 17, 35, 0.85) 0%,
-      rgba(0, 0, 0, 0) 80%
-    ),
-    url("./img/card.png");
-  background-size: cover;
+  @apply font-montserrat;
 }
 
 .landing {
