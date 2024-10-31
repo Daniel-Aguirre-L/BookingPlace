@@ -11,6 +11,9 @@ export default {
         "dark-text": "#595858",
         "background-light": "#dedede",
       },
+      width: {
+        '600': '37.5rem',
+      }
     },
   },
   plugins: [],
