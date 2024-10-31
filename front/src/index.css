@@ -1,4 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background-dark: #0c1123;
+  --primary-color: #088395;
+  --secondary-color: #fbffbd;
+  --light-text: #eeeeee;
+  --dark-text: #595858;
+  --background-light: #dedede;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-dark);
+  color: var(--light-text);
+  font-family: Roboto;
+}
+
+.montserrat,
+button {
+  font-family: Montserrat;
+}
+
+.card {
+  background: rgb(12, 17, 35);
+  background: linear-gradient(
+      0deg,
+      rgba(12, 17, 35, 0.85) 0%,
+      rgba(0, 0, 0, 0) 80%
+    ),
+    url("./img/card.png");
+  background-size: cover;
+}
+
+.landing {
+  background: rgb(12, 17, 35);
+  background: linear-gradient(
+      0deg,
+      rgba(12, 17, 35, 1) 0%,
+      rgba(0, 0, 0, 0) 30%
+    ),
+    url("./img/landing.png");
+  background-size: cover;
+}
+
+.alignAbsolute {
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin-block: auto;
+}
+
+.pageMargin {
+  margin-inline: 6rem;
+}
+
+@media not all and (min-width: 640px) {
+  .pageMargin {
+    margin-inline: 3rem;
+  }
+}

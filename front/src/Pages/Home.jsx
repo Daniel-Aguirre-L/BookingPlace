@@ -1,11 +1,10 @@
-
+import Landing from "../Components/Landing";
 import Headline from "../Components/Headline";
 import CatalogList from "../Components/CatalogList";
 import DisplayCard from "../Components/DisplayCard";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-
 
 const Home = () => {
   // Ejemplo del uso de rustikApi para hacer llamados al BACK
