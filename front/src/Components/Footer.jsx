@@ -8,9 +8,9 @@ const Footer = () => {
           className="mx-auto my-0"
         />
         <div className="flex justify-center gap-5">
-          <img src="/Icons/Vector.svg" alt="instagram" />
-          <img src="/Icons/Vector(1).svg" alt="facebook" />
-          <img src="/Icons/Vector(2).svg" alt="x" />
+            <a target="_blank" href="https://instagram.com"><img src="/Icons/Vector.svg" alt="instagram" /></a>
+            <a target="_blank"  href="https://facebook.com"><img src="/Icons/Vector(1).svg" alt="facebook" /></a>
+            <a target="_blank" href="https://x.com"><img src="/Icons/Vector(2).svg" alt="x" /></a>
         </div>
         <div className="flex justify-center gap-12">
           <span>About us</span>
