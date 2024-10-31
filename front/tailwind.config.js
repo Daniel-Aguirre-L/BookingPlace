@@ -15,6 +15,9 @@ export default {
         'montserrat': ['Montserrat', 'sans-serif'],
         'roboto': ['Roboto', 'sans-serif'],
       }
+      width: {
+        '600': '37.5rem',
+      }
     },
   },
 
