@@ -8,6 +8,7 @@ import ManageBooking from "./Pages/ManageBooking";
 import ManageCatalog from "./Pages/ManageCatalog";
 import ErrorPage from "./Pages/ErrorPage";
 import Layout from "./Pages/Layout";
+import { routeList } from "./helpers/routeList";
 
 
 
@@ -17,12 +18,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element= {<Layout />} >
-          <Route path="/" element={<Home />} />
-          <Route path="/catalogo/:id" element={<CatalogDetail />} />
-          <Route path="/administracion" element={<AdminPanel />} />
-          <Route path="/administracion/usuarios" element={<ManageUser />} />
-          <Route path="/administracion/reservas" element={<ManageBooking />} />
-          <Route path="/administracion/catalogo" element={<ManageCatalog />} />
+          <Route path={routeList.HOME} element={<Home />} />
+          <Route path={`${routeList.CATALOG_DETAIL}/:id`} element={<CatalogDetail />} />
+          <Route path={routeList.ADMIN_PANEL} element={<AdminPanel />} />
+          <Route path={routeList.USERS} element={<ManageUser />} />
+          <Route path={routeList.BOOKINGS} element={<ManageBooking />} />
+          <Route path={routeList.CATALOGS} element={<ManageCatalog />} />
         </Route> 
         <Route path="*" element= {<ErrorPage />} />
       </Routes>

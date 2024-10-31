@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="[100vw] bg-slate-50">
+    <footer className="bg-slate-50 w-full ">
       <section className="bg-[#088395] text-center flex justify-center flex-col gap-7 px-2.5 py-5 text-[#EEEEEEEE]">
         <img
           src="/Icons/Group 46.svg"

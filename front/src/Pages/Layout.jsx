@@ -6,14 +6,17 @@ import Navbar from "../Components/Navbar";
 // style={{ display: "grid", gridTemplateRows: "auto 1fr auto", minHeight: "100vh" }}
 const Layout = () => {
   return (
-    <div className="flex flex-col justify-center">
-      <div className="sticky top-0 bg-opacity-70 bg-background-dark " >
+    <div className="flex flex-col items-center w-screen">
+      <header className="w-full sticky top-0 bg-opacity-70 bg-background-dark z-50 max-w-[1600px]" >
         <Navbar />
-      </div>
+      </header>
       <main className="self-center max-w-[1600px]">
         <Outlet />
       </main>
-      <Footer />
+      <div className="max-w-[1600px] flex w-full">
+        <Footer />
+      </div>
+      
     </div>
   );
 };
