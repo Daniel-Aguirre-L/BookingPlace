@@ -43,6 +43,5 @@ function DisplayCard() {
   );
 }
 
-export default DisplayCard;
 
 export default DisplayCard;
