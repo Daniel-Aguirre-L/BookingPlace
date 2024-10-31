@@ -11,7 +11,7 @@ const CatalogDetail = () => {
             "https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80",
             "https://images.unsplash.com/photo-1560393464-5c69a73c5770?ixlib=rb-1.2.1&auto=format&fit=crop&w=765&q=80",
         ],
-        comments: 23,
+        
     };
 
     return (
