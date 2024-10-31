@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const images = [
@@ -10,24 +10,19 @@ const images = [
 ];
 
 const Catalog = () => {
-    const [showAllImages, setShowAllImages] = useState(false);
     const navigate = useNavigate();
-
-    const toggleImages = () => {
-        setShowAllImages(!showAllImages);
-    };
 
     return (
         <div className="w-full p-6 mx-auto">
             <div className="flex items-center mb-4">
                 <button onClick={() => navigate('/')} className="flex items-center text-secondary">
-                    <img src="/Icons/arrowleft.svg" alt="Volver" className="mr-2" />
+                    <img src="/Icons/arrowleft.svg" alt="Snow Cottage" className="mr-2" />
                     <span className="text-white">Snow Cottage</span>
                 </button>
             </div>
             <div className="relative bg-white overflow-hidden">
                 <div className="grid grid-cols-2 gap-2">
-                    {/* Imggrande */}
+                    {/* Imgrande */}
                     <div className="h-96 overflow-hidden rounded-[1.2rem]">
                         <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[0].url} alt={`Cabin ${images[0].id}`} />
                     </div>
@@ -71,7 +66,7 @@ const Catalog = () => {
                         <span className="border border-[#FBFFBD] text-[#088395] font-semibold p-2 rounded mr-2">
                             4.2
                         </span>
-                        <span className="text-[#EEEEEE]">Very Good</span>
+                        <span className="text-[#EEEEEE]">Very Good </span>
                         <span className="text-[#088395] ml-2">371 reviews</span>
                     </div>
                 </div>

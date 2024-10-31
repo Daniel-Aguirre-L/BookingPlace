@@ -1,42 +1,43 @@
-import Navbar from "../Components/Navbar"
+
+import Headline from "../Components/Headline";
 import CatalogList from "../Components/CatalogList";
-import Footer from "../Components/Footer";
+import DisplayCard from "../Components/DisplayCard";
 import { useEffect } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-import CatalogDetail from "./CatalogDetail";
-
-
-
 
 
 const Home = () => {
+  // Ejemplo del uso de rustikApi para hacer llamados al BACK
+  useEffect(() => {
+    const apicall = async () => {
+      try {
+        const { data } = await rustikApi.get(rustikEndpoints.cabins);
+        console.log("Llamado exitoso a la api", data);
+      } catch (error) {
+        console.error("Error al llamar a la api", error);
+      }
+    };
+    apicall();
+  }, []);
 
-
-    // Ejemplo del uso de rustikApi para hacer llamados al BACK
-    useEffect(() => {
-        const apicall = async () => {
-            try {
-                const { data } = await rustikApi.get(rustikEndpoints.cabins);
-                console.log("Llamado exitoso a la api", data);
-            } catch (error) {
-                console.error("Error al llamar a la api", error);
-            }
-        }
-        apicall();
-
-    }, [])
-
-    return (
-        <>
-            <CatalogList />
-            <h1 className="text-3xl font-bold underline text-red-700 h-screen " >prueba Tailwind</h1>
-            <CatalogDetail/>
-            
-        </>
-
-       
-    )
-}
+  return (
+    <>
+      
+      <Headline title="Lo mas visitado" id={7}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
+        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      </Headline>
+      <CatalogList></CatalogList>
+      <Headline title="El mas reservado" id={1}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
+        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      </Headline>
+      <DisplayCard></DisplayCard>
+    </>
+  );
+};
 
 export default Home;
