@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
 public class InitialData implements ApplicationRunner {
 
