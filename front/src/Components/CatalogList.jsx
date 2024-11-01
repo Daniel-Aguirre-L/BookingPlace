@@ -48,7 +48,7 @@ const CatalogList = ({ myCabins, page, handleShowMore }) => {
         {
           myCabins && myCabins.map(({ id, name, description, price, images }) => (
             <Card key={id} title={name} price={price} images={images} id={id} >
-              {description}
+              {`${description.slice(0, 100)}`.slice(0, 37)}{description.length > 35 && '...'}
             </Card>
           ))
         }

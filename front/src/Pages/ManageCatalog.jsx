@@ -44,7 +44,7 @@ const ManageCatalog = () => {
 
     return (
         <div >
-            <div className="container w-screen " style={{ filter: isModalOpen ? "blur(10px)" : "blur(0px)" }} >
+            <div className="container w-screen px-5" style={{ filter: isModalOpen ? "blur(10px)" : "blur(0px)" }} >
                 <div className="py-8">
                     <div>
                         <h2 className="text-2xl font-semibold leading-tight">Mis cabañas</h2>
