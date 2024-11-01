@@ -28,6 +28,7 @@ public class CabinServiceTest {
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
         System.setProperty("DB_URL", dotenv.get("DB_URL"));
         System.setProperty("CLOUDINARY_URL", dotenv.get("CLOUDINARY_URL"));
+        System.setProperty("CORS", dotenv.get("CORS"));
     }
 
 
@@ -49,7 +50,7 @@ public class CabinServiceTest {
         Cabin cabinSaved= cabinService.save(cabin);
 
         //Se verifica si se le ha agregado el id esperado.
-        assertEquals(1l,cabinSaved.getId());
+        assertEquals(21l,cabinSaved.getId());
 
     }
 
@@ -61,7 +62,7 @@ public class CabinServiceTest {
 
         Cabin cabin = new Cabin();
         //Se define una nueva cabaña.
-        cabin.setName("cabaña 2");
+        cabin.setName("cabaña 22");
         cabin.setLocation("cordoba");
         cabin.setCapacity(6);
         cabin.setDescription("Cabaña para 6 personas");
@@ -75,7 +76,7 @@ public class CabinServiceTest {
         List<Cabin> cabins = cabinService.findAll();
 
         //Se espera que La lista de cabañas tenga 2 componentes
-        assertEquals(2,cabins.size());
+        assertEquals(22,cabins.size());
 
     }
 
@@ -85,10 +86,10 @@ public class CabinServiceTest {
     public void findById(){
 
         //Se trae la cabaña con id=2
-        Cabin cabin = cabinService.findById(2l);
+        Cabin cabin = cabinService.findById(22l);
 
         //Se indica el nombre que deberia tener la casbaña con id 2
-        String nameExpected = "cabaña 2";
+        String nameExpected = "cabaña 22";
 
 
         // Se verifica que sea el mismo nombre
@@ -102,11 +103,11 @@ public class CabinServiceTest {
     //Prueba de eliminación de cabaña de BD
     public void deleteCabin() {
 
-        //Primero se verifica que sean 2 cabañas en BD
+        //Primero se verifica que sean 22 cabañas en BD
         List<Cabin> cabinsBefore = cabinService.findAll();
 
-        //Se elimina la cabaña con id 2
-        cabinService.delete(2l);
+        //Se elimina la cabaña con id 22
+        cabinService.delete(22l);
 
         //Se trae la nueva lista de cabañas en BD
         List<Cabin> cabinsAfter = cabinService.findAll();

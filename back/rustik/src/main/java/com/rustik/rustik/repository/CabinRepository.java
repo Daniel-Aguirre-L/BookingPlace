@@ -8,5 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CabinRepository extends JpaRepository<Cabin, Long> {
+
     List<Cabin> findAll();
+
+    boolean existsByName (String name);
 }

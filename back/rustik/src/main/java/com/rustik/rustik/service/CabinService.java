@@ -7,8 +7,10 @@ import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.repository.CabinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +34,13 @@ public class CabinService {
     }
 
     public Cabin save(Cabin cabin) {
-        return cabinRepository.save(cabin);
+
+        try {
+            return cabinRepository.save(cabin);
+        } catch (DataIntegrityViolationException e){
+            throw new RuntimeException("Nombre de cabaña ya existe");
+        }
+
     }
 
     public void delete(Long id) {
@@ -40,6 +48,7 @@ public class CabinService {
     }
 
     public void saveCabins(List<Cabin> cabins) {
+
         cabinRepository.saveAll(cabins);
     }
 
@@ -62,5 +71,9 @@ public class CabinService {
                     }*/
                     return dto;
                 }).collect(Collectors.toList());
+    }
+
+    public Boolean cabinExistByName (String name){
+        return cabinRepository.existsByName(name);
     }
 }

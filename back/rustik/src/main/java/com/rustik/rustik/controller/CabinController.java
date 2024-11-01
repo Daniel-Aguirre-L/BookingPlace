@@ -8,6 +8,7 @@ import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,34 +58,58 @@ public class CabinController {
     @PostMapping
     public ResponseEntity<CabinDTO> createCabin(@ModelAttribute CabinDTO cabinDTO) {
         // Validar que se hayan subido al menos 5 imágenes
-        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
+        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5 || cabinService.cabinExistByName(cabinDTO.getName())) {
             return ResponseEntity.badRequest().body(null); //
         }
 
         // Guardar cabaña sin imágenes
         Cabin cabin = CabinMapper.toEntity(cabinDTO);
-        Cabin savedCabin = cabinService.save(cabin);
 
-        // Subir imágenes y obtener URLs
-        List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
-        savedCabin.setImages(imageUrls);
-        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
+            Cabin savedCabin = cabinService.save(cabin);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
+
+            // Subir imágenes y obtener URLs
+            List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
+            savedCabin.setImages(imageUrls);
+            CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
+
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CabinDTO> updateCabin(@PathVariable Long id, @RequestBody CabinDTO cabinDTO) {
+    public ResponseEntity<CabinDTO> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
+
         Cabin existingCabin = cabinService.findById(id);
         if (existingCabin == null) {
             return ResponseEntity.notFound().build();
         }
-        cabinDTO.setId(id);
-        Cabin updatedCabin = CabinMapper.toEntity(cabinDTO);
-        Cabin savedCabin = cabinService.save(updatedCabin);
-        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
+        if( cabinService.cabinExistByName(cabinDTO.getName())){
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.ok(savedCabinDTO);
+        System.out.println(cabinDTO.toString());
+
+
+        cabinDTO.setId(id);
+
+        Cabin updateCabin = CabinMapper.toExtingEntity(cabinDTO,existingCabin);
+
+        if (cabinDTO.getImagesToUpload().size()>0){
+            imageService.uploadImages(id, cabinDTO.getImagesToUpload());
+        }
+
+
+
+            Cabin savedCabin = cabinService.save(updateCabin);
+
+
+            CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
+
+            return ResponseEntity.ok(savedCabinDTO);
+
+
     }
 
 
