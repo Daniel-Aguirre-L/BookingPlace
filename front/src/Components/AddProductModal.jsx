@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FileUpload from './FileUpload';
 import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApi } from "../services/rustikApi";
+import LoaderModal from './loaders/LoaderModal';
 
 const AddProductModal = ({onClose, isOpen}) => {
     
@@ -13,6 +14,8 @@ const AddProductModal = ({onClose, isOpen}) => {
       location: '',
       description: '',
     }); 
+
+    const [showLoader, setShowLoader] = useState(false);
   
     const handleFileChange = (files) => {
       setUploadedFiles(files);
@@ -40,6 +43,7 @@ const AddProductModal = ({onClose, isOpen}) => {
         });
   
         try {
+          setShowLoader(true);
           const response = await rustikApi.post(rustikEndpoints.cabins, data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -51,6 +55,8 @@ const AddProductModal = ({onClose, isOpen}) => {
         } catch (error) {
           alert('Ha ocurrido un error, intenta de nuevo.')
           console.error('Error adding product:', error);
+        }finally{
+          setShowLoader(false);
         }
       }
 
@@ -150,6 +156,7 @@ const AddProductModal = ({onClose, isOpen}) => {
             </form>
           </div>
         </div>
+        {showLoader && <LoaderModal />}
       </div>
     )
 }
