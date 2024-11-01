@@ -4,8 +4,7 @@ import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApi } from "../services/rustikApi";
 
 const AddProductModal = ({onClose, isOpen}) => {
-    if (!isOpen) return null;
-
+    
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
@@ -57,8 +56,10 @@ const AddProductModal = ({onClose, isOpen}) => {
 
     };
 
+    if (!isOpen) return null;
+
     return (
-      <div className="hs-overlay fixed top-0 left-0 z-80 w-full h-full bg-black bg-opacity-50 py-8 overflow-visible z-50 ">
+      <div className="hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 ">
         <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
           <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
             <div className="flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
@@ -77,7 +78,7 @@ const AddProductModal = ({onClose, isOpen}) => {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="p-4 flex gap-3 flex-col overflow-visible ">
+              <div className="p-4 flex gap-3 flex-col overflow-y-visible ">
                 {/** form */}
                 <div className="flex gap-2 items-end">
                   <div className="w-9/12">
