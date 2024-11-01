@@ -120,4 +120,8 @@ public class ImageService {
         imageRepository.deleteById(imageId);
         return true;
     }
+
+    public List<Image> findImagesByCabin (Long cabinId){
+        return imageRepository.findByCabinId(cabinId);
+    }
 }

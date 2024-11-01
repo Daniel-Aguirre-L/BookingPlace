@@ -50,13 +50,58 @@ public class CabinMapper {
     // Convertir de CabinDTO a Cabin
     public static Cabin toEntity(CabinDTO dto) {
         Cabin cabin = new Cabin();
-        cabin.setId(dto.getId());
-        cabin.setName(dto.getName());
-        cabin.setLocation(dto.getLocation());
-        cabin.setCapacity(dto.getCapacity());
-        cabin.setDescription(dto.getDescription());
-        cabin.setPrice(dto.getPrice());
+
+
+        if (dto.getId() != null){
+            cabin.setId(dto.getId());
+        }
+        if (dto.getName() != null){
+            cabin.setName(dto.getName());
+        }
+        if (dto.getLocation() != null){
+            cabin.setLocation(dto.getLocation());
+        }
+        if (dto.getCapacity() != null){
+            cabin.setCapacity(dto.getCapacity());
+        }
+        if (dto.getDescription() != null){
+            cabin.setDescription(dto.getDescription());
+        }
+        if (dto.getPrice()!= null){
+            cabin.setPrice(dto.getPrice());
+        }
+
 
         return cabin;
     }
+
+
+    public static Cabin toExtingEntity(CabinDTO dto, Cabin cabin) {
+
+
+        if (dto.getId() != null){
+            cabin.setId(dto.getId());
+        }
+        if (dto.getName() != null){
+            cabin.setName(dto.getName());
+        }
+        if (dto.getLocation() != null){
+            cabin.setLocation(dto.getLocation());
+        }
+        if (dto.getCapacity() != null){
+            cabin.setCapacity(dto.getCapacity());
+        }
+        if (dto.getDescription() != null){
+            cabin.setDescription(dto.getDescription());
+        }
+        if (dto.getPrice()!= null){
+            cabin.setPrice(dto.getPrice());
+        }
+
+
+        return cabin;
+    }
+
+
+
 }

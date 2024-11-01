@@ -15,6 +15,7 @@ public class Cabin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
     private String location;
     private Integer capacity;
