@@ -58,9 +58,9 @@ const AddProductModal = ({onClose, isOpen}) => {
     };
 
     return (
-      <div className="hs-overlay fixed top-0 left-0 z-80 w-full h-full bg-black bg-opacity-50 overflow-y-auto">
+      <div className="hs-overlay fixed top-0 left-0 z-80 w-full h-full bg-black bg-opacity-50 py-8 overflow-visible z-50 ">
         <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-          <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto">
+          <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
             <div className="flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
               <h3 className="font-bold text-[#EEEEEEEE]">Agregar Cabaña</h3>
               <button 
@@ -77,7 +77,7 @@ const AddProductModal = ({onClose, isOpen}) => {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="p-4 flex gap-3 flex-col">
+              <div className="p-4 flex gap-3 flex-col overflow-visible ">
                 {/** form */}
                 <div className="flex gap-2 items-end">
                   <div className="w-9/12">

@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CarouselModal from './carousel/CarouselModal';
 
-const images = [
-    { id: 1, url: "https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/hmc4wsso1dnxos4cazae?_a=DAGAACAVZAA0" },
-    { id: 2, url: "https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/jll9uuuzp9r3ym49bzsn?_a=DAGAACAVZAA0" },
-    { id: 3, url: "https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/odvqmwc90hncx3jc5mjb?_a=DAGAACAVZAA0" },
-    { id: 4, url: "https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/tvxnjtbqa8qbjnt2taoa?_a=DAGAACAVZAA0" },
-    { id: 5, url: "https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/xvxsev6nndurbuxboqb2?_a=DAGAACAVZAA0" }
-];
 
-const Catalog = () => {
+
+const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    
 
     return (
         <div className="w-full p-4 md:p-6 mx-auto">
+            <div className='transition-all' style={{ filter: showModal ? "blur(10px)" : "blur(0px)" }}>
             <div className="flex items-center mb-4">
                 <button onClick={() => navigate('/')} className="flex items-center text-secondary">
                     <img src="/Icons/arrowleft.svg" alt="Snow Cottage" className="mr-2" />
-                    <span className="text-white">Snow Cottage</span>
+                    <span className="text-white">Regresar</span>
                 </button>
             </div>
 
@@ -25,25 +23,28 @@ const Catalog = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {/* Imggrabde */}
                     <div className="h-64 md:h-96 overflow-hidden rounded-[1.2rem]">
-                        <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[0].url} alt={`Cabin ${images[0].id}`} />
+                        <img className="object-cover h-full w-full rounded-[1.2rem]" src={cabin.images[0].url} alt={`Foto 1`} />
                     </div>
                     {/* Imgpeque */}
                     <div className="grid grid-rows-2 gap-2">
                         <div className="grid grid-cols-2 gap-2">
                             <div className="h-32 md:h-48 overflow-hidden rounded-[1.2rem] border-4 border-[#FBFFBD]">
-                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[1].url} alt={`Cabin ${images[1].id}`} />
+                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={cabin.images[1].url} alt={`Foto 2`} />
                             </div>
                             <div className="h-32 md:h-48 overflow-hidden rounded-[1.2rem] border-4 border-[#FBFFBD]">
-                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[2].url} alt={`Cabin ${images[2].id}`} />
+                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={cabin.images[2].url} alt={`Foto 3`} />
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                             <div className="h-32 md:h-48 overflow-hidden rounded-[1.2rem] border-4 border-[#FBFFBD]">
-                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[3].url} alt={`Cabin ${images[3].id}`} />
+                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={cabin.images[3].url} alt={`Foto 4`} />
                             </div>
                             <div className="relative h-32 md:h-48 overflow-hidden rounded-[1.2rem] border-4 border-[#FBFFBD]">
-                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={images[4].url} alt={`Cabin ${images[4].id}`} />
-                                <button className="absolute bottom-2 right-2 bg-[#088395] text-white py-1 px-3 rounded">
+                                <img className="object-cover h-full w-full rounded-[1.2rem]" src={cabin.images[4].url} alt={`Foto 5`} />
+                                <button 
+                                    className="absolute bottom-2 right-2 bg-[#088395] text-white py-1 px-3 rounded"
+                                    onClick={()=>setShowModal(true)}
+                                >
                                     Galería
                                 </button>
                             </div>
@@ -56,10 +57,10 @@ const Catalog = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4">
                 <div className="mb-4 md:mb-0">
                     <div className="flex flex-col">
-                        <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Snow Cottage</h1>
+                        <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">{cabin.name}</h1>
                         <p className="text-[#EEEEEE] flex items-center">
                             <img src="/Icons/gps.svg" alt="gps" className="mr-2" />
-                            Sierra Madre, Mexico
+                            {cabin.location}
                         </p>
                     </div>
                     <div className="flex items-center mt-2">
@@ -72,7 +73,7 @@ const Catalog = () => {
                 </div>
                 <div className="flex flex-col items-start md:items-end">
                     <h2 className="text-lg md:text-xl font-semibold text-[#088395]">
-                        <span className="text-xl md:text-2xl">$700</span>
+                        <span className="text-xl md:text-2xl">${cabin.price}</span>
                         <span className="text-sm md:text-lg font-light"> p/noche</span>
                     </h2>
                     <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold">
@@ -83,9 +84,14 @@ const Catalog = () => {
 
             <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Detalles</h1>
             <p className="p-4 text-[#EEEEEE] text-sm md:text-base">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                {cabin.description}
             </p>
+            </div>
+
+            <CarouselModal cabin={cabin} showCarousel={showModal} onClose={()=>setShowModal(false)}  />
+
+
+
         </div>
     );
 };
