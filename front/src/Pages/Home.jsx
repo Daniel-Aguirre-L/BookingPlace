@@ -31,7 +31,7 @@ const Home = () => {
   useEffect(() => {
     const apicall = async () => {
       try {
-        const { data } = await rustikApi.get(`${rustikEndpoints.cabinsRandom}?count=20`);
+        const { data } = await rustikApi.get(`${rustikEndpoints.cabinsRandom}?count=50`);
         setCabins(data);
       } catch (error) {
         console.error("Error al llamar a la api", error);
