@@ -23,8 +23,9 @@ const ManageCatalog = () => {
             await rustikApi.delete(`${rustikEndpoints.cabins}/${id}`);
             const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
             setCabins(updatedCabins);
+            alert("Cabña eliminada correctamente")
         } catch (error) {
-            console.error("Error al llamar a la api", error);
+            console.error("Error al borrar, intente más tarde", error);
         }
     };
 

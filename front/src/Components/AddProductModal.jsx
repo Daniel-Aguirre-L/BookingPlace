@@ -51,9 +51,15 @@ const AddProductModal = ({onClose, isOpen}) => {
           });
           alert('Datos guardados con exito.')
           console.log('Product added successfully:', response.data);
+          setFormData({
+            name: '',
+            price: '',
+            location: '',
+            description: '',
+          }); 
           onClose();
         } catch (error) {
-          alert('Ha ocurrido un error, intenta de nuevo.')
+          alert("Ya existe una cabaña con ese nombre, debe cambiarlo")
           console.error('Error adding product:', error);
         }finally{
           setShowLoader(false);
