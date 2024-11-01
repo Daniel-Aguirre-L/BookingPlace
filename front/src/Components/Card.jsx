@@ -29,14 +29,14 @@ function Card({ title, children, price, images, id }) {
             $ {price}
           </h2>
         </div>
-        <div className="px-5">
+        
         <button 
-          className="text-[1.2rem] bg-secondary-color text-background-dark h-12 w-full rounded-[0.6rem] font-medium z-10" 
+          className="text-[1.2rem] bg-secondary-color text-background-dark h-12 w-full rounded-[0.6rem] font-medium z-10 mt-3" 
           onClick={() => navigate(`${routeList.CATALOG_DETAIL}/${id}`)}
         >
           Reserva
         </button>
-        </div>
+        
       </section>
     </div>
   );

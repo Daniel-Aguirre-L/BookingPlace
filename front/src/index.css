@@ -14,11 +14,16 @@
   --background-light: #dedede;
 }
 
+* {
+
+  @apply box-border  m-0 p-0 font-roboto scroll-smooth;
+
+}
+
 html,
 body {
-  @apply bg-background-dark text-light-text m-0 p-0 font-roboto ;
-  scroll-behavior: smooth;
-  overflow-x: clip;
+  @apply bg-background-dark text-light-text overflow-x-clip
+  
 }
 
 .montserrat,

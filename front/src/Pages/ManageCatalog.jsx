@@ -4,6 +4,7 @@ import { rustikEndpoints } from "../services/rustkEndPoints"
 
 
 import AddProductModal from "../Components/AddProductModal";
+import Loader from "../Components/loaders/Loader";
 
 const ManageCatalog = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -15,6 +16,17 @@ const ManageCatalog = () => {
     const handleCloseModal = () => setModalOpen(false);
 
     const [cabins, setCabins] = useState([]);
+
+    const handleDelete = async (id) => {
+        try {
+            alert("Confirmar eliminar cabaña")
+            await rustikApi.delete(`${rustikEndpoints.cabins}/${id}`);
+            const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
+            setCabins(updatedCabins);
+        } catch (error) {
+            console.error("Error al llamar a la api", error);
+        }
+    };
 
     useEffect(() => {
         const fetchCabins = async () => {
@@ -56,7 +68,7 @@ const ManageCatalog = () => {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="px-5 bg-light-text">
+                            <tbody className="px-5 bg-white">
                                 {cabins.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px] ">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
@@ -73,12 +85,17 @@ const ManageCatalog = () => {
                                             <p className="text-gray-900 whitespace-no-wrap text-center">{cabin.id}</p>
                                         </td>
                                         <td className="px-5 py-16  flex justify-center items-center gap-5">
-                                            <span>
+                                            <button 
+                                                className="active:scale-90" 
+                                            >
                                                 <img src="/Icons/Editar.svg" alt="Editar cabaña" />
-                                            </span>
-                                            <span>
+                                            </button>
+                                            <button 
+                                                className="active:scale-90"
+                                                onClick={() => handleDelete(cabin.id)}
+                                            >
                                                 <img src="/Icons/Eliminar.svg" alt="Eliminar cabaña" />
-                                            </span>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
