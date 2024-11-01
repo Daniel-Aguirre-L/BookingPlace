@@ -18,6 +18,8 @@ public class Cabin {
     private String name;
     private String location;
     private Integer capacity;
+
+    @Column(length = 500)
     private String description;
     private Double price;
 

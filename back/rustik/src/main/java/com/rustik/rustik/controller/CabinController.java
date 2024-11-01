@@ -2,7 +2,6 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.CabinDTO;
-import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Image;
@@ -49,7 +48,7 @@ public class CabinController {
     }
 
     @GetMapping("/random")
-    //Llama 10 cabañas random con su priemra imagen
+    //Llama 10 cabañas random con su primera imagen
     public ResponseEntity<List<CabinDTO>> getRandomCabins(@RequestParam(defaultValue = "10") int count) {
         List<CabinDTO> randomCabins = cabinService.getRandomCabins(count);
         return ResponseEntity.ok(randomCabins);

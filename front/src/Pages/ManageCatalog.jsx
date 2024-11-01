@@ -93,10 +93,7 @@ const ManageCatalog = () => {
             </div>
 
         </>
-        <>
-           <button  type="button"  onClick={handleOpenModal} >Agregar Cabaña</button>
-            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
-        </>
+        
     )
 }
 
