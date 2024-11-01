@@ -18,8 +18,10 @@ const ManageCatalog = () => {
     const [cabins, setCabins] = useState([]);
 
     const handleDelete = async (id) => {
+        const confirma = confirm("Confirmar eliminar cabaña")
+        if (!confirma) return;
         try {
-            alert("Confirmar eliminar cabaña")
+            
             await rustikApi.delete(`${rustikEndpoints.cabins}/${id}`);
             const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
             setCabins(updatedCabins);
@@ -73,11 +75,13 @@ const ManageCatalog = () => {
                                 {cabins.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px] ">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
+                                            <div className="grid grid-cols-[auto_1fr] items-center gap-10" >
                                             <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>
                                             <div>
                                                 <p className="text-gray-900 whitespace-no-wrap">{cabin.name}</p>
                                                 <p className="text-gray-900 whitespace-no-wrap text-xs">{cabin.description}</p>
 
+                                            </div>
                                             </div>
 
                                         </td>

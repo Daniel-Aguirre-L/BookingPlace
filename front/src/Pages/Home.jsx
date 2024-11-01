@@ -50,7 +50,7 @@ const Home = () => {
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
-      <CatalogList myCabins={myCabins} page={page} handleShowMore={handleShowMore} ></CatalogList>
+      <CatalogList myCabins={myCabins} page={page} handleShowMore={handleShowMore} continuar={myCabins.length === cabins.length} ></CatalogList>
       <Headline title="El más reservado"  handleOnClick={handleVisitMasReservado}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
