@@ -1,0 +1,40 @@
+.embla {
+    @apply w-full ;
+    --slide-spacing: 1rem;
+    --slide-size: 45%;
+  }
+  .embla__viewport {
+    @apply overflow-hidden ;
+  }
+  .embla__container {
+    @apply flex ml-[calc(var(--slide-spacing)_*_-1)] ;
+    touch-action: pan-y pinch-zoom;
+  }
+  .embla__slide {
+    @apply  min-w-0 pl-[var(--slide-spacing)] max-h-[500px] ;
+    transform: translate3d(0, 0, 0);
+  }
+  .embla__controls {
+    @apply flex justify-evenly items-center mt-[1.8rem] w-[350px] ;
+  }
+  .embla__buttons {
+    @apply grid grid-cols-[repeat(2,1fr)] gap-[0.6rem] items-center;
+  }
+  .embla__button {
+    @apply appearance-none bg-transparent touch-manipulation inline-flex no-underline cursor-pointer shadow-[inset_0_0_0_0.2rem_var(--detail-medium-contrast)] w-[3.6rem] h-[3.6rem] z-[1] text-[color:var(--text-body)] flex items-center justify-center m-0 p-0 rounded-[50%] border-0 disabled:text-[color:var(--detail-high-contrast)];
+    -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
+    -webkit-appearance: none;
+  }
+  .embla__button__svg {
+    @apply w-[30px] h-[30px]; 
+  }
+  .embla__play {
+    @apply appearance-none bg-transparent touch-manipulation no-underline cursor-pointer shadow-[inset_0_0_0_0.2rem_var(--detail-medium-contrast)] flex items-center justify-center justify-self-end text-[color:var(--text-body)] font-bold text-[1.4rem] min-w-[8.4rem] m-0 px-[2.4rem] p-0 rounded-[1.8rem] border-0;
+    -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
+    -webkit-appearance: none;
+  }
+  .embla__slide__img {
+    @apply flex h-[300px] md:h-3/4 w-full object-cover rounded-[1.8rem];
+  }
+
+  

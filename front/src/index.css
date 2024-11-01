@@ -18,6 +18,7 @@ html,
 body {
   @apply bg-background-dark text-light-text m-0 p-0 font-roboto ;
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 .montserrat,
@@ -51,4 +52,8 @@ button {
   .pageMargin {
     margin-inline: 3rem;
   }
+}
+
+#root{
+  
 }

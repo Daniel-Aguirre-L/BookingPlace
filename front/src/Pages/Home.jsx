@@ -43,7 +43,7 @@ const Home = () => {
   const myCabins =  useMemo(() => cabins.slice(0, (4 * page)), [page, cabins]);
 
   return (
-    <>
+    <div>
       <Landing></Landing>
       <Headline title="Nuestras Cabañas" handleOnClick={handleOnClick} >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -51,14 +51,13 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <CatalogList myCabins={myCabins} page={page} handleShowMore={handleShowMore} ></CatalogList>
-      <div id="paginator"></div>
       <Headline title="El más reservado"  handleOnClick={handleVisitMasReservado}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <DisplayCard cabin={cabins[8]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
-    </>
+    </div>
   );
 };
 

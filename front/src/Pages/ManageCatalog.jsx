@@ -8,7 +8,10 @@ import AddProductModal from "../Components/AddProductModal";
 const ManageCatalog = () => {
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const handleOpenModal = () => setModalOpen(true);
+    const handleOpenModal = () => {
+        setModalOpen(true);
+        window.scrollTo(0, 0);
+    }
     const handleCloseModal = () => setModalOpen(false);
 
     const [cabins, setCabins] = useState([]);
@@ -22,12 +25,14 @@ const ManageCatalog = () => {
                 console.error("Error al llamar a la api", error);
             }
         };
-        fetchCabins();
-    }, []);
+        
+        !isModalOpen &&fetchCabins();
+        
+    }, [isModalOpen]);
 
     return (
-        <>
-            <div className="container w-screen">
+        <div >
+            <div className="container w-screen " style={{ filter: isModalOpen ? "blur(10px)" : "blur(0px)" }} >
                 <div className="py-8">
                     <div>
                         <h2 className="text-2xl font-semibold leading-tight">Mis cabañas</h2>
@@ -83,6 +88,7 @@ const ManageCatalog = () => {
                             <button
                                 className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
                                 type="button"
+                                onClick={handleOpenModal}
                             >
                                 Agregar Cabaña
                             </button>
@@ -91,11 +97,9 @@ const ManageCatalog = () => {
                     </div>
                 </div>
             </div>
-
-        </>
-        
+                 
             <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
-        </>
+        </div>
     )
 }
 
