@@ -2,10 +2,15 @@ package com.rustik.rustik.service.dataInitializer;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Image;
+import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.repository.ImageRepository;
+import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
+import com.rustik.rustik.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,6 +28,9 @@ public class InitialData implements ApplicationRunner {
     private ImageRepository imageRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CabinService cabinService;
 
 
@@ -31,6 +39,9 @@ public class InitialData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        User admin = new User("admin","admin","admin@admin.com","123","uy", UserRole.ROLE_ADMIN,"1234Admin!");
+        userService.registerUser(admin);
 
         List<Cabin> cabins = new ArrayList<>();
 

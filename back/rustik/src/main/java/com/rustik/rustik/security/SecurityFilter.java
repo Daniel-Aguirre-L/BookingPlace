@@ -1,5 +1,6 @@
 package com.rustik.rustik.security;
 
+import com.rustik.rustik.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,11 +32,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null && tokenService.getSubject(token)!= null ){
             try{
                 String userName = tokenService.getSubject(token);
-                UserDetails userDetails = userDetail.loadUserByUsername(userName);
+                UserDetails userDetails = userDetail.loadUserByUsername(userName); //El UserName es el mail.
 
                 if (userDetails != null){
-                    Authentication auth  = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    if (tokenService.validateToken(token)) {
+                        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }else {
+                        String refreshedToken = tokenService.refreshToken(token, (User) userDetails);
+                        response.setHeader("Authorization", "Bearer " + refreshedToken);
+                        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
             } catch (Exception e){
                 SecurityContextHolder.clearContext();
