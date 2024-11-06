@@ -63,7 +63,7 @@ public class UserService {
     public AuthUserDTO logIn (LogInDTO logInDTO) {
 
 
-        User user = userRepository.findByMail(logInDTO.getMail())
+        User user = userRepository.findByEmail(logInDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         if (!encoder.matches(logInDTO.getPassword(), user.getPassword())) {
@@ -97,8 +97,8 @@ public class UserService {
     }
 
 
-    public Optional<User> findUserByMail (String mail){
-        return userRepository.findByMail(mail);
+    public Optional<User> findUserByEmail (String email){
+        return userRepository.findByEmail(email);
     }
 
 

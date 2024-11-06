@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class LogInDTO {
 
-    private String mail;
+    private String email;
 
     private String password;
 
     public LogInDTO (User user){
-        this.mail=user.getMail();
+        this.email=user.getEmail();
         this.password = user.getPassword();
     }
 

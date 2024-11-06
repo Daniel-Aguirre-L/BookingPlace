@@ -3,3 +3,5 @@ DB_PASSWORD=
 DB_URL="jdbc:mysql://localhost:3306/rustik"
 CLOUDINARY_URL=
 CORS="http://localhost:5173"
+SECRET=
+ISSUER=

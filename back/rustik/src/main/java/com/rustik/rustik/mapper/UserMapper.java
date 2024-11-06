@@ -10,10 +10,10 @@ public class UserMapper {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
         dto.setName(user.getName() + " " + user.getSurname());
-        dto.setMail(user.getMail());
-        dto.setPais(user.getPais());
-        dto.setTeléfono(user.getTelefono());
-        dto.setItsAdmin(user.getRole()== UserRole.ROLE_ADMIN);
+        dto.setEmail(user.getEmail());
+        dto.setCountry(user.getCountry());
+        dto.setPhone(user.getPhone());
+        dto.setIsAdmin(user.getRole()== UserRole.ROLE_ADMIN);
 
         return dto;
 
@@ -26,15 +26,15 @@ public class UserMapper {
 
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
-        user.setMail(dto.getMail());
+        user.setEmail(dto.getEmail());
         if (dto.getPassword().equals(dto.getRepeatPassword())) {
             user.setPassword(dto.getPassword());
         } else {
             throw new RuntimeException("Las contraseñas no coinciden");
         }
-        user.setTelefono(dto.getTelefono());
-        user.setPais(dto.getPais());
-        user.setRole(dto.getItsAdmin()? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+        user.setPhone(dto.getPhone());
+        user.setCountry(dto.getCountry());
+        user.setRole(dto.getIsAdmin()? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
 
         return user;
     }

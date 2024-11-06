@@ -25,7 +25,7 @@ public class AuthController {
     public ResponseEntity<AuthUserDTO> registrerUser (@RequestBody UserDTO userDTO){
 
         User user = UserMapper.toEntity(userDTO);
-        if (!userService.findUserByMail(user.getMail()).isPresent() && user.getPassword() != null){
+        if (!userService.findUserByEmail(user.getEmail()).isPresent() && user.getPassword() != null){
 
             AuthUserDTO authUserDTO = userService.registerUser(user);
 

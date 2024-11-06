@@ -28,17 +28,17 @@ public class User implements UserDetails {
     @NotBlank(message = "El apellido debe estar completo")
     private String surname;
 
-    @NotBlank(message = "El mail debe estar completo")
+    @NotBlank(message = "El email debe estar completo")
     @Email
     @Column(unique = true)
-    private String mail;
+    private String email;
 
     @NotBlank(message = "debe indicar su número de teléfono")
     @Column(unique = true)
-    private String telefono;
+    private String phone;
 
     @NotBlank(message = "Debe indicar su pais")
-    private String pais;
+    private String country;
 
 
     //Rol del usuario.
@@ -52,12 +52,12 @@ public class User implements UserDetails {
     )
     private String password;
 
-    public User(String name, String surname, String mail, String telefono, String pais, UserRole role, String password) {
+    public User(String name, String surname, String email, String phone, String country, UserRole role, String password) {
         this.name = name;
         this.surname = surname;
-        this.mail = mail;
-        this.telefono = telefono;
-        this.pais = pais;
+        this.email = email;
+        this.phone = phone;
+        this.country = country;
         this.role = role;
         this.password = password;
     }
@@ -69,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {  //el userName sera el Email.
-        return mail;
+        return email;
     }
 
     @Override

@@ -10,16 +10,16 @@ public class UserDTO {
 
     private String surname;
 
-    private String mail;
+    private String email;
 
-    private String telefono;
+    private String phone;
 
     private String password;
 
     private String repeatPassword;
 
-    private Boolean itsAdmin;
+    private String country;
 
-    private String pais;
+    private Boolean isAdmin;
 
 }

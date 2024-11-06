@@ -12,12 +12,12 @@ public class AuthUserDTO {
 
     private String token;
 
-    private Boolean itsAdmin;
+    private Boolean isAdmin;
 
     public AuthUserDTO(User user, String token){
         this.id = user.getId();
         this.name = user.getName() + " " + user.getSurname();
-        this.itsAdmin = user.getRole() == UserRole.ROLE_ADMIN;
+        this.isAdmin = user.getRole() == UserRole.ROLE_ADMIN;
         this.token = token;
 
 
