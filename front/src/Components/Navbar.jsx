@@ -1,10 +1,10 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = ()=> {
-
+  const navigate = useNavigate();
   const onLogin = () => {
-    alert("Aqui va el login");
+    navigate('Login');
   };
 
   const onSignIn = () => {

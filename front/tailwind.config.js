@@ -17,6 +17,12 @@ export default {
       },
       width: {
         '600': '37.5rem',
+      },
+      maxWidth: {
+        '400': '25rem',
+      },
+      spacing: {
+        'calc-100vh-minus-245':"calc(100vh - 245px)"
       }
     },
   },
