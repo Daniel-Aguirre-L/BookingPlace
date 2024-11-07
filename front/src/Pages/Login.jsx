@@ -1,13 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import InputField from "../Components/InputField";
+import { useUser } from "../hooks/useUser";
+import { routeList } from "../helpers/routeList";
+import LoaderModal from "../Components/loaders/LoaderModal";
 
 const defaultValue = {email:'', password:''}
 
-const Login = () => {
+const LoginPage = () => {
+  
+  const { isLoggedIn, login }= useUser();
+  const navigate = useNavigate();
+  
   const [form, setForm] = useState(defaultValue)
   const [errors, setErrors] = useState(defaultValue);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,18 +52,23 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (validate()) {
-      console.log('Formulario enviado:', form);
-      alert("datos enviados")
+      login(form.email, form.password);
     }
+    setIsLoading(false);
   };
 
+  if (isLoggedIn) {
+    navigate(routeList.HOME);
+  }
+
 	return (
-		<>
-      <div className="flex flex-col md:flex-row md:flex-row md:h-calc-100vh-minus-245 items-center gap-14 font-semibold my-6 mx-3" >
+		<div className="max-w-[1600px] mx-auto">
+      <section className="flex flex-col md:flex-row md:flex-row min-h-calc-100vh-minus-245 items-center md:gap-14 font-semibold my-6 mx-3" >
         <div className="flex-1 justify-items-end">
           <article className="max-w-400 text-2xl">
-            <img src="/Icons/logoSvg.svg" className="mb-4" alt="Logo" />
+            <img src="/Icons/logoSvg.svg" className="mb-4 w-60 mx-auto md:mx-0" alt="Logo"  />
             <p>Rustik te conecta con la naturaleza y te permite compartir momentos inolvidables en cabañas únicas.</p>
           </article>
         </div>
@@ -67,7 +80,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Correo electrónico o número de teléfono"
             />
-             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+             {errors.email && <p className="text-red-500 text-xs text-start">{errors.email}</p>}
             <InputField
               name="password"
               type="password"
@@ -75,20 +88,23 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Contraseña"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && <p className="text-red-500 text-xs text-start">{errors.password}</p>}
             <button type="submit" className="bg-[#088395] text-[#EEEEEE] rounded-lg py-2.5 px-5">Iniciar sesión</button>
             <Link to="/" className="text-[#0C1123]" >¿Olvidaste tu contraseña?</Link>
             <hr className="md:w-96 w-10/12 my-5 mx-auto"/>
             <button type="button" className="my-0 mx-auto max-w-64 bg-[#FBFFBD] py-2.5 px-5 md:px-16 text-[#0C1123] rounded-lg">Registrarse</button>
           </form>
         </article>
-      </div>
+      </section>
       
-      <div className="max-w-[1600px] flex w-full">
+      <div className="flex w-full">
         <Footer />
       </div>
-		</>
+      
+      { isLoading && <LoaderModal /> }  
+
+		</div>
 	)
 }
 
-export default Login;
+export default LoginPage;

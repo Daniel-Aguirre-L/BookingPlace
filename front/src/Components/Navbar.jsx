@@ -7,7 +7,7 @@ const Navbar = ()=> {
   const navigate = useNavigate();
 
 
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, logout } = useUser();
 
   const onLogin = () => {
     navigate('Login');
@@ -30,6 +30,14 @@ const Navbar = ()=> {
             <button className="bg-[#FBFFBD] rounded-xl py-2 px-9 text-[#112211]" type="button" onClick={onSignIn}>Sign in</button>
           </div>
         )}
+
+        {isLoggedIn && (
+          <div className="gap-5 hidden md:flex  ">
+            <button className="bg-[#088395] rounded-xl py-2 px-9 text-[#EEEEEEEE]" type="button" onClick={logout}>Logout</button>
+          </div>
+        )}
+
+
 
     </nav>
   );

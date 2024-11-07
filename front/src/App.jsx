@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./Pages/Home";
-import Login from "./Pages/Login";
+import LoginPage from "./Pages/Login";
 import AdminPanel from "./Pages/AdminPanel";
 import CatalogDetail from "./Pages/CatalogDetail";
 import ManageUser from "./Pages/ManageUser";
@@ -19,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={routeList.LOGIN} element= {<Login />} />
+        <Route path={routeList.LOGIN} element= {<LoginPage />} />
         <Route element= {<Layout />} >
           <Route path={routeList.HOME} element={<Home />} />
           <Route path={`${routeList.CATALOG_DETAIL}/:id`} element={<CatalogDetail />} />

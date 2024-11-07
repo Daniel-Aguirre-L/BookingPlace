@@ -22,7 +22,7 @@ export const useUser = () => {
     const userName = useUserStore((state) => state.userName);
     const userEmail = useUserStore((state) => state.userEmail);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const login = useCallback(async (email, password) => {
         
@@ -32,7 +32,7 @@ export const useUser = () => {
             setToken(data.token);
             useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email });
             alert(`Bienvenivo ${data.userName}`);
-            navigate(routeList.HOME);
+            // navigate(routeList.HOME);
     
         } catch (error) {
             if (error.status === 403){
