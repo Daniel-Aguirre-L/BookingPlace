@@ -34,7 +34,7 @@ public class UserMapper {
         }
         user.setPhone(dto.getPhone());
         user.setCountry(dto.getCountry());
-        user.setRole(dto.getIsAdmin()? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+        user.setRole(UserRole.ROLE_USER);
 
         return user;
     }
