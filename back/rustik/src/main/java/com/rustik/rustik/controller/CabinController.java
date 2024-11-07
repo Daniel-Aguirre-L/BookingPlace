@@ -4,6 +4,7 @@ package com.rustik.rustik.controller;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
+import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
@@ -99,8 +100,6 @@ public class CabinController {
             imageService.uploadImages(id, cabinDTO.getImagesToUpload());
         }
 
-
-
             Cabin savedCabin = cabinService.save(updateCabin);
 
 
@@ -108,13 +107,20 @@ public class CabinController {
 
             return ResponseEntity.ok(savedCabinDTO);
 
-
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
         cabinService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<CabinDTO>> getCabinsByCategories(@RequestParam List<CabinCategory> categories) {
+        List<CabinDTO> cabins = cabinService.getCabinsByCategories(categories);
+        if (cabins.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(cabins);
     }
 }

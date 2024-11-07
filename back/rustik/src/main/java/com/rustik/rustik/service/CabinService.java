@@ -5,6 +5,7 @@ import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
+import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.repository.CabinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,19 +62,23 @@ public class CabinService {
                 .limit(count)
                 .collect(Collectors.toList());
 
-        System.out.println(randomCabins.get(0).getImages().size());
-
         return randomCabins.stream()
                 .map(cabin -> {
                     CabinDTO dto = CabinMapper.toDTO(cabin);
-                    /*if (!cabin.getImages().isEmpty()) {
-                        dto.setImages(Collections.singletonList(new ImageDTO(cabin.getImages().get(0).getUrl())));
-                    }*/
                     return dto;
                 }).collect(Collectors.toList());
     }
 
     public Boolean cabinExistByName (String name){
         return cabinRepository.existsByName(name);
+    }
+
+    public List<CabinDTO> getCabinsByCategories(List<CabinCategory> categories) {
+        List<Cabin>cabins = cabinRepository.findByCategoryIn(categories);
+        return cabins.stream()
+                .map(cabin -> {
+                    CabinDTO dto = CabinMapper.toDTO(cabin);
+                    return dto;
+                }).collect(Collectors.toList());
     }
 }
