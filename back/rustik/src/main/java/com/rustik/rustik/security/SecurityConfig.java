@@ -38,7 +38,9 @@ public class SecurityConfig {
             PREFIX + "/auth/validate-token",
             PREFIX + "/auth/refresh-token",
             PREFIX + "/auth/validate-username",
-            PREFIX + "/auth/validate-email"
+            PREFIX + "/auth/validate-email",
+            PREFIX + "/details",
+            PREFIX + "/details/{id}"
     );
 
     @Bean

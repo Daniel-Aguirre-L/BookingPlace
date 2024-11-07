@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import FileUpload from './FileUpload';
 import { rustikEndpoints } from "../services/rustkEndPoints";
-import { rustikApi } from "../services/rustikApi";
+import { rustikApiForm } from "../services/rustikApi";
 import LoaderModal from './loaders/LoaderModal';
 
 const AddProductModal = ({onClose, isOpen}) => {
@@ -44,11 +44,7 @@ const AddProductModal = ({onClose, isOpen}) => {
   
         try {
           setShowLoader(true);
-          const response = await rustikApi.post(rustikEndpoints.cabins, data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-          });
+          const response = await rustikApiForm.post(rustikEndpoints.cabins, data);
           alert('Datos guardados con exito.')
           console.log('Product added successfully:', response.data);
           setFormData({
