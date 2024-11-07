@@ -1,9 +1,7 @@
 package com.rustik.rustik.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -21,14 +19,30 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    @NotBlank(message = "El nombre no puede estar vacio")
+    private String name;
+
+    @NotBlank(message = "El apellido debe estar completo")
+    private String surname;
+
+    @NotBlank(message = "El email debe estar completo")
+    @Email
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank(message = "debe indicar su número de teléfono")
+    @Column(unique = true)
+    private String phone;
+
+    @NotBlank(message = "Debe indicar su pais")
+    private String country;
 
 
     //Rol del usuario.
-    private String role = "ROLE_ADMIN"; //Proximamente se agregaran mas roles en enum.
+    private UserRole role = UserRole.ROLE_USER;
 
 
     @NotBlank
@@ -38,9 +52,24 @@ public class User implements UserDetails {
     )
     private String password;
 
+    public User(String name, String surname, String email, String phone, String country, UserRole role, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+        this.country = country;
+        this.role = role;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {  //el userName sera el Email.
+        return email;
     }
 
     @Override

@@ -1,0 +1,25 @@
+package com.rustik.rustik.dto;
+
+import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
+import lombok.Data;
+
+@Data
+public class AuthUserDTO {
+    private Long id;
+
+    private String name;
+
+    private String token;
+
+    private Boolean isAdmin;
+
+    public AuthUserDTO(User user, String token){
+        this.id = user.getId();
+        this.name = user.getName() + " " + user.getSurname();
+        this.isAdmin = user.getRole() == UserRole.ROLE_ADMIN;
+        this.token = token;
+
+
+    }
+}

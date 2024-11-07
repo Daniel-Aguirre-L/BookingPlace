@@ -11,11 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 
-/**
- * Esta clase Sera la encargada de generar y validar el JWT.
- * Clase en construcción sin aplicación en la API momentaneamente.
- * **/
 
 @Service
 public class TokenService {
@@ -24,9 +21,9 @@ public class TokenService {
     public String generateToken(User user){
 
         try {
-            Algorithm algorithm = Algorithm.HMAC256("secret"); //Secret temporal, se agregara como env en el momento de implementarlo.
+            Algorithm algorithm = Algorithm.HMAC256("${SECRET}");
             return JWT.create()
-                    .withIssuer("Issuer") //Issuer temporal, se agregara como env en el momento de implementarlo.
+                    .withIssuer("${ISSUER}")
                     .withSubject(user.getUsername())
                     .withClaim("id",user.getId())
                     .withExpiresAt(getExpirationDate())
@@ -45,9 +42,9 @@ public class TokenService {
     public String getSubject(String token){
 
         try{
-            Algorithm algorithm = Algorithm.HMAC256("secret"); //Secret temporal, se agregara como env en el momento de implementarlo.
+            Algorithm algorithm = Algorithm.HMAC256("${SECRET}");
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer("Issuer") //Issuer temporal, se agregara como env en el momento de implementarlo.
+                    .withIssuer("${ISSUER}")
                     .build();
 
             DecodedJWT decodedJWT = verifier.verify(token);
@@ -70,10 +67,37 @@ public class TokenService {
 
 
     public Boolean validateToken (String token){
-        if (token !=null && getSubject(token)!= null){
-            return true;
+        if (token == null || getSubject(token) == null){
+            return false;
         }
-        return false;
+        Date expirationDate = getExpritationDateFromToken(token);
 
+        return expirationDate != null && !expirationDate.before(new Date());
+
+    }
+
+
+    private Date getExpritationDateFromToken (String token){
+        try{
+            Algorithm algorithm = Algorithm.HMAC256("${SECRET}");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("${ISSUER}")
+                    .build();
+
+            DecodedJWT decodedJWT = verifier.verify(token);
+
+            return decodedJWT.getExpiresAt();
+
+        }catch (JWTVerificationException e){
+            return null;
+        }
+    }
+
+
+    public String refreshToken(String expiredToken, User user) {
+        if (validateToken(expiredToken)) {
+            return generateToken(user);
+        }
+        throw new RuntimeException("El token ha expirado y no puede ser renovado");
     }
 }

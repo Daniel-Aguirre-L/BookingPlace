@@ -14,6 +14,9 @@ public class RustikApplication {
 		System.setProperty("DB_URL", dotenv.get("DB_URL"));
 		System.setProperty("CLOUDINARY_URL", dotenv.get("CLOUDINARY_URL"));
 		System.setProperty("CORS", dotenv.get("CORS"));
+		System.setProperty("SECRET", dotenv.get("SECRET"));
+		System.setProperty("ISSUER", dotenv.get("ISSUER"));
+
 		SpringApplication.run(RustikApplication.class, args);
 
 	}
