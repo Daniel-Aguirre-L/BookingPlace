@@ -1,13 +1,16 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { useUser } from '../hooks/useUser';
 
-const Navbar = () => {
+const Navbar = ()=> {
+  const navigate = useNavigate();
+
 
   const { isLoggedIn } = useUser();
 
   const onLogin = () => {
-    alert("Aqui va el login");
+    navigate('Login');
   };
 
   const onSignIn = () => {
