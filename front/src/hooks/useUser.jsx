@@ -1,11 +1,13 @@
 import { useCallback } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { rustikApi } from "../services/rustikApi";
+import { useNavigate } from "react-router-dom";
+import { routeList } from "../helpers/routeList";
 
 
 const getToken = () => {
-    const token = localStorage.getItem("token");
-    return token;
+    return localStorage.getItem("token") || "";
+     
 };
 
 const setToken = (token) => {
@@ -18,35 +20,50 @@ export const useUser = () => {
     const isLoggedIn = useUserStore((state) => state.isLoggedIn);
     const isAdmin = useUserStore((state) => state.isAdmin);
     const userName = useUserStore((state) => state.userName);
-    const email = useUserStore((state) => state.userEmail);
+    const userEmail = useUserStore((state) => state.userEmail);
+
+    const navigate = useNavigate();
 
     const login = useCallback(async (email, password) => {
-        const user = { email, password };
-        const { data } = await rustikApi.post("/auth/login", user);
-        setToken(data.token);
-        useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.userName, email: data.email });
-        return data;
+        
+        try {
+            const user = { email, password };
+            const { data } = await rustikApi.post("/auth/login", user);
+            setToken(data.token);
+            useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email });
+            alert(`Bienvenivo ${data.userName}`);
+            navigate(routeList.HOME);
+    
+        } catch (error) {
+            if (error.status === 403){
+                return alert("Credenciales Incorrectas");
+            }
+            console.error(error.message);
+        }
+
     }, []);
+
 
 
     const logout = useCallback(() => {
         setToken(null);
-        useUserStore.setState({ isLoggedIn: false, isAdmin: false, userName: '', email: '' });
+        useUserStore.setState({ isLoggedIn: false, isAdmin: false, userName: '', userEmail: '' });
+        navigate(routeList.HOME);
     }, []);
 
 
-    const refreshToken = useCallback(async () => {
-        const token = getToken();
-        const { data } = await rustikApi.post("/auth/refresh", token);
-        setToken(data.token);
-    }, []);
+    // const refreshToken = useCallback(async () => {
+    //     const token = getToken();
+    //     const { data } = await rustikApi.post("/auth/refresh", token);
+    //     setToken(data.token);
+    // }, []);
 
 
     return {
         isLoggedIn,
         isAdmin,
         userName,
-        email,
+        userEmail,
 
         login,
         logout,
