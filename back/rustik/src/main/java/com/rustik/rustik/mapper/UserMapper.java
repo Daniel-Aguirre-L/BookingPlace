@@ -23,7 +23,6 @@ public class UserMapper {
     public static User toEntity (UserDTO dto) {
         User user = new User();
 
-
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setEmail(dto.getEmail());
@@ -36,8 +35,30 @@ public class UserMapper {
         user.setCountry(dto.getCountry());
         user.setRole(UserRole.ROLE_USER);
 
+
         return user;
     }
+
+    public static User toExistingEntity (UserDTO dto, User user) {
+
+
+        if(dto.getName() != null){
+                user.setName(dto.getName());
+        }
+        if(dto.getSurname() != null){
+            user.setSurname(dto.getSurname());
+        }
+        if (dto.getPhone()!= null){
+            user.setPhone(dto.getPhone());
+        }
+        if (dto.getCountry() != null){
+            user.setCountry(dto.getCountry());
+        }
+
+        return user;
+    }
+
+
 
 
 

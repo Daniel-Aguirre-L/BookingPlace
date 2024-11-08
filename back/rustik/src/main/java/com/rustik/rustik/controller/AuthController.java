@@ -58,7 +58,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token missing or invalid");
         }
 
-        String token = authHeader.replace("Bearer","");
+        String token = authHeader.replace("Bearer ","");
 
         if (!tokenService.validateToken(token)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token missing or invalid");

@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rustik.rustik.model.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -99,5 +101,23 @@ public class TokenService {
             return generateToken(user);
         }
         throw new RuntimeException("El token ha expirado y no puede ser renovado");
+    }
+
+    public String tokenFromHeader (String authHeader){
+        if (authHeader == null || !authHeader.startsWith("Bearer")){
+            return "Token missing or invalid";
+        }
+
+        String token = authHeader.replace("Bearer ","");
+
+        return token;
+    }
+
+    public  String subjecjFromHeader (String authHeader) {
+        String token = tokenFromHeader(authHeader);
+
+        String subject = getSubject(token);
+
+        return subject;
     }
 }
