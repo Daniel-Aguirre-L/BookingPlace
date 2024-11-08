@@ -48,8 +48,20 @@ const ManageCatalog = () => {
         <div className="animate-fadeIn" >
             <div className="container w-screen px-5" style={{ filter: isModalOpen ? "blur(10px)" : "blur(0px)" }} >
                 <div className="py-8">
+                    <div className="flex justify-between items-center">
                     <div>
                         <h2 className="text-2xl font-semibold leading-tight">Mis cabañas</h2>
+                    </div>
+                    <div className="px-5 py-4 flex justify-end">
+                            <button
+                                className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
+                                type="button"
+                                onClick={handleOpenModal}
+                            >
+                                Agregar Cabaña
+                            </button>
+                        </div>
+
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
                         <table className="w-full rounded-lg p-2">
@@ -104,16 +116,6 @@ const ManageCatalog = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <div className="px-5 py-4 flex justify-end">
-                            <button
-                                className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
-                                type="button"
-                                onClick={handleOpenModal}
-                            >
-                                Agregar Cabaña
-                            </button>
-                        </div>
-
                     </div>
                 </div>
             </div>
