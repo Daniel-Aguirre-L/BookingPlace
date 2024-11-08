@@ -35,8 +35,6 @@ public class SecurityConfig {
             PREFIX + "/cabins",
             PREFIX + "/cabins/{id}",
             PREFIX + "/cabins/random",
-            PREFIX + "/auth/validate-username",
-            PREFIX + "/auth/validate-email",
             PREFIX + "/details",
             PREFIX + "/details/{id}"
     );
