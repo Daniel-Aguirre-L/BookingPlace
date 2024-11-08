@@ -22,5 +22,4 @@ public class Detail {
     private Feature feature; // Relación con Feature
 
     private Integer quantity;
-    private String icon;
 }

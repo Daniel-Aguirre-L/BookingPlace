@@ -14,6 +14,7 @@ public class Feature {
     private Long id;
 
     private String name;
+    private String icon;
 
 
 }
