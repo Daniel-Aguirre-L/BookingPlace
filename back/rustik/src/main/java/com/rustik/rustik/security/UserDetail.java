@@ -16,10 +16,12 @@ public class UserDetail implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    //public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
+
         if (user.isPresent()){
-            return user.get();
+            return new CustomUserDetails(user.get(), user.get().getAuthorities());
         } else {
             throw new UsernameNotFoundException("Usuario no encontrado");
         }

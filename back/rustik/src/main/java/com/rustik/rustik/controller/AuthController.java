@@ -5,11 +5,14 @@ import com.rustik.rustik.dto.LogInDTO;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -51,14 +54,19 @@ public class AuthController {
     }
 
     @GetMapping("/validate-token")
-    public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader){
-        if (authHeader == null || !authHeader.startsWith("Bearer")){
+    public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader, @AuthenticationPrincipal CustomUserDetails userDetails){
+
+        if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         String token = authHeader.replace("Bearer ","");
+
+        /*
         String email = tokenService.getTokenEmail(token);
         User user = userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        return ResponseEntity.ok(new AuthUserDTO( user, token));
+        */
+
+        return ResponseEntity.ok(new AuthUserDTO( userDetails.getUser(), token));
     }
 
 
