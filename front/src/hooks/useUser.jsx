@@ -3,6 +3,7 @@ import { useUserStore } from "../store/useUserStore";
 import { rustikApi } from "../services/rustikApi";
 import { useNavigate } from "react-router-dom";
 import { routeList } from "../helpers/routeList";
+import useNotificationStore from "../store/useNotificationStore";
 
 
 const getToken = () => {
@@ -21,6 +22,7 @@ export const useUser = () => {
     const isAdmin = useUserStore((state) => state.isAdmin);
     const userName = useUserStore((state) => state.userName);
     const userEmail = useUserStore((state) => state.userEmail);
+    const { setNotification } = useNotificationStore();
 
     // const navigate = useNavigate();
 
@@ -31,12 +33,20 @@ export const useUser = () => {
             const { data } = await rustikApi.post("/auth/login", user);
             setToken(data.token);
             useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email });
-            alert(`Bienvenivo ${data.userName}`);
+            setNotification({
+                visibility: true,
+                type: "success",
+                text: `¡Bienvenid@, ${data.userName}!`,
+              });
             // navigate(routeList.HOME);
     
         } catch (error) {
             if (error.status === 403){
-                return alert("Credenciales Incorrectas");
+                setNotification({
+                    visibility: true,
+                    type: "error",
+                    text: `Credenciales Incorrectas, intente denuevo.`,
+                  });
             }
             console.error(error.message);
         }
