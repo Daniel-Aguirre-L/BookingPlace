@@ -9,6 +9,9 @@ import { routeList } from "../helpers/routeList";
 import { rustikEndpoints } from "../services/rustkEndPoints";
 
 
+
+
+
 const Home = () => {
   const navigate = useNavigate();
   const [cabins, setCabins] = useState([]);
@@ -57,7 +60,9 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <DisplayCard cabin={cabins[8]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
+      
     </div>
+    
   );
 };
 
