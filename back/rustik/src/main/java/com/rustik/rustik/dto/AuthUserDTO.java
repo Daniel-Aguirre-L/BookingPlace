@@ -10,6 +10,8 @@ public class AuthUserDTO {
 
     private String name;
 
+    private String email;
+
     private String token;
 
     private Boolean isAdmin;
@@ -17,9 +19,8 @@ public class AuthUserDTO {
     public AuthUserDTO(User user, String token){
         this.id = user.getId();
         this.name = user.getName() + " " + user.getSurname();
+        this.email = user.getEmail();
         this.isAdmin = user.getRole() == UserRole.ROLE_ADMIN;
         this.token = token;
-
-
     }
 }
