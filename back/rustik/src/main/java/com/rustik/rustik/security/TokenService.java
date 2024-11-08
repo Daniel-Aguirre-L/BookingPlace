@@ -29,15 +29,10 @@ public class TokenService {
                     .withExpiresAt(getExpirationDate())
                     .sign(algorithm);
 
-
         } catch (JWTCreationException e){
-
             throw new RuntimeException("Error al generar el token", e);
         }
     }
-
-
-
 
     public String getSubject(String token){
 
@@ -48,7 +43,6 @@ public class TokenService {
                     .build();
 
             DecodedJWT decodedJWT = verifier.verify(token);
-
             return decodedJWT.getSubject();
 
         }catch (JWTVerificationException e){
@@ -57,25 +51,26 @@ public class TokenService {
 
     }
 
-
     private Instant getExpirationDate (){
         Instant now = Instant.now();
-
         return now.plus(Duration.ofHours(24));
     }
-
-
 
     public Boolean validateToken (String token){
         if (token == null || getSubject(token) == null){
             return false;
         }
         Date expirationDate = getExpritationDateFromToken(token);
-
         return expirationDate != null && !expirationDate.before(new Date());
-
     }
 
+    public String getTokenEmail (String token){
+        Date expirationDate = getExpritationDateFromToken(token);
+        if (expirationDate == null || expirationDate.before(new Date())){
+            return null;
+        }
+        return getSubject(token);
+    }
 
     private Date getExpritationDateFromToken (String token){
         try{
@@ -83,16 +78,12 @@ public class TokenService {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("${ISSUER}")
                     .build();
-
             DecodedJWT decodedJWT = verifier.verify(token);
-
             return decodedJWT.getExpiresAt();
-
         }catch (JWTVerificationException e){
             return null;
         }
     }
-
 
     public String refreshToken(String expiredToken, User user) {
         if (validateToken(expiredToken)) {

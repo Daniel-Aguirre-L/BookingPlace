@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -27,11 +29,7 @@ public class AuthController {
 
         User user = UserMapper.toEntity(userDTO);
         if (!userService.findUserByEmail(user.getEmail()).isPresent() && user.getPassword() != null){
-
             AuthUserDTO authUserDTO = userService.registerUser(user);
-
-
-
             return ResponseEntity.ok(authUserDTO);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -53,22 +51,15 @@ public class AuthController {
     }
 
     @GetMapping("/validate-token")
-    public ResponseEntity<String> validateToken (@RequestHeader ("Authorization") String authHeader){
+    public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader){
         if (authHeader == null || !authHeader.startsWith("Bearer")){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token missing or invalid");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
-        String token = authHeader.replace("Bearer","");
-
-        if (!tokenService.validateToken(token)){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token missing or invalid");
-        }
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Token valido");
-
+        String token = authHeader.replace("Bearer ","");
+        String email = tokenService.getTokenEmail(token);
+        User user = userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(new AuthUserDTO( user, token));
     }
-
-
 
 
 }

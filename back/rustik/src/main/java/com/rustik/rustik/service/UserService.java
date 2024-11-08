@@ -39,7 +39,6 @@ public class UserService {
         String upperName = user.getName().toUpperCase();
         String upperSurname = user.getSurname().toUpperCase();
 
-
         user.setPassword(codedPass);
         user.setName(upperName);
         user.setSurname(upperSurname);
@@ -48,11 +47,6 @@ public class UserService {
 
         String token = tokenService.generateToken(savedUser);
         return new AuthUserDTO(savedUser, token);
-
-
-
-
-
     }
 
 
@@ -61,7 +55,6 @@ public class UserService {
     }
 
     public AuthUserDTO logIn (LogInDTO logInDTO) {
-
 
         User user = userRepository.findByEmail(logInDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
