@@ -11,6 +11,7 @@ import ErrorPage from "./Pages/ErrorPage";
 import Layout from "./Pages/Layout";
 import { routeList } from "./helpers/routeList";
 import AdminLayout from "./Pages/AdminLayout";
+import FormRegister from "./Pages/FormRegister";
 
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route element= {<Layout />} >
           <Route path={routeList.HOME} element={<Home />} />
           <Route path={`${routeList.CATALOG_DETAIL}/:id`} element={<CatalogDetail />} />
+          <Route path={routeList.REGISTER} element= {<FormRegister />} />
           <Route element= {<AdminLayout />} >
           <Route path={routeList.ADMIN_PANEL} element={<AdminPanel />} />
           <Route path={routeList.USERS} element={<ManageUser />} />
