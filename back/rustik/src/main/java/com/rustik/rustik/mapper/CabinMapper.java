@@ -29,7 +29,6 @@ public class CabinMapper {
                     DetailDTO detailDTO = new DetailDTO();
                     detailDTO.setId(detail.getId());
                     detailDTO.setFeatureId(detail.getFeature().getId());
-                    detailDTO.setFeatureName(detail.getFeature().getName());
                     detailDTO.setQuantity(detail.getQuantity());
                     return detailDTO;
                 })

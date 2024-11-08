@@ -58,24 +58,30 @@ public class CabinController {
     @PostMapping
     public ResponseEntity<CabinDTO> createCabin(@ModelAttribute CabinDTO cabinDTO) {
         // Validar que se hayan subido al menos 5 imágenes
-        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5 || cabinService.cabinExistByName(cabinDTO.getName())) {
-            return ResponseEntity.badRequest().body(null); //
+        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
+            System.out.println("Error: No se han subido al menos 5 imágenes.");
+            return ResponseEntity.badRequest().body(null); // Bad request debido a imágenes insuficientes
+        }
+
+        // Validar si la cabaña ya existe
+        if (cabinService.cabinExistByName(cabinDTO.getName())) {
+            System.out.println("Error: La cabaña con nombre " + cabinDTO.getName() + " ya existe.");
+            return ResponseEntity.badRequest().body(null); // Bad request debido a nombre duplicado
         }
 
         // Guardar cabaña sin imágenes
         Cabin cabin = CabinMapper.toEntity(cabinDTO);
+        Cabin savedCabin = cabinService.save(cabin);
 
-            Cabin savedCabin = cabinService.save(cabin);
+        // Subir imágenes y obtener URLs
+        List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
+        savedCabin.setImages(imageUrls);
 
+        // Convertir la entidad de la cabaña guardada en un DTO
+        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
 
-            // Subir imágenes y obtener URLs
-            List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
-            savedCabin.setImages(imageUrls);
-            CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
-
-
+        // Devolver respuesta exitosa con el DTO
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
     }
 
     @PutMapping("/{id}")
