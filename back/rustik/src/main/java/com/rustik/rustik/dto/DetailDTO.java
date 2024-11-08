@@ -8,4 +8,5 @@ public class DetailDTO {
     private Long featureId;
     private String featureName;
     private Integer quantity;
+    private String icon;
 }

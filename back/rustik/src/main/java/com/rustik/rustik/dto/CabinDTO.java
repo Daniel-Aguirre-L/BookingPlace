@@ -15,6 +15,7 @@ public class CabinDTO {
     private Integer capacity;
     private String description;
     private Double price;
+    private String category;
     private List<DetailDTO> cabinFeatures = new ArrayList<>(); // Lista de detalles
     private List<ImageDTO> images = new ArrayList<>(); // Lista de url
 

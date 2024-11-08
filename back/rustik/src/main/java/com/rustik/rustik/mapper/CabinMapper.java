@@ -4,6 +4,8 @@ import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.model.Cabin;
+import com.rustik.rustik.model.CabinCategory;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,8 @@ public class CabinMapper {
         dto.setCapacity(cabin.getCapacity());
         dto.setDescription(cabin.getDescription());
         dto.setPrice(cabin.getPrice());
+        dto.setCategory(cabin.getCategory() != null ? cabin.getCategory().name() : null);
+
 
         // Convertir la lista de detalles
         List<DetailDTO> detailDTOs = cabin.getCabinFeatures().stream()
@@ -70,7 +74,9 @@ public class CabinMapper {
         if (dto.getPrice()!= null){
             cabin.setPrice(dto.getPrice());
         }
-
+        if (dto.getCategory() != null) {
+            cabin.setCategory(CabinCategory.valueOf(dto.getCategory().toUpperCase()));
+        }
 
         return cabin;
     }

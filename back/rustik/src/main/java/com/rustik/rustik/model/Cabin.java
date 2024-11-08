@@ -24,6 +24,10 @@ public class Cabin {
     private String description;
     private Double price;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CabinCategory category; // Campo de categoría usando enum
+
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Detail> cabinFeatures = new ArrayList<>(); // Relación con CabinFeature
 
@@ -31,12 +35,12 @@ public class Cabin {
     private List<Image> images = new ArrayList<>(); // Relación con Image
 
 
-    //Se crea constructor especifico para data inicial manual.
-    public Cabin(String name, String location, Integer capacity, String description, Double price) {
+    public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category) {
         this.name = name;
         this.location = location;
         this.capacity = capacity;
         this.description = description;
         this.price = price;
+        this.category = category;
     }
 }
