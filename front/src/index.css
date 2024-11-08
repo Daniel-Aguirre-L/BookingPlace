@@ -31,17 +31,6 @@ button {
   @apply font-montserrat;
 }
 
-.landing {
-  background: rgb(12, 17, 35);
-  background: linear-gradient(
-      0deg,
-      rgba(12, 17, 35, 1) 0%,
-      rgba(0, 0, 0, 0) 30%
-    ),
-    url("./img/landing.png");
-  background-size: cover;
-}
-
 .alignAbsolute {
   top: 0;
   bottom: 0;

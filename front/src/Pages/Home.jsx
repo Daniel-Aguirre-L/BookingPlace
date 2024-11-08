@@ -43,7 +43,7 @@ const Home = () => {
   const myCabins =  useMemo(() => cabins.slice(0, (4 * page)), [page, cabins]);
 
   return (
-    <div>
+    <div className="animate-fadeIn " >
       <Landing></Landing>
       <Headline title="Nuestras Cabañas" handleOnClick={handleOnClick} >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

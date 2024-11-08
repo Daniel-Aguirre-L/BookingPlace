@@ -1,12 +1,18 @@
-import { Outlet } from "react-router-dom";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
+import { Navigate, Outlet } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+import { routeList } from "../helpers/routeList";
+
 
 // className="grid min-h-screen grid-rows-[auto 1fr auto]"
 // style={{ display: "grid", gridTemplateRows: "auto 1fr auto", minHeight: "100vh" }}
 const AdminLayout = () => {
+  
+  const { isAdmin } = useUser();
+
   return (
     <>
+    { !isAdmin && <Navigate to={routeList.LOGIN} />}
+
     <div className="hidden lg:flex w-full" >
       <div className="w-full flex flex-col justify-items-start items-center">
         <Outlet />

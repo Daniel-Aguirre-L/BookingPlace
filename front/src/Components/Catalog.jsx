@@ -10,7 +10,7 @@ const Catalog = ({ cabin }) => {
     
 
     return (
-        <div className="w-full p-4 md:p-6 mx-auto">
+        <div className="animate-fadeIn w-full p-4 md:p-6 mx-auto">
             <div className='transition-all' style={{ filter: showModal ? "blur(10px)" : "blur(0px)" }}>
             <div className="flex items-center mb-4">
                 <button onClick={() => navigate('/')} className="flex items-center text-secondary">

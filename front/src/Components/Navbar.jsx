@@ -2,19 +2,22 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useUser } from '../hooks/useUser';
+import { routeList } from '../helpers/routeList';
 
 const Navbar = ()=> {
   const navigate = useNavigate();
 
 
-  const { isLoggedIn, logout } = useUser();
+  const { isLoggedIn, isAdmin, logout, register } = useUser();
 
   const onLogin = () => {
     navigate('Login');
   };
 
-  const onSignIn = () => {
-    alert("Aqui va el sign in");
+  const onSignIn = async () => {
+    // alert("Aqui va el sign in");
+    await register("nombre", "apellido", "n2@correo.com","2555444888", "1234Admin", "1234Admin", "Peru" );
+    
   };
 
   return (
@@ -33,6 +36,7 @@ const Navbar = ()=> {
 
         {isLoggedIn && (
           <div className="gap-5 hidden md:flex  ">
+            {isAdmin && <Link to={routeList.ADMIN_PANEL}>Panel Administrador</Link>}
             <button className="bg-[#088395] rounded-xl py-2 px-9 text-[#EEEEEEEE]" type="button" onClick={logout}>Logout</button>
           </div>
         )}
