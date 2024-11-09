@@ -1,3 +1,4 @@
+/*
 package com.rustik.rustik.security;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,3 +25,4 @@ public class WebConfig {
         };
     }
 }
+*/

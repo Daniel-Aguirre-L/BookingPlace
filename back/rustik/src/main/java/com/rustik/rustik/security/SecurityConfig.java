@@ -1,6 +1,7 @@
 package com.rustik.rustik.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,9 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Value("${CORS}")
+    private String CORS;
+
     private static final String PREFIX = "/api/v1";
 
     List<String> publicPost = List.of(
@@ -43,7 +47,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity
-                .cors(cors -> cors.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()))
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(List.of(CORS));
+                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+                    return corsConfiguration;
+                }))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
