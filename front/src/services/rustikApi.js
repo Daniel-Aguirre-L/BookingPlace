@@ -1,8 +1,20 @@
 import axios from "axios";
 
-// const TOKEN = localStorage.getItem("token");
+const TOKEN = localStorage.getItem("token") || "";
 
 const baseURL = import.meta.env.VITE_RUSTIK_API || "";
+
+
+// const publicHeaders = {
+//     "Content-Type": "application/json",
+//     "Accept": "application/json",
+// };
+
+// const privateHeaders = {
+//     "Content-Type": "application/json",
+//     "Accept": "application/json",
+//     "Authorization": `Bearer ${TOKEN}`,
+// };
 
 
 export const rustikApi = axios.create({
@@ -10,8 +22,8 @@ export const rustikApi = axios.create({
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        // "Authorization": `Bearer ${TOKEN}`,
-    }
+      },
+      withCredentials: true,
 });
 
 export const rustikApiForm = axios.create({
@@ -19,8 +31,16 @@ export const rustikApiForm = axios.create({
     headers: {
         'Content-Type': 'multipart/form-data',
         "Accept": "application/json",
-        // "Authorization": `Bearer ${TOKEN}`,
-    }
+        "Authorization": `Bearer ${TOKEN}`,
+      },
 });
 
-
+rustikApi.interceptors.request.use(
+    (config) => {
+      if (TOKEN) {
+        config.headers["Authorization"] = `Bearer ${TOKEN}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );

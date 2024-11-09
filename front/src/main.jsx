@@ -5,11 +5,14 @@ import './index.css'
 
 import '@fontsource/montserrat'; 
 import '@fontsource/roboto'; 
+import MessageProviders from './Components/providers/MessageProviders';
 
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <MessageProviders>
+      <App />
+    </MessageProviders>
   </StrictMode>,
 )

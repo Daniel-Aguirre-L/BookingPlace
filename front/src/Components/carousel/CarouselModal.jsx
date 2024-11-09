@@ -1,4 +1,4 @@
-import React from 'react'
+
 import EmblaCarousel from './EmblaCarousel'
 
 const CarouselModal = ({ cabin, showCarousel, onClose }) => {
@@ -8,7 +8,7 @@ const CarouselModal = ({ cabin, showCarousel, onClose }) => {
     const SLIDES = cabin.images.map((image) => image.url)
 
     return (
-        <section className={`${showCarousel ? "w-full h-[100%] animate-fadeIn" : "h-0 w-0 overflow-hidden"} fixed top-0 right-0 bg-background-dark bg-opacity-85 flex justify-center transition-all]`} >
+        <section className={`${showCarousel ? "w-full h-[100%] animate-fadeIn" : "h-0 w-0 overflow-hidden"} fixed top-0 right-0 bg-background-dark bg-opacity-85 flex justify-center transition-all backdrop-blur `} >
             <div>
                 <div className='w-full flex justify-end pt-40 pr-5 mb-10'>
                     <button

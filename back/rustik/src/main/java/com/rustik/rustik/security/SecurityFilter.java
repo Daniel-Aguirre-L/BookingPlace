@@ -32,7 +32,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null && tokenService.getSubject(token)!= null ){
             try{
                 String userName = tokenService.getSubject(token);
-                //UserDetails userDetails = userDetail.loadUserByUsername(userName); //El UserName es el email.
                 CustomUserDetails userDetails = userDetail.loadUserByUsername(userName); //El UserName es el email.
 
                 if (userDetails != null){
