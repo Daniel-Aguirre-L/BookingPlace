@@ -49,9 +49,10 @@ public class SecurityConfig {
         httpSecurity
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of(CORS));
-                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+                    corsConfiguration.setAllowedOrigins(List.of(CORS)); // Permite solicitudes desde tu frontend
+                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos HTTP permitidos
+                    corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept")); // Permite encabezados como Authorization y Content-Type
+                    corsConfiguration.setAllowCredentials(true); // Permite el uso de credenciales (cookies, tokens)
                     return corsConfiguration;
                 }))
                 .csrf(csrf -> csrf.disable())

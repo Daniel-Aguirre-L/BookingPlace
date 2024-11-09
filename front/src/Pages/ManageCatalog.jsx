@@ -4,11 +4,13 @@ import { rustikEndpoints } from "../services/rustkEndPoints"
 import useNotificationStore from "../store/useNotificationStore";
 
 import AddProductModal from "../Components/AddProductModal";
+import useLoaderModalStore from "../store/useLoaderModalStore";
 
 
 const ManageCatalog = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const { setNotification } = useNotificationStore();
+    const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -22,7 +24,7 @@ const ManageCatalog = () => {
         const confirma = confirm("Confirmar eliminar cabaña")
         if (!confirma) return;
         try {
-
+            showLoaderModal();
             await rustikApi.delete(`${rustikEndpoints.cabins}/${id}`);
             const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
             setCabins(updatedCabins);
@@ -33,6 +35,8 @@ const ManageCatalog = () => {
             });
         } catch (error) {
             console.error("Error al borrar, intente más tarde", error);
+        }finally{
+            hideLoaderModal();
         }
     };
 
