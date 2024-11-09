@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints"
+import useNotificationStore from "../store/useNotificationStore";
 
 import AddProductModal from "../Components/AddProductModal";
 
 
 const ManageCatalog = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const { setNotification } = useNotificationStore();
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -24,7 +26,11 @@ const ManageCatalog = () => {
             await rustikApi.delete(`${rustikEndpoints.cabins}/${id}`);
             const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
             setCabins(updatedCabins);
-            alert("Cabña eliminada correctamente")
+            setNotification({
+                visibility: true, 
+                type: "success",
+                text: "Cabaña eliminada correctamente.",
+            });
         } catch (error) {
             console.error("Error al borrar, intente más tarde", error);
         }

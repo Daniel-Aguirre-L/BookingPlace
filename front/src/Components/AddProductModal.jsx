@@ -3,9 +3,12 @@ import FileUpload from './FileUpload';
 import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApiForm } from "../services/rustikApi";
 import LoaderModal from './loaders/LoaderModal';
+import useNotificationStore from '../store/useNotificationStore';
 
 const AddProductModal = ({onClose, isOpen}) => {
     
+    const { setNotification } = useNotificationStore();
+
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
@@ -45,7 +48,11 @@ const AddProductModal = ({onClose, isOpen}) => {
         try {
           setShowLoader(true);
           const response = await rustikApiForm.post(rustikEndpoints.cabins, data);
-          alert('Datos guardados con exito.')
+          setNotification({
+            visibility: true,
+            type: "success",
+            text: "Cabaña agregada correctamente.",
+          });
           console.log('Product added successfully:', response.data);
           setFormData({
             name: '',
@@ -55,7 +62,11 @@ const AddProductModal = ({onClose, isOpen}) => {
           }); 
           onClose();
         } catch (error) {
-          alert("Ya existe una cabaña con ese nombre, debe cambiarlo")
+          setNotification({
+            visibility: true,
+            type: "error",
+            text: "Ya existe una cabaña con ese nombre, elige uno nuevo.",
+          });
           console.error('Error adding product:', error);
         }finally{
           setShowLoader(false);

@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../Components/InputField";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
 import LoaderModal from "../Components/loaders/LoaderModal";
+import Notification from "../Components/Notification";
+import useNotificationStore from "../store/useNotificationStore";
 
 const defaultValue = {email:'', password:''}
 
 const LoginPage = () => {
+  const { notification, setNotification, resetNotification } = useNotificationStore();
+
+  useEffect(() => {
+    if (notification.visibility) {
+      const timer = setTimeout(() => {
+        resetNotification();
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [notification.visibility, resetNotification]);
   
   const { isLoggedIn, login }= useUser();
   const navigate = useNavigate();
@@ -106,7 +119,10 @@ const LoginPage = () => {
       
       { isLoading && <LoaderModal /> }  
 
-		</>
+      {notification.visibility && (
+        <Notification type={notification.type}>{notification.text}</Notification>
+      )}
+		</div>
 	)
 }
 
