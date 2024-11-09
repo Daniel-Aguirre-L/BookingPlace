@@ -2,12 +2,13 @@ import { useState } from 'react';
 import FileUpload from './FileUpload';
 import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApiForm } from "../services/rustikApi";
-import LoaderModal from './loaders/LoaderModal';
 import useNotificationStore from '../store/useNotificationStore';
+import useLoaderModalStore from '../store/useLoaderModalStore';
 
 const AddProductModal = ({onClose, isOpen}) => {
     
     const { setNotification } = useNotificationStore();
+    const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
 
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [error, setError] = useState('');
@@ -18,8 +19,6 @@ const AddProductModal = ({onClose, isOpen}) => {
       description: '',
     }); 
 
-    const [showLoader, setShowLoader] = useState(false);
-  
     const handleFileChange = (files) => {
       setUploadedFiles(files);
     };
@@ -40,13 +39,14 @@ const AddProductModal = ({onClose, isOpen}) => {
         data.append('price', formData.price);
         data.append('location', formData.location);
         data.append('description', formData.description);
+        data.append('category', "INVIERNO");
         
         uploadedFiles.forEach((file) => {
           data.append('imagesToUpload', file);
         });
   
         try {
-          setShowLoader(true);
+          showLoaderModal();
           const response = await rustikApiForm.post(rustikEndpoints.cabins, data);
           setNotification({
             visibility: true,
@@ -69,7 +69,7 @@ const AddProductModal = ({onClose, isOpen}) => {
           });
           console.error('Error adding product:', error);
         }finally{
-          setShowLoader(false);
+          hideLoaderModal();
         }
       }
 
@@ -78,10 +78,10 @@ const AddProductModal = ({onClose, isOpen}) => {
     if (!isOpen) return null;
 
     return (
-      <div className="hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 ">
+      <div className="hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
         <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
           <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
-            <div className="flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
+            <div className="sticky top-0 flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
               <h3 className="font-bold text-[#EEEEEEEE]">Agregar Cabaña</h3>
               <button 
                 type="button" 
@@ -169,7 +169,7 @@ const AddProductModal = ({onClose, isOpen}) => {
             </form>
           </div>
         </div>
-        {showLoader && <LoaderModal />}
+        
       </div>
     )
 }

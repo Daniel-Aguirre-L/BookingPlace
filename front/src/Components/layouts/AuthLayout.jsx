@@ -6,12 +6,11 @@ import { routeList } from "../../helpers/routeList";
 
 const AuthLayout = () => {
 
-    const {isLoggedIn} = useUser();
+    const {isLoggedIn, userLoaded} = useUser();
 
     return (
         <div className="max-w-[1600px] mx-auto">
-
-            { isLoggedIn && <Navigate to={routeList.HOME} />}
+            { userLoaded &&isLoggedIn && <Navigate to={routeList.HOME} />}
             <Outlet />
             <div className="flex w-full">
                 <Footer />

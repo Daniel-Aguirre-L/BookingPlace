@@ -1,23 +1,9 @@
+
 import { Outlet } from "react-router-dom";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
-import Notification from "../Components/Notification"; // Renamed from Toast to Notification
-import { useEffect } from "react";
-import useNotificationStore from "../store/useNotificationStore";
-import Warning from "../Components/Warning"
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 
 const Layout = () => {
-  const { notification, setNotification, resetNotification } = useNotificationStore();
-
-  useEffect(() => {
-    if (notification.visibility) {
-      const timer = setTimeout(() => {
-        resetNotification();
-      }, 4000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [notification.visibility, resetNotification]);
 
   return (
     <div className="flex flex-col items-center w-screen">
@@ -30,9 +16,6 @@ const Layout = () => {
       <div className="max-w-[1600px] flex w-full">
         <Footer />
       </div>
-      {notification.visibility && (
-        <Notification type={notification.type}>{notification.text}</Notification>
-      )}
     </div>
   );
 };

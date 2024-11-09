@@ -1,34 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../Components/InputField";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
-import LoaderModal from "../Components/loaders/LoaderModal";
-import Notification from "../Components/Notification";
-import useNotificationStore from "../store/useNotificationStore";
+
 
 const defaultValue = {email:'', password:''}
 
 const LoginPage = () => {
-  const { notification, setNotification, resetNotification } = useNotificationStore();
 
-  useEffect(() => {
-    if (notification.visibility) {
-      const timer = setTimeout(() => {
-        resetNotification();
-      }, 4000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [notification.visibility, resetNotification]);
-  
   const { isLoggedIn, login }= useUser();
   const navigate = useNavigate();
   
   const [form, setForm] = useState(defaultValue)
   const [errors, setErrors] = useState(defaultValue);
-  const [isLoading, setIsLoading] = useState(false);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -64,11 +50,9 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     if (validate()) {
       await login(form.email, form.password);
     }
-    setIsLoading(false);
   };
 
   if (isLoggedIn) {
@@ -115,14 +99,7 @@ const LoginPage = () => {
           </form>
         </article>
       </section>
-      
-      
-      { isLoading && <LoaderModal /> }  
-
-      {notification.visibility && (
-        <Notification type={notification.type}>{notification.text}</Notification>
-      )}
-		</div>
+		</>
 	)
 }
 

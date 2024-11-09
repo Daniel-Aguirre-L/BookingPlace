@@ -1,15 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
-import useNotificationStore from "../store/useNotificationStore";
-
-
 import { routeList } from '../helpers/routeList';
+
 
 const Navbar = ()=> {
   const navigate = useNavigate();
-
-  const { setNotification } = useNotificationStore();
-
 
   const { isLoggedIn, isAdmin, logout  } = useUser();
 

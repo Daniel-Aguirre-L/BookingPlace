@@ -2,9 +2,8 @@ import { useCallback, useEffect } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-
-import { routeList } from "../helpers/routeList";
 import useNotificationStore from "../store/useNotificationStore";
+import useLoaderModalStore from "../store/useLoaderModalStore";
 
 // import { routeList } from "../helpers/routeList";
 
@@ -17,9 +16,7 @@ export const useUser = () => {
     const userName = useUserStore((state) => state.userName);
     const userEmail = useUserStore((state) => state.userEmail);
     const { setNotification } = useNotificationStore();
-
-    // const navigate = useNavigate();
-
+    const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
 
     useEffect(() => {
         const validateToken = async () => {
@@ -43,7 +40,7 @@ export const useUser = () => {
     }, []);
 
     const login = useCallback(async (email, password) => {
-
+        showLoaderModal();
         try {
             const user = { email, password };
             const { data } = await rustikApi.post(rustikEndpoints.login, user);
@@ -52,9 +49,8 @@ export const useUser = () => {
             setNotification({
                 visibility: true,
                 type: "success",
-                text: `¡Bienvenid@, ${data.userName}!`,
+                text: `¡Bienvenid@, ${data.name}!`,
               });
-            // navigate(routeList.HOME);
 
         } catch (error) {
             if (error.status === 403){
@@ -65,6 +61,8 @@ export const useUser = () => {
                   });
             }
             console.error(error.message);
+        }finally{
+            hideLoaderModal();
         }
 
     }, []);
@@ -76,21 +74,29 @@ export const useUser = () => {
 
     const register = useCallback(async (name, surname, email, phone, password, repeatPassword, country) => {
 
-        const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
+        showLoaderModal();
         try {
+        const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
             const { data } = await rustikApi.post(rustikEndpoints.register, user);
             setToken(data.token);
             useUserStore.setState((state) => ({ ...state, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email }));
-            alert(`Bienvenido ${data.name}`);
-            // navigate(routeList.HOME);
-
+            setNotification({
+                visibility: true,
+                type: "success",
+                text: `¡Bienvenid@, ${data.name}!`,
+              });
         } catch (error) {
-            if (error.status === 400) {
-                return alert("Credenciales Incorrectas");
+            if (error.status >= 400) {
+                setNotification({
+                    visibility: true,
+                    type: "error",
+                    text: `Por favor verifique los datos e intente nuevamente...`,
+                  });
             }
             console.error(error.message);
+        }finally{
+            hideLoaderModal();
         }
-
 
     }, []);
 
@@ -107,6 +113,7 @@ export const useUser = () => {
         isAdmin,
         userName,
         userEmail,
+        userLoaded,
 
         login,
         logout,

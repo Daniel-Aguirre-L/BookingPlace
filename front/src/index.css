@@ -51,3 +51,13 @@ button {
 #root{
   
 }
+
+*::-webkit-scrollbar {
+  @apply w-2;
+}
+*::-webkit-scrollbar-track {
+  @apply bg-[#e7e7e7] border shadow-[inset_0_0_6px_rgba(0,0,0,0.3)] rounded-lg border-solid border-[#cacaca];
+}
+*::-webkit-scrollbar-thumb {
+  @apply bg-[#363636] rounded-lg;
+}
