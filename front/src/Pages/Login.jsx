@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../Components/Footer";
 import InputField from "../Components/InputField";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
@@ -50,11 +49,11 @@ const LoginPage = () => {
     return valid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     if (validate()) {
-      login(form.email, form.password);
+      await login(form.email, form.password);
     }
     setIsLoading(false);
   };
@@ -64,7 +63,7 @@ const LoginPage = () => {
   }
 
 	return (
-		<div className="max-w-[1600px] mx-auto">
+		<>
       <section className="animate-fadeIn flex flex-col md:flex-row md:flex-row min-h-calc-100vh-minus-245 items-center md:gap-14 font-semibold my-6 mx-3" >
         <div className="flex-1 justify-items-end">
           <article className="max-w-400 text-2xl">
@@ -94,18 +93,20 @@ const LoginPage = () => {
             <button type="submit" className="bg-[#088395] text-[#EEEEEE] rounded-lg py-2.5 px-5">Iniciar sesión</button>
             <Link to="/" className="text-[#0C1123]" >¿Olvidaste tu contraseña?</Link>
             <hr className="md:w-96 w-10/12 my-5 mx-auto"/>
-            <button type="button" className="my-0 mx-auto max-w-64 bg-[#FBFFBD] py-2.5 px-5 md:px-16 text-[#0C1123] rounded-lg">Registrarse</button>
+            <button type="button" 
+              className="my-0 mx-auto max-w-64 bg-[#FBFFBD] py-2.5 px-5 md:px-16 text-[#0C1123] rounded-lg"
+              onClick={()=>navigate(routeList.REGISTER)}
+            >
+              Registrarse
+            </button>
           </form>
         </article>
       </section>
       
-      <div className="flex w-full">
-        <Footer />
-      </div>
       
       { isLoading && <LoaderModal /> }  
 
-		</div>
+		</>
 	)
 }
 

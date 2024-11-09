@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
-import { routeList } from "../helpers/routeList";
+import { useUser } from "../../hooks/useUser";
+import { routeList } from "../../helpers/routeList";
 
 
 // className="grid min-h-screen grid-rows-[auto 1fr auto]"

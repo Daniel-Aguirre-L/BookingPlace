@@ -8,7 +8,7 @@ const Navbar = ()=> {
   const navigate = useNavigate();
 
 
-  const { isLoggedIn, isAdmin, logout, register } = useUser();
+  const { isLoggedIn, isAdmin, logout  } = useUser();
 
   const onLogin = () => {
     navigate(routeList.LOGIN);
@@ -16,7 +16,6 @@ const Navbar = ()=> {
 
   const onSignIn = async () => {
     // alert("Aqui va el sign in");
-    //await register("nombre", "apellido", "n2@correo.com","2555444888", "1234Admin", "1234Admin", "Peru" );
     navigate(routeList.REGISTER);
     
   };
@@ -43,8 +42,6 @@ const Navbar = ()=> {
             <button className="bg-[#088395] rounded-xl py-2 px-9 text-[#EEEEEEEE]" type="button" onClick={logout}>Logout</button>
           </div>
         )}
-
-
 
     </nav>
   );

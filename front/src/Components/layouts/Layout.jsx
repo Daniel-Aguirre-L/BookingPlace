@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Footer from "../Components/Footer";
-import Navbar from "../Components/Navbar";
+import Footer from "../Footer";
+import Navbar from "../Navbar";
 
 
 // className="grid min-h-screen grid-rows-[auto 1fr auto]"

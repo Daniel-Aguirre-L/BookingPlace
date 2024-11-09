@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const TOKEN = localStorage.getItem("token");
+const TOKEN = localStorage.getItem("token") || "";
 
 const baseURL = import.meta.env.VITE_RUSTIK_API || "";
 

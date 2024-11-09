@@ -1,13 +1,10 @@
 import { useCallback, useEffect } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { rustikApi } from "../services/rustikApi";
-import { routeList } from "../helpers/routeList";
 import { rustikEndpoints } from "../services/rustkEndPoints";
 
+// import { routeList } from "../helpers/routeList";
 
-const setToken = (token) => {
-    localStorage.setItem("token", token);
-};
 
 export const useUser = () => {
 
@@ -34,12 +31,12 @@ export const useUser = () => {
                 }
             }
         };
-
         !userLoaded && validateToken();
+    }, []);
 
-    }, [])
-
-
+    const setToken = useCallback((token) => {
+        return localStorage.setItem("token", token);
+    }, []);
 
     const login = useCallback(async (email, password) => {
 
@@ -61,7 +58,7 @@ export const useUser = () => {
     }, []);
 
     const logout = useCallback(() => {
-        setToken(null);
+        localStorage.removeItem("token");
         useUserStore.setState((state) => ({ ...state, isLoggedIn: false, isAdmin: false, userName: '', userEmail: '' }));
     }, []);
 
