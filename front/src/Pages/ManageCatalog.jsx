@@ -5,6 +5,7 @@ import useNotificationStore from "../store/useNotificationStore";
 
 import AddProductModal from "../Components/AddProductModal";
 import useLoaderModalStore from "../store/useLoaderModalStore";
+import PageTitleAndBack from "../Components/PageTitleAndBack";
 
 
 const ManageCatalog = () => {
@@ -29,13 +30,13 @@ const ManageCatalog = () => {
             const updatedCabins = cabins.filter((cabin) => cabin.id !== id);
             setCabins(updatedCabins);
             setNotification({
-                visibility: true, 
+                visibility: true,
                 type: "success",
                 text: "Cabaña eliminada correctamente.",
             });
         } catch (error) {
             console.error("Error al borrar, intente más tarde", error);
-        }finally{
+        } finally {
             hideLoaderModal();
         }
     };
@@ -57,12 +58,10 @@ const ManageCatalog = () => {
     return (
         <div className="animate-fadeIn" >
             <div className="container w-screen px-5" >
-                <div className="py-8">
-                    <div className="flex justify-between items-center">
-                    <div>
-                        <h2 className="text-2xl font-semibold leading-tight">Mis cabañas</h2>
-                    </div>
-                    <div className="px-5 py-4 flex justify-end">
+                <div className="py-8 animate-fadeIn">
+                    <div className="flex w-full justify-between items-center">
+                        <PageTitleAndBack title={`Mis cabañas`} />
+                        <div className="px-5 py-4 flex justify-end">
                             <button
                                 className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
                                 type="button"
@@ -94,7 +93,7 @@ const ManageCatalog = () => {
                             </thead>
                             <tbody className="px-5 bg-white">
                                 {cabins.map((cabin) => (
-                                    <tr key={cabin.id} className="border-b border-gray-200 border-[5px] ">
+                                    <tr key={cabin.id} className="border-b border-gray-200 border-[5px]">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <div className="grid grid-cols-[auto_1fr] items-center gap-10" >
                                                 <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>
@@ -103,24 +102,24 @@ const ManageCatalog = () => {
                                                     <p className="text-gray-900 whitespace-no-wrap text-xs">{cabin.description}</p>
                                                 </div>
                                             </div>
-
                                         </td>
-
-                                        <td className="px-5 py-5 ">
+                                        <td className="px-5 py-5 min-w-40">
                                             <p className="text-gray-900 whitespace-no-wrap text-center">{cabin.id}</p>
                                         </td>
-                                        <td className="px-5 py-16  flex justify-center items-center gap-5">
-                                            <button
-                                                className="active:scale-90"
-                                            >
-                                                <img src="/Icons/Editar.svg" alt="Editar cabaña" />
-                                            </button>
-                                            <button
-                                                className="active:scale-90"
-                                                onClick={() => handleDelete(cabin.id)}
-                                            >
-                                                <img src="/Icons/Eliminar.svg" alt="Eliminar cabaña" />
-                                            </button>
+                                        <td className="px-5 py-5 min-w-40">
+                                            <div className="flex justify-center items-center gap-5 my-auto ">
+                                                <button
+                                                    className="active:scale-90"
+                                                >
+                                                    <img src="/Icons/Editar.svg" alt="Editar cabaña" />
+                                                </button>
+                                                <button
+                                                    className="active:scale-90"
+                                                    onClick={() => handleDelete(cabin.id)}
+                                                >
+                                                    <img src="/Icons/Eliminar.svg" alt="Eliminar cabaña" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

@@ -1,10 +1,13 @@
 export const routeList = {
     HOME: "/",
     CATALOG_DETAIL: "/catalogo",
+    USER_PROFILE:"/perfil",
+    USER_FAVORITES:"/mis-favoritos",
+    USER_BOOKINGS:"/mis-reservas",
     ADMIN_PANEL: "/administracion",
-    USERS: "/administracion/usuarios",
-    BOOKINGS: "/administracion/reservas",
-    CATALOGS: "/administracion/catalogo",
+    ADMIN_USERS: "/administracion/usuarios",
+    ADMIN_BOOKINGS: "/administracion/reservas",
+    ADMIN_CATALOGS: "/administracion/catalogo",
     LOGIN: "/login",
     REGISTER: "/register",
     

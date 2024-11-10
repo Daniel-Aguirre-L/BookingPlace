@@ -34,8 +34,6 @@ const FormRegister = () => {
     let valid = true;
     const newErrors = { firstName: '', lastName: '', email: '', phone: '', password: '', passwordRepeat: '' };
 
-
-
     if (form.firstName.trim().length < 3) {
       newErrors.firstName = 'El nombre debe tener al menos 3 caracteres';
     }
@@ -92,7 +90,6 @@ const FormRegister = () => {
     e.preventDefault();
     if (validate()) {
       await register(form.firstName, form.lastName, form.email, form.phone, form.password, form.passwordRepeat, form.country);
-      console.log("Formulario enviado", form);
     }
   };
 
@@ -208,13 +205,7 @@ const FormRegister = () => {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="py-2 px-6 rounded-lg font-bold  "
-                style={{
-                  backgroundColor: 'var(--secondary-color)',
-                  color: 'var(--background-dark)',
-
-                }}
-
+                className="py-2 px-6 rounded-lg font-bold bg-secondary-color text-background-dark  "
               >
                 Registrarse
               </button>

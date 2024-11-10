@@ -22,7 +22,7 @@ export const useUser = () => {
         const validateToken = async () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.validateToken);
-                useUserStore.setState((state) => ({ ...state, userLoaded: true, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: data.name }));
+                useUserStore.setState((state) => ({ ...state, userLoaded: true, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name.toLowerCase(), userEmail: data.email }));
             } catch (error) {
                 if (error.status >= 500) {
                     console.error(error.message);
@@ -45,7 +45,7 @@ export const useUser = () => {
             const user = { email, password };
             const { data } = await rustikApi.post(rustikEndpoints.login, user);
             setToken(data.token);
-            useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email });
+            useUserStore.setState({ isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name.toLowerCase(), userEmail: email });
             setNotification({
                 visibility: true,
                 type: "success",
@@ -79,7 +79,7 @@ export const useUser = () => {
         const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
             const { data } = await rustikApi.post(rustikEndpoints.register, user);
             setToken(data.token);
-            useUserStore.setState((state) => ({ ...state, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name, userEmail: email }));
+            useUserStore.setState((state) => ({ ...state, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name.toLowerCase(), userEmail: email }));
             setNotification({
                 visibility: true,
                 type: "success",

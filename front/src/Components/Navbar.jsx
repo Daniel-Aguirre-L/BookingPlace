@@ -19,7 +19,7 @@ const Navbar = ()=> {
   };
 
   return (
-    <nav className="flex justify-between items-center px-5 md:px-20 py-2.5">
+    <nav className="flex justify-between items-center px-5 md:px-20 py-[26px]">
       <Link to="/">
         <img src="/Icons/logoSvg.svg" alt="icono" />
       </Link>
