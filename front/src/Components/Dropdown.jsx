@@ -7,9 +7,9 @@ const Dropdown = ({ options, label, placeholder, onSelect }) => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
+    setSelectedOption(option[1]);
     setIsOpen(false);
-    onSelect(option);
+    onSelect(option[0]);
   };
 
   return (
@@ -18,7 +18,7 @@ const Dropdown = ({ options, label, placeholder, onSelect }) => {
 
       <button
         onClick={toggleDropdown}
-        className="w-full p-2.5 border border-[#A9AEB9] rounded font-roboto text-[#9CA3AF] text-left bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
+        className={`${selectedOption ? "text-inherit" : "text-[#9CA3AF]"}  w-full p-2.5 border border-[#A9AEB9] rounded font-roboto text-left bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400`}
         aria-expanded={isOpen ? "true" : "false"}
         aria-haspopup="true"
         type='button'
@@ -39,7 +39,7 @@ const Dropdown = ({ options, label, placeholder, onSelect }) => {
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-all"
                 onClick={() => handleOptionClick(option)}
               >
-                {option}
+                {option[1]}
               </a>
             ))}
           </div>

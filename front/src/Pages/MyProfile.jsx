@@ -1,14 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import  country from "../helpers/country";
+import { rustikApi } from "../services/rustikApi";
+import { rustikEndpoints } from "../services/rustkEndPoints";
+import { useNavigate } from "react-router-dom";
+import { routeList } from "../helpers/routeList";
+import useLoaderModalStore from "../store/useLoaderModalStore";
+import useNotificationStore from "../store/useNotificationStore";
+import { useUser } from "../hooks/useUser";
 
 const MyProfile = () => {
 
-  // const defaultValue = { email: '', password: '', repeatPassword: '', name: '', surname: '', phone: '', country: '' };
-  const defaultValue = { email: 'admin@admin.com', password: '', repeatPassword: '', name: 'admin', surname: 'admin', phone: '1234567890', country: 'Colombia' };
+  const { setNotification } = useNotificationStore();
+  const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
+  const { logout } = useUser();  
+  const navigate = useNavigate();
+
+  const defaultValue = { id: 0, email: '', password: '', repeatPassword: '', name: '', surname: '', phone: '', country: '' };
+  //const defaultValue = { email: 'admin@admin.com', password: '', repeatPassword: '', name: 'admin', surname: 'admin', phone: '1234567890', country: 'CO' };
   const [form, setForm] = useState(defaultValue);
   const [errors, setErrors] = useState(defaultValue);
 
-  // console.log(countryList);
+  useEffect(() => {
+    const apicall = async () => {
+      showLoaderModal();
+      try {
+        const { data } = await rustikApi.get(`${rustikEndpoints.myUser}`);
+        setForm({
+          id: data.id, email: data.email, password: '', repeatPassword: '', name: data.name, surname: data.surname, phone: data.phone, country: data.country
+        });
+      } catch (error) {
+        if (error.status >= 400 && error.status < 500 ) {
+          setNotification({
+            visibility: true,
+            type: "error",
+            text: `Error al cargar datos de usuario inicie sesión nuevamente`,
+          });
+          logout();
+        }
+        else{
+          console.error("Error al llamar a la api", error);
+          setNotification({
+            visibility: true,
+            type: "error",
+            text: `Error al cargar datos de usuario intente más tarde`,
+          });
+          navigate(`${routeList.HOME}`);
+        }
+      }finally{
+        hideLoaderModal();
+      }
+    };
+    apicall();
+  
+  }, [])
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +75,7 @@ const MyProfile = () => {
       newErrors.surname = 'El apellido debe tener al menos 3 caracteres';
     }
 
-    const phoneRegex = /^[0-9]{10}$/;
+    const phoneRegex = /^[0-9]{7,12}$/;
     if (!form.phone) {
       newErrors.phone = 'El numero de telefono es obligatorio'
       valid = false;
@@ -68,7 +113,7 @@ const MyProfile = () => {
       } else if (!/[a-z]/.test(form.password)) {
         newErrors.password = 'La contraseña debe tener al menos una letra minúscula';
         valid = false;
-      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(form.password)) {
+      } else if (!/[!_@#$%^&*(),.?":{}|<>]/.test(form.password)) {
         newErrors.password = 'La contraseña debe tener al menos un símbolo';
         valid = false;
       }
@@ -80,10 +125,46 @@ const MyProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      // await register(form.firstName, form.lastName, form.email, form.phone, form.password, form.passwordRepeat, form.country);
-      console.log("envia formulario");
+      showLoaderModal();
+      try {
+        const {id, password, repeatPassword, ...otherData } = form; 
+        const updateUser = password ? {...otherData, password, repeatPassword} : otherData;
+        console.log({updateUser});
+        const { data } = await rustikApi.put(`${rustikEndpoints.users}/${id}`, updateUser);
+        setNotification({
+          visibility: true,
+          type: "success",
+          text: `Datos guardados correctamente!`,
+        });
+        
+        console.log({data});
+      } catch (error) {
+        if (error.status >= 400 && error.status < 500 ) {
+          setNotification({
+            visibility: true,
+            type: "error",
+            text: `Error al cargar datos de usuario inicie sesión nuevamente`,
+          });
+          logout();
+        }
+        else{
+          console.error("Error al llamar a la api", error);
+          setNotification({
+            visibility: true,
+            type: "error",
+            text: `Error al cargar datos de usuario intente más tarde`,
+          });
+          navigate(`${routeList.HOME}`);
+        }
+      }finally{
+        hideLoaderModal();
+      }
     }else{
-      console.error("Verificar datos");
+      setNotification({
+        visibility: true,
+        type: "warning",
+        text: `Verifique los campos e intente nuevamente`,
+      });
     }
   };
 
@@ -120,6 +201,20 @@ const MyProfile = () => {
             {errors.surname && <p className="text-red-500 text-sm mt-1">{errors.surname}</p>}
           </fieldset>
           <fieldset className="w-full flex flex-col mb-8" >
+            <label htmlFor="email" className="montserrat text-background-dark font-normal cursor-pointer"  >Email</label>
+            <input
+              className="border-0 bg-transparent cursor-pointer focus:outline-none focus:border-b focus:border-b-primary-color montserrat text-background-dark text-xl font-semibold"
+              name="email"
+              id="email"
+              placeholder="email@ejemplo.com"
+              type="email"
+              value={form.email}
+              readOnly
+              // onChange={handleChange}
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          </fieldset>
+          <fieldset className="w-full flex flex-col mb-8" >
             <label htmlFor="phone" className="montserrat text-background-dark font-normal cursor-pointer"  >Teléfono</label>
             <input  
               className="border-0 bg-transparent cursor-pointer focus:outline-none focus:border-b focus:border-b-primary-color montserrat text-background-dark text-xl font-semibold"
@@ -144,11 +239,11 @@ const MyProfile = () => {
               {
                 country.map((country) => (
                   <option 
-                    className="text-white bg-primary-color"
-                    key={country} 
-                    value={country}
+                    className="text-white bg-dark-text"
+                    key={country[0]} 
+                    value={country[0]}
                   >
-                    {country}
+                    {country[1]}
                   </option>
                 ))
               }

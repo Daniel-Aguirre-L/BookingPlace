@@ -15,7 +15,7 @@ function Card({ title, children, price, images, id }) {
 
   return (
     <div 
-      className="animate-fadeIn group relative card h-[32rem] rounded-[0.7rem] w-[98%] flex justify-end flex-col bg-cover bg-center bg-no-repeat transition-all  "
+      className="animate-fadeIn group relative card h-[32rem] rounded-[0.7rem] w-[98%] flex justify-end flex-col bg-cover bg-center bg-no-repeat transition-all hover:scale-105 "
       style={images && styles}
     >
       <img src={images &&images[0].url} alt="cabaña" className="w-full h-full absolute top-0 left-0 object-cover group-hover:opacity-0 group-hover:scale-0 transition-all duration-300 z-0 rounded-[0.7rem]" />

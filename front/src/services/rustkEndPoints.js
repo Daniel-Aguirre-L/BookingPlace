@@ -5,5 +5,7 @@ export const rustikEndpoints = {
     login: "/auth/login",
     register: "/auth/register",
     validateToken: "/auth/validate-token",
+    myUser: "/users/my-user",
+    users: "/users",
     
 }

@@ -41,14 +41,14 @@ const FormRegister = () => {
     if (form.lastName.trim().length < 3) {
       newErrors.lastName = 'El apellido debe tener al menos 3 caracteres';
     }
-
-    const phoneRegex = /^[0-9]{10}$/;
+   
+    const phoneRegex = /^[0-9]{7,12}$/;
     if (!form.phone) {
       newErrors.phone = 'El numero de telefono es obligatorio'
       valid = false;
 
     } else if (!phoneRegex.test(form.phone)) {
-      newErrors.phone = 'el numero de telefono debe tener 10 digitos'
+      newErrors.phone = 'el numero de telefono debe tener minimo 7 digitos'
       valid = false;
 
     }
@@ -77,7 +77,7 @@ const FormRegister = () => {
     } else if (!/[a-z]/.test(form.password)) {
       newErrors.password = 'La contraseña debe tener al menos una letra minúscula';
       valid = false;
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(form.password)) {
+    } else if (!/[!_@#$%^&*(),.?":{}|<>]/.test(form.password)) {
       newErrors.password = 'La contraseña debe tener al menos un símbolo';
       valid = false;
     }
@@ -122,6 +122,7 @@ const FormRegister = () => {
                   <InputField
                     name="firstName"
                     placeholder="Nombre"
+                    required
                     value={form.firstName}
                     onChange={handleChange}
                   />
@@ -134,6 +135,7 @@ const FormRegister = () => {
                   <InputField
                     name="lastName"
                     placeholder="Apellido"
+                    required
                     value={form.lastName}
                     onChange={handleChange}
                   />
@@ -146,6 +148,7 @@ const FormRegister = () => {
               <InputField
                 type="email"
                 name="email"
+                required
                 placeholder="Correo Electrónico"
                 value={form.email}
                 onChange={handleChange}
@@ -160,6 +163,7 @@ const FormRegister = () => {
                 <InputField
                   name="phone"
                   placeholder="Número de teléfono"
+                  required
                   value={form.phone}
                   onChange={handleChange}
                 />
@@ -167,7 +171,7 @@ const FormRegister = () => {
               </div>
 
 
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 text-black">
                 <Dropdown
                   options={country}
                   placeholder="País"
@@ -182,6 +186,7 @@ const FormRegister = () => {
                 type="password"
                 name="password"
                 placeholder="Contraseña"
+                required
                 value={form.password}
                 onChange={handleChange}
                 className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black"
@@ -195,6 +200,7 @@ const FormRegister = () => {
                 type="password"
                 name="passwordRepeat"
                 placeholder="Confirma tu contraseña"
+                required
                 value={form.passwordRepeat}
                 onChange={handleChange}
                 className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black"
