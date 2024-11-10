@@ -5,12 +5,14 @@ package com.rustik.rustik.controller;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -34,15 +36,18 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser (@RequestHeader("Authorization") String authHeader){
 
         String subject = tokenService.subjecjFromHeader(authHeader);
-
         User user = userService.findUserByEmail(subject).get();
-
         UserDTO userDTO = UserMapper.toDTO(user);
-
-
         return ResponseEntity.ok(userDTO);
 
 
+    }
+
+    @GetMapping("/my-user")
+    public ResponseEntity<UserDTO> getMyUser (@AuthenticationPrincipal CustomUserDetails userDetails){
+        // Para los User endpoints devolver el nombre y el apellido por separado
+        UserDTO myUser = UserMapper.userDetailsToUserDTO(userDetails);
+        return ResponseEntity.ok(myUser);
     }
 
     @PutMapping("/{id}")

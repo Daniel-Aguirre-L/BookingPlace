@@ -3,6 +3,7 @@ package com.rustik.rustik.mapper;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
+import com.rustik.rustik.security.CustomUserDetails;
 
 public class UserMapper {
 
@@ -59,7 +60,16 @@ public class UserMapper {
     }
 
 
-
-
+    public static UserDTO userDetailsToUserDTO (CustomUserDetails userDetails) {
+        UserDTO user = new UserDTO();
+        user.setId(userDetails.getUser().getId());
+        user.setName(userDetails.getUser().getName());
+        user.setSurname(userDetails.getUser().getSurname());
+        user.setEmail(userDetails.getUser().getEmail());
+        user.setPhone(userDetails.getUser().getPhone());
+        user.setCountry(userDetails.getUser().getCountry());
+        user.setIsAdmin(userDetails.getUser().getRole() == UserRole.ROLE_ADMIN);
+        return user;
+    }
 
 }
