@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class DetailDTO {
     private Long id;
+    private Long cabinId;
     private Long featureId;
-    private String featureName;
     private Integer quantity;
 }
