@@ -52,6 +52,11 @@ public class UserMapper {
         if (dto.getPhone()!= null){
             user.setPhone(dto.getPhone());
         }
+        if (dto.getPassword() != null && dto.getPassword().equals(dto.getRepeatPassword())) {
+            user.setPassword(dto.getPassword());
+        } else {
+            throw new RuntimeException("Las contraseñas no coinciden");
+        }
         if (dto.getCountry() != null){
             user.setCountry(dto.getCountry());
         }

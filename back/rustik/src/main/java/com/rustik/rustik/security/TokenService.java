@@ -7,8 +7,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rustik.rustik.model.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.rustik.rustik.model.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -28,6 +27,7 @@ public class TokenService {
                     .withIssuer("${ISSUER}")
                     .withSubject(user.getUsername())
                     .withClaim("id",user.getId())
+                    .withClaim("role",user.getRole().name())
                     .withExpiresAt(getExpirationDate())
                     .sign(algorithm);
 
@@ -104,11 +104,29 @@ public class TokenService {
         return token;
     }
 
-    public  String subjecjFromHeader (String authHeader) {
+    public  String subjectFromHeader(String authHeader) {
         String token = tokenFromHeader(authHeader);
 
         String subject = getSubject(token);
 
         return subject;
+    }
+
+    public Boolean subjectIsAdmin (String authHeader){
+        String token =tokenFromHeader(authHeader);
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("${SECRET}");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("${ISSUER}")
+                    .build();
+
+            DecodedJWT decodedJWT = verifier.verify(token);
+
+
+            return decodedJWT.getClaim("role").asString().equals(UserRole.ROLE_ADMIN.name());
+        }catch (JWTVerificationException e){
+            return null;
+        }
     }
 }

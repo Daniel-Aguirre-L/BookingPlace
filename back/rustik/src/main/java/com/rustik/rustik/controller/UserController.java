@@ -15,7 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ("/api/v1/users")
@@ -32,13 +35,22 @@ public class UserController {
     public static final Logger logger = Logger.getLogger(UserController.class);
 
 
-    @GetMapping
-    public ResponseEntity<UserDTO> getUser (@RequestHeader("Authorization") String authHeader){
+    @GetMapping // queda para listar todos los users para el admin (user personal en my-user
+    public ResponseEntity<List<UserDTO>> getUser (@RequestHeader("Authorization") String authHeader){
 
-        String subject = tokenService.subjecjFromHeader(authHeader);
-        User user = userService.findUserByEmail(subject).get();
-        UserDTO userDTO = UserMapper.toDTO(user);
-        return ResponseEntity.ok(userDTO);
+
+
+        if (tokenService.subjectIsAdmin(authHeader)){
+
+             List<UserDTO> usersDTO = userService.findUsers().stream()
+                    .map(UserMapper::toDTO).collect(Collectors.toList());
+
+            return ResponseEntity.ok(usersDTO);
+
+        }
+
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
 
     }
@@ -52,7 +64,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @RequestHeader("Authorization") String authHeader, @RequestBody UserDTO userDTO ) {
-        String subject = tokenService.subjecjFromHeader(authHeader);
+        String subject = tokenService.subjectFromHeader(authHeader);
 
 
         Optional<User> userOptional = userService.findUserById(id);

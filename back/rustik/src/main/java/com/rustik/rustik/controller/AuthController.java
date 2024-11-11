@@ -78,10 +78,6 @@ public class AuthController {
         }
         String token = authHeader.replace("Bearer ","");
 
-        /*
-        String email = tokenService.getTokenEmail(token);
-        User user = userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        */
 
         return ResponseEntity.ok(new AuthUserDTO( userDetails.getUser(), token));
     }
