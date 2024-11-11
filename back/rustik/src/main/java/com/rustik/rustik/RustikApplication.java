@@ -18,7 +18,7 @@ public class RustikApplication {
 		System.setProperty("ISSUER", dotenv.get("ISSUER"));
 		System.setProperty("SPRING_MAIL_USERNAME", dotenv.get("MAIL_USERNAME"));
 		System.setProperty("SPRING_MAIL_PASSWORD", dotenv.get("MAIL_PASSWORD"));
-
+		System.setProperty("RUSTIK_URL", dotenv.get("RUSTIK_URL"));
 
 		SpringApplication.run(RustikApplication.class, args);
 
