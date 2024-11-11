@@ -11,6 +11,9 @@ import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +40,12 @@ public class UserController {
     public static final Logger logger = Logger.getLogger(UserController.class);
 
 
-    @GetMapping // queda para listar todos los users para el admin (user personal en my-user
+    @Operation(summary = "List all users (Admin only)", description = "Lista todos los usuarios registrados")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Usuario no autorizado."),
+    }    )
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getUser (@RequestHeader("Authorization") String authHeader){
 
 
@@ -58,6 +66,11 @@ public class UserController {
 
     }
 
+    @Operation(summary = "Get details of the authenticated user", description = "Devuelve la información del usuario logeado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Detalles del usuario obtenidos exitosamente."),
+            @ApiResponse(responseCode = "401", description = "No autenticado.")
+    })
     @GetMapping("/my-user")
     public ResponseEntity<UserDTO> getMyUser (@AuthenticationPrincipal CustomUserDetails userDetails){
         // Para los User endpoints devolver el nombre y el apellido por separado
@@ -65,6 +78,15 @@ public class UserController {
         return ResponseEntity.ok(myUser);
     }
 
+    @Operation(summary = "Update user details", description = "Permite acutlaizar los datos del usuario. \n " +
+            "Para modificar la contraseña debe enviarse de la misma forma que en el registro. \n" +
+            "En caso de ser solicitado por un admin, puede modificar tambien el rol enviando 'isAdmin': true")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario actualizado exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Solicitud incorrecta o error en los datos."),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado."),
+            @ApiResponse(responseCode = "403", description = "No autorizado para realizar esta acción.")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @RequestHeader("Authorization") String authHeader, @RequestBody UserDTO userDTO ) throws NotFoundException {
 
@@ -101,6 +123,7 @@ public class UserController {
         return ResponseEntity.ok(updatedDTO);
 
     }
+    
 
 
 
