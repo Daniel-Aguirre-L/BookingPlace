@@ -19,31 +19,24 @@ import java.util.Map;
 public class ImageService {
 
     private final ImageRepository imageRepository;
-    private final CabinService cabinService;
     private final Cloudinary cloudinary;
 
 
     @Autowired
-    public ImageService(ImageRepository imageRepository, CabinService cabinService, Cloudinary cloudinary) {
+    public ImageService(ImageRepository imageRepository, Cloudinary cloudinary) {
         this.imageRepository = imageRepository;
-        this.cabinService = cabinService;
         this.cloudinary = cloudinary; // Usa el bean Cloudinary configurado
     }
 
     // Método para subir imagen y asociarla con una cabaña
-    public Image uploadImage(Long cabinId, MultipartFile file) {
+    public Image uploadImage(Cabin cabin, MultipartFile file) {
         try {
             // Verifica que el archivo no esté vacío
             if (file.isEmpty()) {
                 throw new IllegalArgumentException("El archivo está vacío");
             }
 
-            Cabin cabin = cabinService.findById(cabinId);
-            if (cabin == null) {
-                throw new IllegalArgumentException("Cabaña no encontrada");
-            }
-
-            Map<String,Object> uploadParams = ObjectUtils.asMap("folder", "cabin "+ cabinId);
+            Map<String,Object> uploadParams = ObjectUtils.asMap("folder", "cabin "+ cabin.getId());
             // Subir el archivo a Cloudinary
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), uploadParams);
             String imageUrl = (String) uploadResult.get("url");
@@ -64,7 +57,7 @@ public class ImageService {
         }
     }
 
-    public List<Image> uploadImages(Long cabinId, List<MultipartFile> files) {
+    public List<Image> uploadImages(Cabin cabin, List<MultipartFile> files) {
         List<Image> imageUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -72,7 +65,7 @@ public class ImageService {
                 try {
                     // Sube la imagen a Cloudinary
                     Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                            ObjectUtils.asMap("folder", "cabin " + cabinId));
+                            ObjectUtils.asMap("folder", "cabin " + cabin.getId()));
                     String url = (String) uploadResult.get("url");
 
                     // Crea un objeto Image y guarda la URL en la base de datos
@@ -81,8 +74,6 @@ public class ImageService {
                     image.setImagePublicId((String) uploadResult.get("public_id")); // Guarda el ID público si lo necesitas
 
                     // Establece la cabaña
-                    Cabin cabin = new Cabin();
-                    cabin.setId(cabinId);
                     image.setCabin(cabin); // Asocia la imagen a la cabaña
 
                     imageUrls.add(imageRepository.save(image)); // Guarda la imagen en la base de datos

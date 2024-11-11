@@ -2,96 +2,65 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.DetailDTO;
-import com.rustik.rustik.mapper.DetailMapper;
-import com.rustik.rustik.model.Cabin;
-import com.rustik.rustik.model.Detail;
-import com.rustik.rustik.model.Feature;
 import com.rustik.rustik.service.DetailService;
-import com.rustik.rustik.service.FeatureService;
-import com.rustik.rustik.service.CabinService;
+import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.rustik.rustik.mapper.DetailMapper.toDTO;
 
 @RestController
 @RequestMapping("/api/v1/details")
 public class DetailController {
 
     private final DetailService detailService;
-    private final FeatureService featureService;
-    private final CabinService cabinService;
 
     @Autowired
-    public DetailController(DetailService detailService, FeatureService featureService, CabinService cabinService) {
+    public DetailController(DetailService detailService) {
         this.detailService = detailService;
-        this.featureService = featureService;
-        this.cabinService = cabinService;
     }
 
     @GetMapping
     public List<DetailDTO> getAllDetails() {
         // Convertir la lista de detalles a DTOs
-        return detailService.findAll()
-                .stream()
-                .map(DetailMapper::toDTO)
-                .collect(Collectors.toList());
+        return detailService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DetailDTO> getDetailById(@PathVariable Long id) {
-        Detail detail = detailService.findById(id);
-        return detail != null ? ResponseEntity.ok(toDTO(detail)) : ResponseEntity.notFound().build();
+        DetailDTO detail = detailService.findById(id);
+        return detail != null ? ResponseEntity.ok(detail) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<?> createDetail(@RequestBody DetailDTO detailDto) {
 
-        Cabin existingCabin = cabinService.findById(detailDto.getCabinId());
+        Either<List<String>, DetailDTO> result = detailService.save(detailDto);
 
-        if (existingCabin == null) {
-            return ResponseEntity.badRequest().body("Cabaña no existente");
-        }
-
-        Feature existingFeature = featureService.findById(detailDto.getFeatureId());
-
-        if (existingFeature == null) {
-            return ResponseEntity.badRequest().body("Característica no existente");
-        }
-
-        Detail detail = DetailMapper.toDetail(detailDto, existingCabin, existingFeature);
-        Detail savedDetail = detailService.save(detail);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(savedDetail));
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                detail -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(detail);
+                }
+        );
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDetail(@PathVariable Long id, @RequestBody DetailDTO detailDto) {
-        Detail existingDetail = detailService.findById(id);
-        if (existingDetail == null) {
-            return ResponseEntity.notFound().build();
-        }
 
-        Cabin existingCabin = cabinService.findById(detailDto.getCabinId());
+        detailDto.setId(id);
 
-        if (existingCabin == null) {
-            return ResponseEntity.badRequest().body("Cabaña no existente");
-        }
+        Either<List<String>, DetailDTO> result = detailService.save(detailDto);
 
-        Feature existingFeature = featureService.findById(detailDto.getFeatureId());
-
-        if (existingFeature == null) {
-            return ResponseEntity.badRequest().body("Característica no existente");
-        }
-
-        Detail detail = DetailMapper.toExistingEntity(detailDto, existingDetail, existingCabin, existingFeature);
-
-        Detail updatedDetail = detailService.save(detail);
-        return ResponseEntity.ok(toDTO(updatedDetail));
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                ResponseEntity::ok
+        );
     }
 
     @DeleteMapping("/{id}")

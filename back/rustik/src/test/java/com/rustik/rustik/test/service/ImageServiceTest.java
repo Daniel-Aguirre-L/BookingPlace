@@ -1,5 +1,7 @@
 package com.rustik.rustik.test.service;
 
+import com.rustik.rustik.dto.CabinDTO;
+import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
@@ -50,11 +52,11 @@ public class ImageServiceTest {
     @BeforeEach
     //Guardo una cabaña en BD para los test
     void cabinSetup(){
-        Cabin cabin = new Cabin();
+        CabinDTO cabin = new CabinDTO();
 
         cabin.setName("test");
 
-        testCabin = cabinService.save(cabin);
+        testCabin = CabinMapper.toEntity(cabinService.save(cabin).get());
     }
 
 
@@ -77,7 +79,7 @@ public class ImageServiceTest {
             return;
         }
         //Carlo la imagen a BD
-        Image uploadImage = imageService.uploadImage(testCabin.getId(),file);
+        Image uploadImage = imageService.uploadImage(testCabin,file);
 
         //Verifico que la imagen cargada no sea nula,
         // que la url devuelta por claudinary no este vacia
@@ -98,7 +100,7 @@ public class ImageServiceTest {
         MultipartFile file = new MockMultipartFile("file", "test-image.jpeg", "image/jpeg", new byte[0]);
 
         //Se verifica que al intentar guardar ese archivo tira una excepción
-        assertThrows(RuntimeException.class,() -> imageService.uploadImage(testCabin.getId(), file));
+        assertThrows(RuntimeException.class,() -> imageService.uploadImage(testCabin, file));
 
     }
 
@@ -118,7 +120,7 @@ public class ImageServiceTest {
         }
 
         //Verifico que al asignarlo a una cabaña que no se encuentra en BD tira una excepción.
-        assertThrows(RuntimeException.class, () -> imageService.uploadImage(999l,file));
+        assertThrows(RuntimeException.class, () -> imageService.uploadImage(testCabin,file));
 
     }
 

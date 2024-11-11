@@ -2,12 +2,14 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.CabinDTO;
+import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
+import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +23,10 @@ import java.util.stream.Collectors;
 public class CabinController {
 
     private final CabinService cabinService;
-    private final ImageService imageService;
 
     @Autowired
     public CabinController(CabinService cabinService, ImageService imageService) {
         this.cabinService = cabinService;
-        this.imageService = imageService;
     }
 
 
@@ -56,63 +56,34 @@ public class CabinController {
     }
 
     @PostMapping
-    public ResponseEntity<CabinDTO> createCabin(@ModelAttribute CabinDTO cabinDTO) {
-        // Validar que se hayan subido al menos 5 imágenes
-        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
-            System.out.println("Error: No se han subido al menos 5 imágenes.");
-            return ResponseEntity.badRequest().body(null); // Bad request debido a imágenes insuficientes
-        }
+    public ResponseEntity<?> createCabin(@ModelAttribute CabinDTO cabinDTO) {
+        Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
-        // Validar si la cabaña ya existe
-        if (cabinService.cabinExistByName(cabinDTO.getName())) {
-            System.out.println("Error: La cabaña con nombre " + cabinDTO.getName() + " ya existe.");
-            return ResponseEntity.badRequest().body(null); // Bad request debido a nombre duplicado
-        }
-
-        // Guardar cabaña sin imágenes
-        Cabin cabin = CabinMapper.toEntity(cabinDTO);
-        Cabin savedCabin = cabinService.save(cabin);
-
-        // Subir imágenes y obtener URLs
-        List<Image> imageUrls = imageService.uploadImages(savedCabin.getId(), cabinDTO.getImagesToUpload());
-        savedCabin.setImages(imageUrls);
-
-        // Convertir la entidad de la cabaña guardada en un DTO
-        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
-
-        // Devolver respuesta exitosa con el DTO
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCabinDTO);
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                cabin -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
+                }
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CabinDTO> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
-
-        Cabin existingCabin = cabinService.findById(id);
-        if (existingCabin == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if( cabinService.cabinExistByName(cabinDTO.getName())){
-            return ResponseEntity.badRequest().build();
-        }
-
-        System.out.println(cabinDTO.toString());
-
+    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
 
         cabinDTO.setId(id);
 
-        Cabin updateCabin = CabinMapper.toExtingEntity(cabinDTO,existingCabin);
+        Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
-        if (cabinDTO.getImagesToUpload().size()>0){
-            imageService.uploadImages(id, cabinDTO.getImagesToUpload());
-        }
-
-            Cabin savedCabin = cabinService.save(updateCabin);
-
-
-            CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
-
-            return ResponseEntity.ok(savedCabinDTO);
-
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                cabin -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
+                }
+        );
     }
 
     @DeleteMapping("/{id}")
