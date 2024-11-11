@@ -7,7 +7,9 @@ import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
+import com.rustik.rustik.service.EmailService;
 import com.rustik.rustik.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +29,32 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/register")
-    public ResponseEntity<AuthUserDTO> registrerUser (@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> registerUser(@RequestBody @Valid UserDTO userDTO, @RequestParam(required = false) boolean resendConfirmationEmail) {
 
         User user = UserMapper.toEntity(userDTO);
-        if (!userService.findUserByEmail(user.getEmail()).isPresent() && user.getPassword() != null){
-            AuthUserDTO authUserDTO = userService.registerUser(user);
-            return ResponseEntity.ok(authUserDTO);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
 
+        // Verificar si el correo no existe
+        if (userService.findUserByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
+        }
+
+        // Registrar al usuario
+        AuthUserDTO authUserDTO = userService.registerUser(user);
+
+        // Enviar correo de confirmación de registro
+        emailService.sendRegistrationConfirmationEmail(user.getEmail(), user.getName());
+
+        // Si se requiere reenviar el correo, lo hacemos
+        if (resendConfirmationEmail) {
+            return ResponseEntity.ok("El correo de confirmación ha sido reenviado.");
+        }
+
+        return ResponseEntity.ok(authUserDTO);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthUserDTO> logIn (@RequestBody LogInDTO logInDTO){

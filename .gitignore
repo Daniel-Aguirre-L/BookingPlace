@@ -432,4 +432,4 @@ build/
 ### VS Code ###
 .vscode/
 
-**/.env
+.env
