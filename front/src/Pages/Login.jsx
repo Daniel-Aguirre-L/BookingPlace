@@ -39,10 +39,7 @@ const LoginPage = () => {
     if (!form.password) {
       newErrors.password = 'La contraseña es obligatoria';
       valid = false;
-    } else if (form.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-      valid = false;
-    }
+    } 
 
     setErrors(newErrors);
     return valid;
