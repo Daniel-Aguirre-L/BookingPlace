@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
@@ -17,6 +17,7 @@ export const useUser = () => {
     const userEmail = useUserStore((state) => state.userEmail);
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
+    const [refreshLoggedUser, setRefreshLoggedUser] = useState(0);
 
     useEffect(() => {
         const validateToken = async () => {
@@ -33,7 +34,7 @@ export const useUser = () => {
             }
         };
         !userLoaded && validateToken();
-    }, []);
+    }, [refreshLoggedUser]);
 
     const setToken = useCallback((token) => {
         return localStorage.setItem("token", token);
@@ -72,8 +73,8 @@ export const useUser = () => {
         useUserStore.setState((state) => ({ ...state, isLoggedIn: false, isAdmin: false, userName: '', userEmail: '' }));
     }, []);
 
+    
     const register = useCallback(async (name, surname, email, phone, password, repeatPassword, country) => {
-
         showLoaderModal();
         try {
         const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
@@ -107,6 +108,11 @@ export const useUser = () => {
     //     setToken(data.token);
     // }, []);
 
+    const onRefreshLoggedUser = useCallback( () => {
+        useUserStore.setState((state) => ({ ...state, userLoaded: false }));
+        setRefreshLoggedUser(refreshLoggedUser + 1);
+    }, [refreshLoggedUser]);
+
 
     return {
         isLoggedIn,
@@ -114,10 +120,13 @@ export const useUser = () => {
         userName,
         userEmail,
         userLoaded,
+        refreshLoggedUser,
 
         login,
         logout,
         register,
+        onRefreshLoggedUser,
+        
 
     }
 }
