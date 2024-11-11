@@ -3,14 +3,16 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.UserDTO;
+import com.rustik.rustik.exception.BadRequestException;
+import com.rustik.rustik.exception.NotFoundException;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +52,8 @@ public class UserController {
         }
 
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        throw new BadRequestException("Usuario no autorizado");
+
 
 
     }
@@ -63,21 +66,31 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @RequestHeader("Authorization") String authHeader, @RequestBody UserDTO userDTO ) {
-        String subject = tokenService.subjectFromHeader(authHeader);
+    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @RequestHeader("Authorization") String authHeader, @RequestBody UserDTO userDTO ) throws NotFoundException {
 
 
         Optional<User> userOptional = userService.findUserById(id);
 
 
-        if (!userOptional.isPresent() || !userOptional.get().getUsername().equals(subject)) {
+        if (!userOptional.isPresent()) {
             
 
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new NotFoundException("Usuario no existe");
         }
 
         User user = UserMapper.toExistingEntity(userDTO, userOptional.get());
+
+
+        //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
+        if (tokenService.subjectIsAdmin(authHeader)){
+            if (userDTO.getIsAdmin()){
+                user.setRole(UserRole.ROLE_ADMIN);
+            } else{ user.setRole(UserRole.ROLE_USER);
+            }
+
+        }
+
 
 
         User updatedUser = userService.updateUser(user);

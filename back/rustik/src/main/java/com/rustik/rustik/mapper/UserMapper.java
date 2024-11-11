@@ -10,7 +10,8 @@ public class UserMapper {
     public static UserDTO toDTO (User user){
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
-        dto.setName(user.getName() + " " + user.getSurname());
+        dto.setName(user.getName());
+        dto.setSurname(user.getSurname());
         dto.setEmail(user.getEmail());
         dto.setCountry(user.getCountry());
         dto.setPhone(user.getPhone());
@@ -76,5 +77,7 @@ public class UserMapper {
         user.setIsAdmin(userDetails.getUser().getRole() == UserRole.ROLE_ADMIN);
         return user;
     }
+
+
 
 }

@@ -3,6 +3,8 @@ package com.rustik.rustik.controller;
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
 import com.rustik.rustik.dto.UserDTO;
+import com.rustik.rustik.exception.BadRequestException;
+import com.rustik.rustik.exception.NotFoundException;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.security.CustomUserDetails;
@@ -10,6 +12,7 @@ import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.EmailService;
 import com.rustik.rustik.service.UserService;
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,15 +60,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthUserDTO> logIn (@RequestBody LogInDTO logInDTO){
+    public ResponseEntity<AuthUserDTO> logIn (@RequestBody LogInDTO logInDTO)  {
 
         try {
             AuthUserDTO authUserDTO = userService.logIn(logInDTO);
 
             return ResponseEntity.ok(authUserDTO);
 
-        } catch (RuntimeException e){
-            throw new RuntimeException( e);
+        } catch (BadRequestException | NotFoundException e){
+            throw e;
         }
 
     }
@@ -80,6 +83,16 @@ public class AuthController {
 
 
         return ResponseEntity.ok(new AuthUserDTO( userDetails.getUser(), token));
+    }
+
+
+    @GetMapping("/isAdmin")
+    public ResponseEntity<Boolean> isAdmin (@RequestHeader ("Authorization") String authHeader,@AuthenticationPrincipal CustomUserDetails userDetails){
+
+        if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        return ResponseEntity.ok(tokenService.subjectIsAdmin(authHeader));
     }
 
 

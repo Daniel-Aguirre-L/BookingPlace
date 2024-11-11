@@ -2,6 +2,8 @@ package com.rustik.rustik.service;
 
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
+import com.rustik.rustik.exception.BadRequestException;
+import com.rustik.rustik.exception.NotFoundException;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.repository.UserRepository;
@@ -51,13 +53,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public AuthUserDTO logIn (LogInDTO logInDTO) {
+    public AuthUserDTO logIn (LogInDTO logInDTO) throws NotFoundException, BadRequestException {
 
         User user = userRepository.findByEmail(logInDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
 
         if (!encoder.matches(logInDTO.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Credenciales incorrectas");
+            throw new BadRequestException("Credenciales incorrectas");
         }
 
 
