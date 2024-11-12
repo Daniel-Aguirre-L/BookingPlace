@@ -1,5 +1,7 @@
 package com.rustik.rustik.test.service.dataInitializer;
 
+import com.rustik.rustik.dto.CabinDTO;
+import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
@@ -53,7 +55,7 @@ public class ImageInitializerTest {
 
         for (int i = 1; i <=20 ; i++) {
 
-            Cabin cabin = cabinService.save(new Cabin());
+            CabinDTO cabin = cabinService.save(new CabinDTO()).get();
             String folderName = "c" + i;
             String directoryPath = baseDirectoryPath + folderName + "\\";
 
@@ -72,7 +74,7 @@ public class ImageInitializerTest {
                                         "image/jpeg", Files.readAllBytes(imageFile.toPath())
                         );
 
-                        imageService.uploadImage(cabinId,multipartFile);
+                        imageService.uploadImage(CabinMapper.toEntity(cabin), multipartFile);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

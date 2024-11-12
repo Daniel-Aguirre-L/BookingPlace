@@ -1,5 +1,6 @@
 package com.rustik.rustik.test.service;
 
+import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.service.CabinService;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -38,7 +39,7 @@ public class CabinServiceTest {
     //Pueba de guardado de cabaña.
     public void saveCabin () {
 
-        Cabin cabin = new Cabin();
+        CabinDTO cabin = new CabinDTO();
         //Se define los datos de la cabaña.
         cabin.setName("cabaña 1");
         cabin.setLocation("cordoba");
@@ -47,11 +48,14 @@ public class CabinServiceTest {
         cabin.setPrice(12.0);
 
         //Se guarda el retorno desde la persistencia
-        Cabin cabinSaved= cabinService.save(cabin);
-
-        //Se verifica si se le ha agregado el id esperado.
-        assertEquals(21l,cabinSaved.getId());
-
+        cabinService.save(cabin).fold(errors ->{
+            assertTrue(errors.isEmpty());
+            return null;
+        }, cabinSaved ->{
+            //Se verifica si se le ha agregado el id esperado.
+            assertEquals(21L,cabinSaved.getId());
+            return null;
+        });
     }
 
 
@@ -60,7 +64,7 @@ public class CabinServiceTest {
     //Prueba de listado de cabañas en BD
     public void findAll (){
 
-        Cabin cabin = new Cabin();
+        CabinDTO cabin = new CabinDTO();
         //Se define una nueva cabaña.
         cabin.setName("cabaña 22");
         cabin.setLocation("cordoba");
@@ -86,7 +90,7 @@ public class CabinServiceTest {
     public void findById(){
 
         //Se trae la cabaña con id=2
-        Cabin cabin = cabinService.findById(22l);
+        Cabin cabin = cabinService.findById(22L);
 
         //Se indica el nombre que deberia tener la casbaña con id 2
         String nameExpected = "cabaña 22";

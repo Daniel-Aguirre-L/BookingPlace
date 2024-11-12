@@ -2,16 +2,13 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.DetailDTO;
-import com.rustik.rustik.mapper.DetailMapper;
-import com.rustik.rustik.model.Detail;
 import com.rustik.rustik.service.DetailService;
+import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.rustik.rustik.mapper.DetailMapper.toDTO;
 
 @RestController
 @RequestMapping("/api/v1/details")
@@ -27,33 +24,43 @@ public class DetailController {
     @GetMapping
     public List<DetailDTO> getAllDetails() {
         // Convertir la lista de detalles a DTOs
-        return detailService.findAll()
-                .stream()
-                .map(DetailMapper::toDTO)
-                .collect(Collectors.toList());
+        return detailService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DetailDTO> getDetailById(@PathVariable Long id) {
-        Detail detail = detailService.findById(id);
-        return detail != null ? ResponseEntity.ok(toDTO(detail)) : ResponseEntity.notFound().build();
+        DetailDTO detail = detailService.findById(id);
+        return detail != null ? ResponseEntity.ok(detail) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public DetailDTO createDetail(@RequestBody Detail detail) {
-        Detail savedDetail = detailService.save(detail);
-        return toDTO(savedDetail);
+    public ResponseEntity<?> createDetail(@RequestBody DetailDTO detailDto) {
+
+        Either<List<String>, DetailDTO> result = detailService.save(detailDto);
+
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                detail -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(detail);
+                }
+        );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DetailDTO> updateDetail(@PathVariable Long id, @RequestBody Detail detail) {
-        Detail existingDetail = detailService.findById(id);
-        if (existingDetail == null) {
-            return ResponseEntity.notFound().build();
-        }
-        detail.setId(id);
-        Detail updatedDetail = detailService.save(detail);
-        return ResponseEntity.ok(toDTO(updatedDetail));
+    public ResponseEntity<?> updateDetail(@PathVariable Long id, @RequestBody DetailDTO detailDto) {
+
+        detailDto.setId(id);
+
+        Either<List<String>, DetailDTO> result = detailService.save(detailDto);
+
+        return result.fold(
+                errors -> {
+                    return ResponseEntity.badRequest().body(errors);
+                },
+                ResponseEntity::ok
+        );
     }
 
     @DeleteMapping("/{id}")

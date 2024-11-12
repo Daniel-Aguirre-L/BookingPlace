@@ -3,7 +3,9 @@ package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.ImageDTO;
 import com.rustik.rustik.mapper.ImageMapper;
+import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Image;
+import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +22,13 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    private final CabinService cabinService;
+
     @Autowired
-    public ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService, CabinService cabinService) {
+
         this.imageService = imageService;
+        this.cabinService = cabinService;
     }
 
     @GetMapping
@@ -44,14 +50,21 @@ public class ImageController {
     }
 
     @PostMapping("/{cabinId}")
-    public ResponseEntity<ImageDTO> uploadImage(@PathVariable Long cabinId,
+    public ResponseEntity<?> uploadImage(@PathVariable Long cabinId,
                                                 @RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Image savedImage = imageService.uploadImage(cabinId, file);
+        Cabin cabin = cabinService.findById(cabinId);
+
+        if(cabin == null)
+        {
+            return ResponseEntity.badRequest().body("Cabaña no existente");
+        }
+
+        Image savedImage = imageService.uploadImage(cabin, file);
         ImageDTO imageDTO = ImageMapper.toDTO(savedImage);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(imageDTO);
