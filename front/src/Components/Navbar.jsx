@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
+import Avatar from "./Avatar";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { isLoggedIn, isAdmin, logout } = useUser();
+  const { isLoggedIn, isAdmin, logout, userName } = useUser();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const onLogin = () => {
@@ -79,18 +80,14 @@ const Navbar = () => {
             onMouseEnter={handleMouseEnter}
           >
             <span className="relative">
-              <img
-                className="w-[3rem] h-[3rem] rounded-full bg-primary-color"
-                src="./img/landing.png"
-                alt="Profile Pic"
-              />
+              <Avatar name={userName} size="small"/>
               <img
                 className="absolute bottom-0 right-0 w-4 h-4"
                 src="./Icons/arrowdown.svg"
                 alt="arrow down"
               />
             </span>
-            <p className="text-[1.2rem]">John D.</p>
+            <p className="text-[1.2rem]">{userName}</p>
           </div>
           <section
             className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem] top-[5rem] right-24 transition-all duration-200 ease-in-out ${
@@ -101,12 +98,8 @@ const Navbar = () => {
             onMouseLeave={handleMouseLeave} // Ensure menu closes when mouse leaves the section
           >
             <span className="text-[1.3rem] font-medium flex items-center gap-5 w-full">
-              <img
-                className="w-[4.5rem] h-[4.5rem] shadow-md rounded-full bg-primary-color"
-                src="./img/landing.png"
-                alt="Profile Pic"
-              />
-              <p>John Doe.</p>
+            <Avatar name={userName} size="medium"/>
+              <p>{userName}</p>
             </span>
             <hr className="border-background-dark border-dotted opacity-[15%] mt-6 mb-4" />
             <MenuOption imgUrl="/Icons/profile.svg">Editar Perfil</MenuOption>
