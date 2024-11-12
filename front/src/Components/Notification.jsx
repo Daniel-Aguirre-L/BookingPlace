@@ -53,8 +53,8 @@ function Notification({ type, children }) {
   return (
     <div
       id="toast-success"
-      className="flex fixed z-50 bottom-4 right-14 items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
-      role="alert"
+      className="flex fixed z-50 top-[12%] left-1/2 -translate-x-1/2 items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+      role="a lert"
     >
       {type == "success" ? successIcon : type == "error" ? errorIcon : warningIcon}
       <div className="ms-3 text-sm font-normal">{children}</div>

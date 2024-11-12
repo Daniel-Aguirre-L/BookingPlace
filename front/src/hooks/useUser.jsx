@@ -54,7 +54,7 @@ export const useUser = () => {
               });
 
         } catch (error) {
-            if (error.status === 403){
+            if (error.status === 400 || error.status === 404){
                 setNotification({
                     visibility: true,
                     type: "error",
