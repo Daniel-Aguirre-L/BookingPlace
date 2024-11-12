@@ -1,6 +1,7 @@
 package com.rustik.rustik.mapper;
 
 import com.rustik.rustik.dto.UserDTO;
+import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
@@ -53,10 +54,12 @@ public class UserMapper {
         if (dto.getPhone()!= null){
             user.setPhone(dto.getPhone());
         }
-        if (dto.getPassword() != null && dto.getPassword().equals(dto.getRepeatPassword())) {
-            user.setPassword(dto.getPassword());
-        } else {
-            throw new RuntimeException("Las contraseñas no coinciden");
+        if (dto.getPassword() != null ) {
+            if (dto.getPassword().equals(dto.getRepeatPassword())) {
+                user.setPassword(dto.getPassword());
+            } else {
+                throw new BadRequestException("Las contraseñas no coinciden");
+            }
         }
         if (dto.getCountry() != null){
             user.setCountry(dto.getCountry());

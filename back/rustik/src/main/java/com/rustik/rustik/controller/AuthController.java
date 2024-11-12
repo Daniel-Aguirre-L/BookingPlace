@@ -37,20 +37,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid UserDTO userDTO, @RequestParam(required = false) boolean resendConfirmationEmail) {
-
         User user = UserMapper.toEntity(userDTO);
 
         // Verificar si el correo no existe
         if (userService.findUserByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
         }
-
         if(userService.findUserByPhone(user.getPhone()).isPresent()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El numero de télefono ya se encuentra registrado.");
         }
-
-
-
         // Registrar al usuario
         AuthUserDTO authUserDTO = userService.registerUser(user);
 
@@ -70,9 +65,7 @@ public class AuthController {
 
         try {
             AuthUserDTO authUserDTO = userService.logIn(logInDTO);
-
             return ResponseEntity.ok(authUserDTO);
-
         } catch (BadRequestException e){
             throw e;
         }
@@ -81,25 +74,20 @@ public class AuthController {
 
     @GetMapping("/validate-token")
     public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader, @AuthenticationPrincipal CustomUserDetails userDetails){
-
         if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         String token = authHeader.replace("Bearer ","");
-
-
         return ResponseEntity.ok(new AuthUserDTO( userDetails.getUser(), token));
     }
 
 
     @GetMapping("/isAdmin")
     public ResponseEntity<Boolean> isAdmin (@RequestHeader ("Authorization") String authHeader,@AuthenticationPrincipal CustomUserDetails userDetails){
-
         if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
         return ResponseEntity.ok(tokenService.subjectIsAdmin(authHeader));
     }
-
 
 }

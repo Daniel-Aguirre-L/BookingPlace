@@ -47,23 +47,12 @@ public class UserController {
     }    )
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUser (@RequestHeader("Authorization") String authHeader){
-
-
-
         if (tokenService.subjectIsAdmin(authHeader)){
-
              List<UserDTO> usersDTO = userService.findUsers().stream()
                     .map(UserMapper::toDTO).collect(Collectors.toList());
-
             return ResponseEntity.ok(usersDTO);
-
         }
-
-
         throw new BadRequestException("Usuario no autorizado");
-
-
-
     }
 
     @Operation(summary = "Get details of the authenticated user", description = "Devuelve la información del usuario logeado")
@@ -88,46 +77,28 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "No autorizado para realizar esta acción.")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @RequestHeader("Authorization") String authHeader, @RequestBody UserDTO userDTO ) throws NotFoundException {
-
-
+    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);
 
-
         if (!userOptional.isPresent()) {
-            
-
-
             throw new NotFoundException("Usuario no existe");
         }
 
         User user = UserMapper.toExistingEntity(userDTO, userOptional.get());
-
-
         //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
-        if (tokenService.subjectIsAdmin(authHeader)){
-            if (userDTO.getIsAdmin()){
-                user.setRole(UserRole.ROLE_ADMIN);
-            } else{ user.setRole(UserRole.ROLE_USER);
-            }
 
+        if (userDetails.getUser().getRole().equals(UserRole.ROLE_ADMIN)) {
+            user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+        }else {
+            if (userDetails.getUser().getId() != id) {
+                throw new BadRequestException("Usuario no autorizado");
+            }
         }
 
-
-
         User updatedUser = userService.updateUser(user);
-
         UserDTO updatedDTO = UserMapper.toDTO(updatedUser);
-
-
         return ResponseEntity.ok(updatedDTO);
-
     }
-    
-
-
-
-
 
 
 }
