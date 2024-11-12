@@ -95,8 +95,8 @@ const Navbar = () => {
           <section
             className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem] top-[5rem] right-24 transition-all duration-200 ease-in-out ${
               userMenuOpen
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-5"
+                ? "opacity-100 translate-y-0 visible"
+                : "opacity-0 -translate-y-5 invisible"
             }`}
             onMouseLeave={handleMouseLeave} // Ensure menu closes when mouse leaves the section
           >
