@@ -11,6 +11,7 @@ import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
 import com.rustik.rustik.service.EmailService;
 import com.rustik.rustik.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,7 @@ public class AuthController {
 
     }
 
+    @SecurityRequirement(name = "bearer")
     @GetMapping("/validate-token")
     public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader, @AuthenticationPrincipal CustomUserDetails userDetails){
         if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){
@@ -82,6 +84,7 @@ public class AuthController {
     }
 
 
+    @SecurityRequirement(name = "bearer")
     @GetMapping("/isAdmin")
     public ResponseEntity<Boolean> isAdmin (@RequestHeader ("Authorization") String authHeader,@AuthenticationPrincipal CustomUserDetails userDetails){
         if (authHeader == null || !authHeader.startsWith("Bearer") || userDetails.getUser().getEmail() == null ){

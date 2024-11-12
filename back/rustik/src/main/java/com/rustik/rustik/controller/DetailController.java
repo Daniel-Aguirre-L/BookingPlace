@@ -6,6 +6,7 @@ import com.rustik.rustik.service.DetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,7 @@ public class DetailController {
             @ApiResponse(responseCode = "201", description = "Detalle creado exitosamente."),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
     })
+    @SecurityRequirement(name = "bearer")
     @PostMapping
     public ResponseEntity<?> createDetail(@RequestBody DetailDTO detailDto) {
 
@@ -71,6 +73,7 @@ public class DetailController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos."),
             @ApiResponse(responseCode = "404", description = "Detalle no encontrado.")
     })
+    @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDetail(@PathVariable Long id, @RequestBody DetailDTO detailDto) {
 
@@ -90,6 +93,7 @@ public class DetailController {
     @Operation(summary = "Eliminar detalle", description = "Permite eliminar un detalle proporcionando su ID.")
     @ApiResponse(responseCode = "204", description = "Detalle eliminado exitosamente.")
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearer")
     public ResponseEntity<Void> deleteDetail(@PathVariable Long id) {
         detailService.delete(id);
         return ResponseEntity.noContent().build();

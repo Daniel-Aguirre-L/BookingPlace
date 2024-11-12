@@ -14,6 +14,7 @@ import com.rustik.rustik.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente."),
             @ApiResponse(responseCode = "400", description = "Usuario no autorizado."),
     }    )
+    @SecurityRequirement(name = "bearer")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUser (@RequestHeader("Authorization") String authHeader){
         if (tokenService.subjectIsAdmin(authHeader)){
@@ -76,6 +78,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado."),
             @ApiResponse(responseCode = "403", description = "No autorizado para realizar esta acción.")
     })
+    @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);

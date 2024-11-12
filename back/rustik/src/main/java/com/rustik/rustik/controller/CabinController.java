@@ -12,6 +12,7 @@ import com.rustik.rustik.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,7 @@ public class CabinController {
             @ApiResponse(responseCode = "201", description = "Cabaña creada exitosamente."),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
     })
+    @SecurityRequirement(name = "bearer")
     @PostMapping
     public ResponseEntity<?> createCabin(@ModelAttribute CabinDTO cabinDTO) {
         Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
@@ -94,6 +96,7 @@ public class CabinController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos."),
             @ApiResponse(responseCode = "404", description = "Cabaña no encontrada.")
     })
+    @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
 
@@ -110,7 +113,7 @@ public class CabinController {
                 }
         );
     }
-
+    @SecurityRequirement(name = "bearer")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
         cabinService.delete(id);

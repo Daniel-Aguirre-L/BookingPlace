@@ -10,6 +10,7 @@ import com.rustik.rustik.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,7 @@ public class ImageController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o cabaña no existente."),
             @ApiResponse(responseCode = "415", description = "Formato de archivo no compatible.")
     })
+    @SecurityRequirement(name = "bearer")
     @PostMapping("/{cabinId}")
     public ResponseEntity<?> uploadImage(@PathVariable Long cabinId,
                                                 @RequestParam("file") MultipartFile file) {
@@ -95,6 +97,7 @@ public class ImageController {
             @ApiResponse(responseCode = "204", description = "Imagen eliminada exitosamente."),
             @ApiResponse(responseCode = "404", description = "Imagen no encontrada.")
     })
+    @SecurityRequirement(name = "bearer")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
         boolean deleted = imageService.deleteImage(id);

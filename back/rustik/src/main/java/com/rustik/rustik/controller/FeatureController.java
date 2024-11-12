@@ -7,6 +7,7 @@ import com.rustik.rustik.service.FeatureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class FeatureController {
             @ApiResponse(responseCode = "201", description = "Característica creada exitosamente."),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
     }   )
+    @SecurityRequirement(name = "bearer")
     @PostMapping
     public ResponseEntity<Feature> createFeature(@RequestBody Feature feature) {
 
@@ -64,6 +66,7 @@ public class FeatureController {
             @ApiResponse(responseCode = "404", description = "Característica no encontrada."),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
     })
+    @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
     public ResponseEntity<Feature> updateFeatureList(@PathVariable Long id, @RequestBody Feature feature) {
         Feature existingFeature = featureService.findById(id);
@@ -78,6 +81,7 @@ public class FeatureController {
 
     @Operation(summary = "Eliminar una característica", description = "Permite eliminar una característica.")
     @ApiResponse(responseCode = "204", description = "Característica eliminada exitosamente.")
+    @SecurityRequirement(name = "bearer")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFeatureList(@PathVariable Long id) {
         featureService.delete(id);
