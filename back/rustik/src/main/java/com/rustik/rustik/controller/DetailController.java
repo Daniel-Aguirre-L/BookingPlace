@@ -3,6 +3,9 @@ package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.service.DetailService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,18 +24,31 @@ public class DetailController {
         this.detailService = detailService;
     }
 
+
+    @Operation(summary = "Obtener todos los detalles", description = "Devuelve una lista de todos los detalles disponibles.")
+    @ApiResponse(responseCode = "200", description = "Lista de detalles obtenida exitosamente.")
     @GetMapping
     public List<DetailDTO> getAllDetails() {
         // Convertir la lista de detalles a DTOs
         return detailService.findAll();
     }
 
+    @Operation(summary = "Obtener detalle por ID", description = "Devuelve un detalle especifico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Detalle encontrado."),
+            @ApiResponse(responseCode = "404", description = "Detalle no encontrado.")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<DetailDTO> getDetailById(@PathVariable Long id) {
         DetailDTO detail = detailService.findById(id);
         return detail != null ? ResponseEntity.ok(detail) : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Crear nuevo detalle", description = "Permite crear un nuevo detalle.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Detalle creado exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
+    })
     @PostMapping
     public ResponseEntity<?> createDetail(@RequestBody DetailDTO detailDto) {
 
@@ -48,6 +64,13 @@ public class DetailController {
         );
     }
 
+
+    @Operation(summary = "Actualizar detalle", description = "Permite actualizar un detalle existente proporcionando.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Detalle actualizado exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos."),
+            @ApiResponse(responseCode = "404", description = "Detalle no encontrado.")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDetail(@PathVariable Long id, @RequestBody DetailDTO detailDto) {
 
@@ -63,6 +86,9 @@ public class DetailController {
         );
     }
 
+
+    @Operation(summary = "Eliminar detalle", description = "Permite eliminar un detalle proporcionando su ID.")
+    @ApiResponse(responseCode = "204", description = "Detalle eliminado exitosamente.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDetail(@PathVariable Long id) {
         detailService.delete(id);

@@ -9,6 +9,9 @@ import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Image;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,8 @@ public class CabinController {
     }
 
 
+    @Operation(summary = "Get all cabins", description = "Devuelve una lista de todas las cabañas disponibles.")
+    @ApiResponse(responseCode = "200", description = "Lista de cabañas obtenida exitosamente.")
     @GetMapping
     public List<CabinDTO> getAllCabins() {
         return cabinService.findAll().stream()
@@ -38,6 +43,11 @@ public class CabinController {
     }
 
 
+    @Operation(summary = "Obtener cabaña por ID", description = "Devuelve los detalles de una cabaña específica usando su ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cabaña encontrada."),
+            @ApiResponse(responseCode = "404", description = "Cabaña no encontrada.")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CabinDTO> getCabinById(@PathVariable Long id) {
         Cabin cabin = cabinService.findById(id);
@@ -48,6 +58,8 @@ public class CabinController {
         return ResponseEntity.ok(cabinDTO);
     }
 
+    @Operation(summary = "Obtener cabañas aleatorias", description = "Devuelve un número de cabañas aleatorias con su primera imagen.")
+    @ApiResponse(responseCode = "200", description = "Cabañas aleatorias obtenidas exitosamente.")
     @GetMapping("/random")
     //Llama 10 cabañas random con su primera imagen
     public ResponseEntity<List<CabinDTO>> getRandomCabins(@RequestParam(defaultValue = "10") int count) {
@@ -55,6 +67,12 @@ public class CabinController {
         return ResponseEntity.ok(randomCabins);
     }
 
+
+    @Operation(summary = "Crear una nueva cabaña", description = "Permite crear una nueva cabaña.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cabaña creada exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos.")
+    })
     @PostMapping
     public ResponseEntity<?> createCabin(@ModelAttribute CabinDTO cabinDTO) {
         Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
@@ -69,6 +87,13 @@ public class CabinController {
         );
     }
 
+
+    @Operation(summary = "Actualizar cabaña", description = "Permite actualizar una cabaña existente .")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cabaña actualizada exitosamente."),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos."),
+            @ApiResponse(responseCode = "404", description = "Cabaña no encontrada.")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
 
@@ -92,6 +117,9 @@ public class CabinController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
+    @ApiResponse(responseCode = "204", description = "Cabaña eliminada exitosamente.")
     @GetMapping("/filter")
     public ResponseEntity<List<CabinDTO>> getCabinsByCategories(@RequestParam List<CabinCategory> categories) {
         List<CabinDTO> cabins = cabinService.getCabinsByCategories(categories);
