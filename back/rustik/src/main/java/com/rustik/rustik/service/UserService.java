@@ -1,5 +1,6 @@
 package com.rustik.rustik.service;
 
+import com.rustik.rustik.controller.UserController;
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
 import com.rustik.rustik.exception.BadRequestException;
@@ -8,11 +9,15 @@ import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.security.TokenService;
+import jakarta.validation.ConstraintViolationException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +36,13 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    public static final Logger logger = Logger.getLogger(UserService.class);
 
 
-    public AuthUserDTO registerUser (User user){
+
+    public AuthUserDTO registerUser (User user) {
+
+
         String codedPass = encoder.encode(user.getPassword());
         String upperName = user.getName().toUpperCase();
         String upperSurname = user.getSurname().toUpperCase();
@@ -42,10 +51,15 @@ public class UserService {
         user.setName(upperName);
         user.setSurname(upperSurname);
 
+
         User savedUser = userRepository.save(user);
 
         String token = tokenService.generateToken(savedUser);
         return new AuthUserDTO(savedUser, token);
+
+
+
+
     }
 
 
@@ -53,10 +67,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public AuthUserDTO logIn (LogInDTO logInDTO) throws NotFoundException, BadRequestException {
+    public AuthUserDTO logIn (LogInDTO logInDTO) throws BadRequestException {
 
         User user = userRepository.findByEmail(logInDTO.getEmail())
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new BadRequestException("Credenciales incorrectas"));
 
         if (!encoder.matches(logInDTO.getPassword(), user.getPassword())) {
             throw new BadRequestException("Credenciales incorrectas");
@@ -106,6 +120,9 @@ public class UserService {
         return userRepository.save(user);}
 
 
+    public Optional<User> findUserByPhone (String phone){
+        return userRepository.findByPhone(phone);
+    }
 
 
 }

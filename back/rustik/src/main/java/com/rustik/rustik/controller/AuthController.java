@@ -45,6 +45,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo electrónico ya está registrado.");
         }
 
+        if(userService.findUserByPhone(user.getPhone()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El numero de télefono ya se encuentra registrado.");
+        }
+
+
+
         // Registrar al usuario
         AuthUserDTO authUserDTO = userService.registerUser(user);
 
@@ -67,7 +73,7 @@ public class AuthController {
 
             return ResponseEntity.ok(authUserDTO);
 
-        } catch (BadRequestException | NotFoundException e){
+        } catch (BadRequestException e){
             throw e;
         }
 
