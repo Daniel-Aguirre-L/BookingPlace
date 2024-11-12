@@ -22,7 +22,8 @@ export default {
         '400': '25rem',
       },
       spacing: {
-        'calc-100vh-minus-245':"calc(100vh - 245px)"
+        'calc-100vh-minus-245':"calc(100vh - 245px)",
+        '100': '6.25rem'
       },
       keyframes: {
         fadeIn: {
