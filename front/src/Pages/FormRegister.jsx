@@ -32,14 +32,29 @@ const FormRegister = () => {
 
   const validate = () => {
     let valid = true;
-    const newErrors = { firstName: '', lastName: '', email: '', phone: '', password: '', passwordRepeat: '' };
+    const newErrors = { firstName: '', lastName: '', email: '', phone: '', password: '', passwordRepeat: '', country: '' };
 
+    if (!form.firstName) {
+      newErrors.firstName = 'El nombre es obligatorio';
+      valid = false;
+    }
+    
     if (form.firstName.trim().length < 3) {
       newErrors.firstName = 'El nombre debe tener al menos 3 caracteres';
     }
 
+    if (!form.lastName) {
+      newErrors.lastName = 'El apellido es obligatorio';
+      valid = false;
+    }
+
     if (form.lastName.trim().length < 3) {
       newErrors.lastName = 'El apellido debe tener al menos 3 caracteres';
+    }
+
+    if (!form.country) {
+      newErrors.country = 'El pais es obligatorio';
+      valid = false;
     }
    
     const phoneRegex = /^[0-9]{7,12}$/;
@@ -122,7 +137,6 @@ const FormRegister = () => {
                   <InputField
                     name="firstName"
                     placeholder="Nombre"
-                    required
                     value={form.firstName}
                     onChange={handleChange}
                   />
@@ -135,7 +149,6 @@ const FormRegister = () => {
                   <InputField
                     name="lastName"
                     placeholder="Apellido"
-                    required
                     value={form.lastName}
                     onChange={handleChange}
                   />
@@ -148,7 +161,6 @@ const FormRegister = () => {
               <InputField
                 type="email"
                 name="email"
-                required
                 placeholder="Correo Electrónico"
                 value={form.email}
                 onChange={handleChange}
@@ -163,7 +175,6 @@ const FormRegister = () => {
                 <InputField
                   name="phone"
                   placeholder="Número de teléfono"
-                  required
                   value={form.phone}
                   onChange={handleChange}
                 />
@@ -177,6 +188,7 @@ const FormRegister = () => {
                   placeholder="País"
                   onSelect={handleCountrySelect}
                 />
+                {errors.country && <p className="text-red-500 text-sm mt-1">{errors.country}</p>}
               </div>
             </div>
 
@@ -186,7 +198,6 @@ const FormRegister = () => {
                 type="password"
                 name="password"
                 placeholder="Contraseña"
-                required
                 value={form.password}
                 onChange={handleChange}
                 className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black"
@@ -200,7 +211,6 @@ const FormRegister = () => {
                 type="password"
                 name="passwordRepeat"
                 placeholder="Confirma tu contraseña"
-                required
                 value={form.passwordRepeat}
                 onChange={handleChange}
                 className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black"

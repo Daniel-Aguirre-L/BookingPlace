@@ -12,7 +12,7 @@ const MyProfile = () => {
 
   const { setNotification } = useNotificationStore();
   const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
-  const { logout } = useUser();  
+  const { logout, onRefreshLoggedUser, refreshLoggedUser } = useUser();  
   const navigate = useNavigate();
 
   const defaultValue = { id: 0, email: '', password: '', repeatPassword: '', name: '', surname: '', phone: '', country: '' };
@@ -81,7 +81,7 @@ const MyProfile = () => {
       valid = false;
 
     } else if (!phoneRegex.test(form.phone)) {
-      newErrors.phone = 'el numero de telefono debe tener 10 digitos'
+      newErrors.phone = 'el numero de telefono debe tener al menos 7 digitos'
       valid = false;
 
     }
@@ -129,15 +129,14 @@ const MyProfile = () => {
       try {
         const {id, password, repeatPassword, ...otherData } = form; 
         const updateUser = password ? {...otherData, password, repeatPassword} : otherData;
-        console.log({updateUser});
         const { data } = await rustikApi.put(`${rustikEndpoints.users}/${id}`, updateUser);
         setNotification({
           visibility: true,
           type: "success",
           text: `Datos guardados correctamente!`,
         });
-        
-        console.log({data});
+        onRefreshLoggedUser();
+
       } catch (error) {
         if (error.status >= 400 && error.status < 500 ) {
           setNotification({
@@ -167,6 +166,7 @@ const MyProfile = () => {
       });
     }
   };
+
 
 
   return (
