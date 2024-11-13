@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { routeList } from "./helpers/routeList";
-
 import Home from "./Pages/Home";
 import LoginPage from "./Pages/Login";
 import AdminPanel from "./Pages/AdminPanel";
@@ -13,11 +12,11 @@ import FormRegister from "./Pages/FormRegister";
 import MyProfile from "./Pages/MyProfile";
 import MyFavorites from "./Pages/MyFavorites";
 import MyBookings from "./Pages/MyBookings";
-
 import Layout from "./Components/layouts/Layout";
 import AdminLayout from "./Components/layouts/AdminLayout";
 import AuthLayout from "./Components/layouts/AuthLayout";
 import UserLayout from "./Components/layouts/UserLayout";
+
 
 
 function App() {
