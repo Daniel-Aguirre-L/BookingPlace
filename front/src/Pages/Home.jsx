@@ -7,6 +7,8 @@ import DisplayCard from "../Components/DisplayCard";
 import { rustikApi } from "../services/rustikApi";
 import { routeList } from "../helpers/routeList";
 import { rustikEndpoints } from "../services/rustkEndPoints";
+import AgregarCaracteristica from "./FormFeature";
+import FormFeature from "./FormFeature";
 
 
 
@@ -60,7 +62,7 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <DisplayCard cabin={cabins[8]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
-      
+      <FormFeature></FormFeature>
     </div>
     
   );

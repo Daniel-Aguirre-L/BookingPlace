@@ -8,4 +8,6 @@ export const rustikEndpoints = {
     myUser: "/users/my-user",
     users: "/users",
     
+
+   
 }
