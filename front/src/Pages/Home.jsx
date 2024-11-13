@@ -62,7 +62,7 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <DisplayCard cabin={cabins[8]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
-      <FormFeature></FormFeature>
+    
     </div>
     
   );
