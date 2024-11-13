@@ -40,7 +40,8 @@ public class SecurityConfig {
             PREFIX + "/cabins/{id}",
             PREFIX + "/cabins/random",
             PREFIX + "/details",
-            PREFIX + "/details/{id}"
+            PREFIX + "/details/{id}",
+            PREFIX + "/features"
     );
 
     @Bean
