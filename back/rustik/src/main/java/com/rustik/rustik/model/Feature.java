@@ -16,5 +16,8 @@ public class Feature {
     private String name;
     private String icon;
 
-
+    public Feature(String name, String icon) {
+        this.name = name;
+        this.icon = icon;
+    }
 }

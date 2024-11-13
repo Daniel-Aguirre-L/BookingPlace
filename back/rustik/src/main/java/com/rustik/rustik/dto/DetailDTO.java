@@ -8,4 +8,6 @@ public class DetailDTO {
     private Long cabinId;
     private Long featureId;
     private Integer quantity;
+    private String featureName;
+    private String featureIcon;
 }

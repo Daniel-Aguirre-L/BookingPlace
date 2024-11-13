@@ -78,6 +78,7 @@ const Navbar = () => {
           <div
             className="max-md:hidden gap-2 flex justify-center items-center cursor-pointer"
             onMouseEnter={handleMouseEnter}
+            onClick={handleMouseEnter}
           >
             <span className="relative">
               <Avatar name={userName} size="small"/>
@@ -95,14 +96,17 @@ const Navbar = () => {
                 ? "opacity-100 translate-y-0 visible"
                 : "opacity-0 -translate-y-5 invisible"
             }`}
-            onMouseLeave={handleMouseLeave}
+            onMouseLeave={handleMouseLeave} // Ensure menu closes when mouse leaves the section
+            onClick={handleMouseLeave}
           >
             <span className="text-[1.3rem] font-medium flex items-center gap-5 w-full">
             <Avatar name={userName} size="medium"/>
               <p>{userName}</p>
             </span>
             <hr className="border-background-dark border-dotted opacity-[15%] mt-6 mb-4" />
-            <MenuOption imgUrl="/Icons/profile.svg">Editar Perfil</MenuOption>
+            <Link to={routeList.USER_PROFILE}>
+              <MenuOption imgUrl="/Icons/profile.svg">Mi Cuenta</MenuOption>
+            </Link>
             {isAdmin && (
               <Link to={routeList.ADMIN_PANEL}>
                 <MenuOption imgUrl="/Icons/config.svg">
