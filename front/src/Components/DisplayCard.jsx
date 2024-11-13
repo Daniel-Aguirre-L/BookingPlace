@@ -1,4 +1,4 @@
-import React from "react";
+
 
 function ImageCard({ src }) {
   return (
@@ -15,7 +15,7 @@ function DisplayCard({cabin, handleOnClick}) {
   return (
     <section className="pageMargin relative grid grid-cols-2 gap-6 mb-10 max-xl:grid-cols-1 max-xl:max-w-[600px] justify-self-center">
       <div className="relative bg-primary-color rounded-[1.2rem] p-8 flex flex-col">
-        <h2 className="text-[2.5rem] font-bold mb-10 montserrat">
+        <h2 className="text-[2.5rem] font-bold mb-10 montserrat w-10/12">
           {cabin.name}
         </h2>
         <p>

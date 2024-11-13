@@ -44,7 +44,6 @@ public class UserMapper {
 
     public static User toExistingEntity (UserDTO dto, User user) {
 
-
         if(dto.getName() != null){
                 user.setName(dto.getName());
         }
@@ -60,6 +59,8 @@ public class UserMapper {
             } else {
                 throw new BadRequestException("Las contraseñas no coinciden");
             }
+        }else{
+            user.setPassword(null);
         }
         if (dto.getCountry() != null){
             user.setCountry(dto.getCountry());

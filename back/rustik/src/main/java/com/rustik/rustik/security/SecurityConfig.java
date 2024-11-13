@@ -36,9 +36,7 @@ public class SecurityConfig {
     );
 
     List<String> publicGet = List.of(
-            PREFIX + "/cabins",
-            PREFIX + "/cabins/{id}",
-            PREFIX + "/cabins/random",
+            PREFIX + "/cabins/**",
             PREFIX + "/details",
             PREFIX + "/details/{id}",
             PREFIX + "/features"

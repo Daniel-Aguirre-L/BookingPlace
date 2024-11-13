@@ -82,11 +82,11 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);
-
         if (!userOptional.isPresent()) {
             throw new NotFoundException("Usuario no existe");
         }
 
+        String currentPassword =  userOptional.get().getPassword();
         User user = UserMapper.toExistingEntity(userDTO, userOptional.get());
         //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
 
@@ -99,6 +99,13 @@ public class UserController {
                 throw new BadRequestException("Usuario no autorizado");
             }
         }
+
+        if (user.getPassword()!= null) {
+            user.setPassword(userService.encodePassword(user.getPassword()));
+        }else{
+            user.setPassword(currentPassword);
+        }
+
 
         User updatedUser = userService.updateUser(user);
         UserDTO updatedDTO = UserMapper.toDTO(updatedUser);

@@ -4,6 +4,7 @@ import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApiForm } from "../services/rustikApi";
 import useNotificationStore from '../store/useNotificationStore';
 import useLoaderModalStore from '../store/useLoaderModalStore';
+import CloseButton from './CloseButton';
 
 const AddProductModal = ({onClose, isOpen}) => {
     
@@ -83,18 +84,7 @@ const AddProductModal = ({onClose, isOpen}) => {
           <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
             <div className="sticky top-0 flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
               <h3 className="font-bold text-[#EEEEEEEE]">Agregar Cabaña</h3>
-              <button 
-                type="button" 
-                className="size-8 inline-flex justify-center items-center gap-x-2 rounded-full  border-2 border-[#FBFFBD] bg-[#088395] text-gray-800" 
-                aria-label="Close" 
-                onClick={onClose}
-              >
-                <span className="sr-only">Close</span>
-                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" color="#FBFFBD" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-                </svg>
-              </button>
+              <CloseButton onClick={onClose} /> 
             </div>
             <form onSubmit={handleSubmit}>
               <div className="p-4 flex gap-3 flex-col overflow-y-visible ">

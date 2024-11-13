@@ -111,11 +111,6 @@ public class UserService {
 
     public User updateUser (User user) {
 
-        if (user.getPassword() != null){
-            String codedPass = encoder.encode(user.getPassword());
-            user.setPassword(codedPass);
-        }
-
         String upperName = user.getName().toUpperCase();
         String upperSurname = user.getSurname().toUpperCase();
 
@@ -126,6 +121,10 @@ public class UserService {
 
     public Optional<User> findUserByPhone (String phone){
         return userRepository.findByPhone(phone);
+    }
+
+    public String encodePassword(String password) {
+        return encoder.encode(password);
     }
 
 }

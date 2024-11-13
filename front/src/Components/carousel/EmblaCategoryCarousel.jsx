@@ -2,7 +2,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import styles from "./carousel-styles.module.css";
 
-const EmblaCategoryCarousel = ({ slides, options }) => {
+const EmblaCategoryCarousel = ({ slides, options, getCategoryCabins }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
     AutoScroll({ playOnInit: true }),
   ]);
@@ -24,14 +24,14 @@ const EmblaCategoryCarousel = ({ slides, options }) => {
                   <p className="text-[1.05rem] z-10">
                     {slide.description}
                   </p>
-                  <button
-                    className="text-[1.2rem] bg-secondary-color text-background-dark h-12 w-fit px-5 rounded-[0.6rem] font-medium z-10 mt-5"
-                    onClick={() =>
-                    console.log({slide}) //ACA DEBERÍA CAMBIARSE EL FILTRO DEL ENDPOINT
-                    }
-                  >
-                    Ver Todas
-                  </button>
+                  <a href="#cabañas" className="z-10" >
+                    <button
+                      className="text-[1.2rem] bg-secondary-color text-background-dark h-12 w-fit px-5 rounded-[0.6rem] font-medium z-10 mt-5"
+                      onClick={() => getCategoryCabins(slide.title.toUpperCase())}
+                    >
+                      Ver Todas
+                    </button>
+                  </a>
                 </div>
                 <img
                   className={styles["embla__slide__img_home"]}

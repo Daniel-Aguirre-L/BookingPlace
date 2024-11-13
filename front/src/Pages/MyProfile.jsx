@@ -12,7 +12,7 @@ const MyProfile = () => {
 
   const { setNotification } = useNotificationStore();
   const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
-  const { logout, onRefreshLoggedUser, refreshLoggedUser } = useUser();  
+  const { logout, onRefreshLoggedUser } = useUser();  
   const navigate = useNavigate();
 
   const defaultValue = { id: 0, email: '', password: '', repeatPassword: '', name: '', surname: '', phone: '', country: '' };

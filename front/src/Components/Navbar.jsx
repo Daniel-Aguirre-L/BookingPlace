@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
 import Avatar from "./Avatar";
+import CloseButton from "./CloseButton";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -50,9 +51,9 @@ const Navbar = () => {
         <img src="/Icons/logoSvg.svg" alt="icono" />
       </Link>
 
-      <Link className="md:hidden" to={routeList.HOME}>
+      <button className="md:hidden" onClick={handleMouseEnter}>
         <img src="/Icons/hamburger.svg" alt="icono" />
-      </Link>
+      </button>
 
       {!isLoggedIn && (
         <div className="gap-5 hidden md:flex">
@@ -81,43 +82,50 @@ const Navbar = () => {
             onClick={handleMouseEnter}
           >
             <span className="relative">
-              <Avatar name={userName} size="small"/>
+              <Avatar name={userName} size="small" />
               <img
                 className="absolute bottom-0 right-0 w-4 h-4"
                 src="/Icons/arrowdown.svg"
                 alt="arrow down"
               />
             </span>
-            <p className="text-[1.2rem]">{userName}</p>
+            <p className="text-[1.2rem] capitalize">{userName}</p>
           </div>
           <section
-            className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem] top-[5rem] right-24 transition-all duration-200 ease-in-out ${
-              userMenuOpen
+            className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem]  top-[5.5rem] right-0 md:top-[5rem] md:right-24 transition-all duration-200 ease-in-out ${userMenuOpen
                 ? "opacity-100 translate-y-0 visible"
                 : "opacity-0 -translate-y-5 invisible"
-            }`}
+              }`}
             onMouseLeave={handleMouseLeave} // Ensure menu closes when mouse leaves the section
             onClick={handleMouseLeave}
           >
-            <span className="text-[1.3rem] font-medium flex items-center gap-5 w-full">
-            <Avatar name={userName} size="medium"/>
-              <p>{userName}</p>
-            </span>
-            <hr className="border-background-dark border-dotted opacity-[15%] mt-6 mb-4" />
-            <Link to={routeList.USER_PROFILE}>
-              <MenuOption imgUrl="/Icons/profile.svg">Mi Cuenta</MenuOption>
-            </Link>
-            {isAdmin && (
-              <Link to={routeList.ADMIN_PANEL}>
-                <MenuOption imgUrl="/Icons/config.svg">
-                  Panel de Admin
-                </MenuOption>
+            <div className="relative" >
+            <div className="absolute -top-3 -right-3" >
+              <CloseButton callback={()=>setUserMenuOpen(false)} />
+            </div>
+              <span className="text-[1.3rem] font-medium flex items-center gap-5 w-full">
+                <div className="shadow-md rounded-full shadow-[rgba(0,0,0,0.6)]">
+                  <Avatar name={userName} size="medium" />
+                </div>
+
+                <p className="capitalize" >{userName}</p>
+              </span>
+              <hr className="border-background-dark border-dotted opacity-[15%] mt-6 mb-4" />
+              <Link to={routeList.USER_PROFILE}>
+                <MenuOption imgUrl="/Icons/profile.svg">Mi Cuenta</MenuOption>
               </Link>
-            )}
-            <hr className="border-background-dark border-dotted opacity-[15%] my-4" />
-            <MenuOption imgUrl="/Icons/logout.svg" onClick={logout}>
-              Logout
-            </MenuOption>
+              {isAdmin && (
+                <Link to={routeList.ADMIN_PANEL}>
+                  <MenuOption imgUrl="/Icons/config.svg">
+                    Panel de Admin
+                  </MenuOption>
+                </Link>
+              )}
+              <hr className="border-background-dark border-dotted opacity-[15%] my-4" />
+              <MenuOption imgUrl="/Icons/logout.svg" onClick={logout}>
+                Logout
+              </MenuOption>
+            </div>
           </section>
         </>
       )}
