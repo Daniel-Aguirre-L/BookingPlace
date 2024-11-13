@@ -24,12 +24,10 @@ public class CabinMapper {
         dto.setPrice(cabin.getPrice());
         dto.setCategory(cabin.getCategory() != null ? cabin.getCategory().name() : null);
 
-
-        // Convertir la lista de detalles
+        // Convertir la lista de detalles usando el DetailMapper
         List<DetailDTO> detailDTOs = cabin.getCabinFeatures().stream()
                 .map(DetailMapper::toDTO)
                 .collect(Collectors.toList());
-
         dto.setCabinFeatures(detailDTOs);
 
         // Convertir la lista de imágenes
@@ -41,11 +39,10 @@ public class CabinMapper {
                     return imageDTO;
                 })
                 .collect(Collectors.toList());
-
         dto.setImages(imageDTOs);
+
         return dto;
     }
-
     // Convertir de CabinDTO a Cabin
     public static Cabin toEntity(CabinDTO dto) {
 

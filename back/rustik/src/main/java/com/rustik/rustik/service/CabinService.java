@@ -2,10 +2,8 @@ package com.rustik.rustik.service;
 
 
 import com.rustik.rustik.dto.CabinDTO;
-import com.rustik.rustik.dto.DetailDTO;
-import com.rustik.rustik.dto.ImageDTO;
+
 import com.rustik.rustik.mapper.CabinMapper;
-import com.rustik.rustik.mapper.DetailMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
@@ -14,12 +12,10 @@ import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.FeatureRepository;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +28,7 @@ public class CabinService {
     private final ImageService imageService;
     private final DetailService detailService;
     private final FeatureRepository featureRepository;
+
 
     @Autowired
     public CabinService(CabinRepository cabinRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
@@ -137,4 +134,11 @@ public class CabinService {
                     return dto;
                 }).collect(Collectors.toList());
     }
+    public List<CabinDTO> getCabinsByName(String name) {
+        List<Cabin> cabins = cabinRepository.findByNameContaining(name);
+        return cabins.stream()
+                .map(cabin -> CabinMapper.toDTO(cabin))
+                .collect(Collectors.toList());
+    }
+
 }
