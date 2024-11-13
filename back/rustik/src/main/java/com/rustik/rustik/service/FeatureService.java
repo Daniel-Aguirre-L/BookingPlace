@@ -33,4 +33,8 @@ public class FeatureService {
     public void delete(Long id) {
         featureRepository.deleteById(id);
     }
+
+    public void save(List<Feature> features) {
+        featureRepository.saveAll(features);
+    }
 }

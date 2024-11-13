@@ -4,9 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.model.*;
+import com.rustik.rustik.repository.FeatureRepository;
 import com.rustik.rustik.repository.ImageRepository;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
+import com.rustik.rustik.service.FeatureService;
 import com.rustik.rustik.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -30,18 +32,41 @@ public class InitialData implements ApplicationRunner {
     @Autowired
     private CabinService cabinService;
 
-
     @Autowired
     private Cloudinary cloudinary;
 
+    @Autowired
+    private FeatureService featureService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        //CREA USUARIO ADMIN
         User admin = new User("admin","admin","admin@admin.com","123","uy", UserRole.ROLE_ADMIN,"1234Admin!");
         userService.registerUser(admin);
 
-        List<Cabin> cabins = new ArrayList<>();
+        //CREA LISTADO DE FEATURES
+        List<Feature> features = new ArrayList<>();
+        features.add(new Feature("Wi-Fi", "I1"));
+        features.add(new Feature("Baños", "I2"));
+        features.add(new Feature("Habitaciones", "I3"));
+        features.add(new Feature("Cocina", "I4"));
+        features.add(new Feature("Parqueadero", "I5"));
+        features.add(new Feature("TV", "I6"));
+        features.add(new Feature("Aire Acondicionado", "I7"));
+        features.add(new Feature("Calentador", "I8"));
+        features.add(new Feature("Jacuzzi", "I9"));
+        features.add(new Feature("Lavadora", "I10"));
+        features.add(new Feature("Pet-Friendly", "I11"));
+        features.add(new Feature("Calefacción", "I12"));
+        features.add(new Feature("Chimenea", "I13"));
+        features.add(new Feature("Refrigerador", "I14"));
+        features.add(new Feature("Horno", "I15"));
+        features.add(new Feature("Asador", "I16"));
 
+        featureService.save(features);
+
+        //CREA LISTADO DE CABANAS
+        List<Cabin> cabins = new ArrayList<>();
         cabins.add(new Cabin("Cabaña del Bosque", "Mirador del Valle", 2,
                 "Un refugio único para parejas, esta cabaña-carpa de glamping se encuentra en un mirador rodeado de bosque, ofreciendo una escapada íntima con vistas espectaculares. Disfruta de la tranquilidad de la naturaleza con comodidad, despertando cada mañana en medio de un entorno natural inigualable y paisajes de ensueño.",
                 100.0, CabinCategory.GLAMPING));
@@ -124,12 +149,13 @@ public class InitialData implements ApplicationRunner {
 
         cabinService.saveCabins(cabins);
 
-
         for (int i = 1; i <= 20; i++) {
             String folder = "cabin " + i; // Crea el nombre de la carpeta
             System.out.println("Listando imágenes en la carpeta: " + folder);
             listImagesInFolder(i);
         }
+
+
     }
 
     public void listImagesInFolder( int i ) {
@@ -157,7 +183,6 @@ public class InitialData implements ApplicationRunner {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }
