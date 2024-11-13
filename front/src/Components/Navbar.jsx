@@ -36,7 +36,7 @@ const Navbar = () => {
       <span className="text-lg">{children}</span>
       {onClick == logout || (
         <img
-          src="./Icons/arrowright.svg"
+          src="/Icons/arrowright.svg"
           alt="Icon"
           className="w-3 h-3 absolute right-0"
         />
@@ -83,7 +83,7 @@ const Navbar = () => {
               <Avatar name={userName} size="small"/>
               <img
                 className="absolute bottom-0 right-0 w-4 h-4"
-                src="./Icons/arrowdown.svg"
+                src="/Icons/arrowdown.svg"
                 alt="arrow down"
               />
             </span>
@@ -95,7 +95,7 @@ const Navbar = () => {
                 ? "opacity-100 translate-y-0 visible"
                 : "opacity-0 -translate-y-5 invisible"
             }`}
-            onMouseLeave={handleMouseLeave} // Ensure menu closes when mouse leaves the section
+            onMouseLeave={handleMouseLeave}
           >
             <span className="text-[1.3rem] font-medium flex items-center gap-5 w-full">
             <Avatar name={userName} size="medium"/>

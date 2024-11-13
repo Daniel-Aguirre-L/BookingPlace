@@ -7,9 +7,7 @@ import DisplayCard from "../Components/DisplayCard";
 import { rustikApi } from "../services/rustikApi";
 import { routeList } from "../helpers/routeList";
 import { rustikEndpoints } from "../services/rustkEndPoints";
-
-
-
+import EmblaCategoryCarousel from "../Components/carousel/EmblaCategoryCarousel";
 
 
 const Home = () => {
@@ -45,9 +43,38 @@ const Home = () => {
 
   const myCabins =  useMemo(() => cabins.slice(0, (4 * page)), [page, cabins]);
 
+  const SLIDES = [
+    {
+      title: "Glamping",
+      description: "Encuentra y reserva espacios de glamping en nuestros destinos más populares",
+      src: "/img/glamping.png"
+    },
+    {
+      title: "Rustica",
+      description: "Descubre y reserva cabañas rústicas en nuestros destinos favoritos",
+      src: "/img/rustica.png"
+    },
+    {
+      title: "Invierno",
+      description: "Descubre y reserva cabañas rústicas en nuestros destinos favoritos",
+      src: "/img/invierno.png"
+    },
+    {
+      title: "Verano",
+      description: "Encuentra y reserva espacios de glamping en nuestros destinos más populares",
+      src: "/img/verano.png"
+    },
+    {
+      title: "Moderna",
+      description: "Encuentra y reserva espacios de glamping en nuestros destinos más populares",
+      src: "/img/moderna.png"
+    }
+  ];
+
   return (
     <div className="animate-fadeIn " >
       <Landing></Landing>
+      <EmblaCategoryCarousel slides={SLIDES} options={{ loop: true }} />
       <Headline title="Nuestras Cabañas" handleOnClick={handleOnClick} >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
