@@ -91,7 +91,9 @@ public class UserController {
         //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
 
         if (userDetails.getUser().getRole().equals(UserRole.ROLE_ADMIN)) {
-            user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+            if (userDTO.getIsAdmin() != null) {
+                user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+            }
         }else {
             if (userDetails.getUser().getId() != id) {
                 throw new BadRequestException("Usuario no autorizado");

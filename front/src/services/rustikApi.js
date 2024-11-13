@@ -37,8 +37,9 @@ export const rustikApiForm = axios.create({
 
 rustikApi.interceptors.request.use(
     (config) => {
-      if (TOKEN) {
-        config.headers["Authorization"] = `Bearer ${TOKEN}`;
+      const TOKEN1 = localStorage.getItem("token") || "";
+      if (TOKEN1) {
+        config.headers["Authorization"] = `Bearer ${TOKEN1}`;
       }
       return config;
     },
