@@ -7,17 +7,18 @@ import com.rustik.rustik.model.Feature;
 
 public class DetailMapper {
 
+
     public static DetailDTO toDTO(Detail detail) {
-
-        if(detail == null) {
-            return null;
-        }
-
         DetailDTO dto = new DetailDTO();
         dto.setId(detail.getId());
         dto.setCabinId(detail.getCabin().getId());
         dto.setFeatureId(detail.getFeature().getId());
         dto.setQuantity(detail.getQuantity());
+
+        // Añadir el nombre e ícono de la característica
+        dto.setFeatureName(detail.getFeature().getName());
+        dto.setFeatureIcon(detail.getFeature().getIcon());
+
         return dto;
     }
 

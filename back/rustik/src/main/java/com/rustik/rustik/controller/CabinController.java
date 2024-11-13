@@ -111,6 +111,8 @@ public class CabinController {
         );
     }
 
+    @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
+    @ApiResponse(responseCode = "204", description = "Cabaña eliminada exitosamente.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
         cabinService.delete(id);
@@ -118,8 +120,6 @@ public class CabinController {
     }
 
 
-    @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
-    @ApiResponse(responseCode = "204", description = "Cabaña eliminada exitosamente.")
     @GetMapping("/filter")
     public ResponseEntity<List<CabinDTO>> getCabinsByCategories(@RequestParam List<CabinCategory> categories) {
         List<CabinDTO> cabins = cabinService.getCabinsByCategories(categories);
@@ -128,4 +128,14 @@ public class CabinController {
         }
         return ResponseEntity.ok(cabins);
     }
+
+    @GetMapping("/filterByName")
+    public ResponseEntity<List<CabinDTO>> getCabinsByName(@RequestParam String name) {
+        List<CabinDTO> cabins = cabinService.getCabinsByName(name);
+        if (cabins.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(cabins);
+    }
+
 }

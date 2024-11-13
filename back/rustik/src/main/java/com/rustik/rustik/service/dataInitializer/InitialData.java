@@ -4,9 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.model.*;
+import com.rustik.rustik.repository.FeatureRepository;
 import com.rustik.rustik.repository.ImageRepository;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
+import com.rustik.rustik.service.FeatureService;
 import com.rustik.rustik.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -30,9 +32,11 @@ public class InitialData implements ApplicationRunner {
     @Autowired
     private CabinService cabinService;
 
-
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    private FeatureService featureService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -124,6 +128,26 @@ public class InitialData implements ApplicationRunner {
 
         cabinService.saveCabins(cabins);
 
+        List<Feature> features = new ArrayList<>();
+        features.add(new Feature("Wi-Fi", "wifi-icon"));
+        features.add(new Feature("Baños", "bathroom-icon"));
+        features.add(new Feature("Habitaciones", "bedroom-icon"));
+        features.add(new Feature("Cocina", "kitchen-icon"));
+        features.add(new Feature("Parqueadero", "parking-icon"));
+        features.add(new Feature("TV", "tv-icon"));
+        features.add(new Feature("Aire Acondicionado", "ac-icon"));
+        features.add(new Feature("Calentador", "heater-icon"));
+        features.add(new Feature("Jacuzzi", "jacuzzi-icon"));
+        features.add(new Feature("Lavadora", "washing-machine-icon"));
+        features.add(new Feature("Pet-Friendly", "pet-friendly-icon"));
+        features.add(new Feature("Calefacción", "heating-icon"));
+        features.add(new Feature("Chimenea", "fireplace-icon"));
+        features.add(new Feature("Refrigerador", "fridge-icon"));
+        features.add(new Feature("Horno", "oven-icon"));
+        features.add(new Feature("Asador", "bbq-icon"));
+
+        featureService.save(features);
+
 
         for (int i = 1; i <= 20; i++) {
             String folder = "cabin " + i; // Crea el nombre de la carpeta
@@ -157,7 +181,6 @@ public class InitialData implements ApplicationRunner {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
 
     }
 }
