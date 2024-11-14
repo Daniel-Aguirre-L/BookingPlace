@@ -20,8 +20,8 @@ const Footer = () => {
             <a target="_blank" href="https://x.com"><img src="/Icons/Vector(2).svg" alt="x" /></a>
         </div>
         <div className="flex justify-center gap-12">
-          <span>About us</span>
-          <span>Contact</span>
+          <span>Sobre Nosotros</span>
+          <span>Contáctanos</span>
         </div>
         <p>Copyright @2024 digitalhouse proyecto integrador</p>
       </section>

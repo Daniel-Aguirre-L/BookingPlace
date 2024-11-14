@@ -12,8 +12,17 @@ const ManageCatalog = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentData, setCurrentData] = useState(null); 
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (cabin) => {
+        if(cabin && cabin.id){
+            setIsEditing(true);
+            setCurrentData(cabin);
+        } else {
+            setIsEditing(false);
+            setCurrentData(null);
+        }
         setModalOpen(true);
         window.scrollTo(0, 0);
     }
@@ -110,6 +119,10 @@ const ManageCatalog = () => {
                                             <div className="flex justify-center items-center gap-5 my-auto ">
                                                 <button
                                                     className="active:scale-90"
+                                                    onClick={() => {
+                                                        handleOpenModal(cabin);
+
+                                                    }}
                                                 >
                                                     <img src="/Icons/Editar.svg" alt="Editar cabaña" />
                                                 </button>
@@ -129,7 +142,7 @@ const ManageCatalog = () => {
                 </div>
             </div>
 
-            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal}  currentData={currentData} isEditing={isEditing} />
         </div>
     )
 }

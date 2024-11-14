@@ -62,14 +62,14 @@ const Navbar = () => {
             type="button"
             onClick={onLogin}
           >
-            Login
+            Iniciar Sesión
           </button>
           <button
             className="bg-[#FBFFBD] rounded-xl py-2 px-9 text-[#112211]"
             type="button"
             onClick={onSignIn}
           >
-            Sign in
+            Registrarse
           </button>
         </div>
       )}
@@ -123,7 +123,7 @@ const Navbar = () => {
               )}
               <hr className="border-background-dark border-dotted opacity-[15%] my-4" />
               <MenuOption imgUrl="/Icons/logout.svg" onClick={logout}>
-                Logout
+                Cerrar Sesión
               </MenuOption>
             </div>
           </section>
