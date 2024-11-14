@@ -11,6 +11,3 @@ const FeatureIcon = ({id="I20"}) => {
 }
 
 export default FeatureIcon
-
-
-

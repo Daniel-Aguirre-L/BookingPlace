@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CarouselModal from './carousel/CarouselModal';
 import PageTitleAndBack from './PageTitleAndBack';
-
+import FeatureIcon from './icons/FeatureIcon'
 
 
 const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-
-
+    console.log(cabin)
+    
+   
+    
     return (
         <div className="animate-fadeIn w-full p-4 md:p-6 mx-auto">
             <div className='transition-all' >
@@ -78,15 +80,32 @@ const Catalog = ({ cabin }) => {
                     </div>
                 </div>
 
-                <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Detalles</h1>
+                <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1 ml-4">Detalles</h1>
                 <p className="p-4 text-[#EEEEEE] text-sm md:text-base">
                     {cabin.description}
                 </p>
-            </div>
+
+                <div>
+
+                    <ul className='grid grid-cols-2 md:grid-cols-6 '>
+                        {cabin.cabinFeatures.map((feature) => (
+                            <li key={feature.id} className="text-[#EEEEEE] text-sm md:text-base flex items-center ml-4">
+                                <span className='text-2xl text-secondary-color mr-2' ><FeatureIcon id={feature.featureIcon}  /></span>
+                                {feature.featureName} {feature.quantity ? `/ ${feature.quantity}`:''}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+             </div>
+
+             
 
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
+             
 
-
+     
+      
 
         </div>
     );
