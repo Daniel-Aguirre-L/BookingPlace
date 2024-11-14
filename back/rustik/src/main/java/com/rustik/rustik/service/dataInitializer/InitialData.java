@@ -202,25 +202,24 @@ public class InitialData implements ApplicationRunner {
         List<Detail> newDetails = new ArrayList<>();
 
         for (int i = 0; i <= 19; i++) {
+            // Agrega Imagenes
             for (int j = 0; j <= 4; j++) {
                 Image image = new Image();
                 image.setUrl(urls.get(5 * i + j));
                 image.setImagePublicId(String.format("cabin %d/%d", i, j));
                 image.setCabin(saveCabins.get(i));
                 newImages.add(image);
-
             }
 
-            int characteristicsCount = random.nextInt(4) + 4;
+            int characteristicsCount = random.nextInt(7) + 5;
 
             for (int j = 0; j < characteristicsCount; j++) {
                 Detail detail = new Detail();
                 detail.setCabin(saveCabins.get(i));
                 Feature addFeature = features.get(random.nextInt(16));
                 detail.setFeature(addFeature);
-
                 if (addFeature.getHasQuantity()) {
-                    detail.setQuantity(random.nextInt(5));
+                    detail.setQuantity(random.nextInt(5)+1);
                 }
                 newDetails.add(detail);
             }

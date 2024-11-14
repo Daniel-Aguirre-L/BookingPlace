@@ -81,34 +81,34 @@ public class CabinMapper {
 
     public static Cabin toExistingEntity(Cabin  existingCabin, CabinDTO dto) {
 
-        Cabin  cabin = existingCabin;
+        //Cabin  cabin = existingCabin;
 
         if (dto.getName() != null){
-            cabin.setName(dto.getName());
+            existingCabin.setName(dto.getName());
         }
 
         if (dto.getLocation() != null){
-            cabin.setLocation(dto.getLocation());
+            existingCabin.setLocation(dto.getLocation());
         }
 
         if (dto.getCapacity() != null){
-            cabin.setCapacity(dto.getCapacity());
+            existingCabin.setCapacity(dto.getCapacity());
         }
 
         if (dto.getDescription() != null){
-            cabin.setDescription(dto.getDescription());
+            existingCabin.setDescription(dto.getDescription());
         }
 
         if (dto.getPrice()!= null){
-            cabin.setPrice(dto.getPrice());
+            existingCabin.setPrice(dto.getPrice());
         }
 
         if (dto.getCategory() != null) {
-            cabin.setCategory(CabinCategory.valueOf(dto.getCategory().toUpperCase()));
+            existingCabin.setCategory(CabinCategory.valueOf(dto.getCategory().toUpperCase()));
         }
 
+        return existingCabin;
 
 
-        return cabin;
     }
 }

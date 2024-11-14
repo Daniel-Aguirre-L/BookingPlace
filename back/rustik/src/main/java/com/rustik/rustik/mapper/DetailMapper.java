@@ -18,6 +18,7 @@ public class DetailMapper {
         // Añadir el nombre e ícono de la característica
         dto.setFeatureName(detail.getFeature().getName());
         dto.setFeatureIcon(detail.getFeature().getIcon());
+        dto.setHasQuantity(detail.getFeature().getHasQuantity());
 
         return dto;
     }

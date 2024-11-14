@@ -1,5 +1,6 @@
 package com.rustik.rustik.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,9 +30,11 @@ public class Cabin {
     private CabinCategory category; // Campo de categoría usando enum
 
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Detail> cabinFeatures = new ArrayList<>(); // Relación con CabinFeature
 
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Image> images = new ArrayList<>(); // Relación con Image
 
 
@@ -63,6 +66,23 @@ public class Cabin {
         this.category = category;
         this.images = images;
         this.cabinFeatures = cabinFeatures;
+    }
+
+    public Cabin(Long id, String name, String location, Integer capacity, String description, Double price, CabinCategory category, List<Detail> cabinFeatures, List<Image> images) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.capacity = capacity;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.cabinFeatures = cabinFeatures;
+        this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "Cabin{id=" + id + ", name='" + name + "', location='" + location + "', capacity=" + capacity + ", description='" + description + "', price=" + price + ", category=" + category + "}";
     }
 
 }

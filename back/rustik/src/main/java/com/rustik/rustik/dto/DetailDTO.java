@@ -10,4 +10,5 @@ public class DetailDTO {
     private Integer quantity;
     private String featureName;
     private String featureIcon;
+    private Boolean hasQuantity;
 }
