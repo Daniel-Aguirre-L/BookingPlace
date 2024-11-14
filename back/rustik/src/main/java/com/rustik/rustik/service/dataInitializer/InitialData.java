@@ -2,6 +2,7 @@ package com.rustik.rustik.service.dataInitializer;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.model.*;
 import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.ImageRepository;
@@ -12,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+
+import java.util.*;
 
 
 @Component
@@ -42,7 +41,7 @@ public class InitialData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //CREA USUARIO ADMIN
-        User admin = new User("admin","admin","admin@admin.com","123","uy", UserRole.ROLE_ADMIN,"1234Admin!");
+        User admin = new User("admin","admin","admin@admin.com","2345678","uy", UserRole.ROLE_ADMIN,"1234Admin!");
         userService.registerUser(admin);
 
         //CREA LISTADO DE FEATURES
@@ -192,7 +191,6 @@ public class InitialData implements ApplicationRunner {
 
     }
 
-
     public void crearImagenesYCaracteristicas(List<Cabin> saveCabins, List<Feature> features) {
 
         Random random = new Random();
@@ -211,8 +209,8 @@ public class InitialData implements ApplicationRunner {
                 newImages.add(image);
             }
 
+            // Agrega Caracteristicas
             int characteristicsCount = random.nextInt(7) + 5;
-
             for (int j = 0; j < characteristicsCount; j++) {
                 Detail detail = new Detail();
                 detail.setCabin(saveCabins.get(i));
@@ -224,8 +222,16 @@ public class InitialData implements ApplicationRunner {
                 newDetails.add(detail);
             }
 
-            imageRepository.saveAll(newImages);
-            detailRepository.saveAll(newDetails);
         }
+
+        //Quitar Duplicados de caracteristicas
+        Map<String, Detail> map = new LinkedHashMap<>();
+        for (Detail detail : newDetails) {
+            map.put(String.format("%s-%s", detail.getFeature(), detail.getCabin().getId()), detail);
+        }
+
+        imageRepository.saveAll(newImages);
+        detailRepository.saveAll(new ArrayList<>(map.values()));
+
     }
 }

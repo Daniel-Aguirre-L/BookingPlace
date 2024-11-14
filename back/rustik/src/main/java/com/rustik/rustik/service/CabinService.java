@@ -3,6 +3,7 @@ package com.rustik.rustik.service;
 
 import com.rustik.rustik.dto.CabinDTO;
 
+import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
@@ -18,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -119,6 +118,7 @@ public class CabinService {
 
         //Crear los detalles
         if (cabinDTO.getCabinFeatures() != null && cabinDTO.getCabinFeatures().size() > 0) {
+            cabinDTO.setCabinFeatures(removeDuplicateFeaturesKeepLast(cabinDTO.getCabinFeatures()));
             try {
                 if (currentCabin != null) {
                     //Borra las caracteristicas y las crea nuevamente
@@ -179,6 +179,15 @@ public class CabinService {
         return cabins.stream()
                 .map(cabin -> CabinMapper.toDTO(cabin))
                 .collect(Collectors.toList());
+    }
+
+
+    public List<DetailDTO> removeDuplicateFeaturesKeepLast(List<DetailDTO> details) {
+        Map<Long, DetailDTO> map = new LinkedHashMap<>();
+        for (DetailDTO detail : details) {
+            map.put(detail.getFeatureId(), detail);
+        }
+        return new ArrayList<>(map.values());
     }
 
 }
