@@ -1,6 +1,7 @@
 package com.rustik.rustik.security;
 
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,6 +43,11 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+
+    public Boolean getIsAdmin(){
+        return user.getRole().equals(UserRole.ROLE_ADMIN);
     }
 
 

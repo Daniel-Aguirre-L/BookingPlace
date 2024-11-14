@@ -83,7 +83,11 @@ public class UserService {
 
 
     public List<User> findUsers (){
-        return userRepository.findAll();
+
+        //logger.info(userRepository.findAll().toString());
+
+        //trae solo a los usuarios activos
+        return userRepository.findByIsActiveTrue();
     }
 
     public User setAdmin (Long id){
@@ -125,6 +129,12 @@ public class UserService {
 
     public String encodePassword(String password) {
         return encoder.encode(password);
+    }
+
+    public Boolean deleteLogic (User user){
+        user.setIsActive(false);
+        User deleteUser = userRepository.save(user);
+        return deleteUser.getIsActive();
     }
 
 }
