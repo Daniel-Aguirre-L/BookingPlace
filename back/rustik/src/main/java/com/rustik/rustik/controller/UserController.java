@@ -33,10 +33,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TokenService tokenService;
-
-
 
     public static final Logger logger = Logger.getLogger(UserController.class);
 
@@ -46,10 +42,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente."),
             @ApiResponse(responseCode = "400", description = "Usuario no autorizado."),
     }    )
-    @SecurityRequirement(name = "bearer")
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUser (@RequestHeader("Authorization") String authHeader){
-        if (tokenService.subjectIsAdmin(authHeader)){
+    public ResponseEntity<List<UserDTO>> getUser (@AuthenticationPrincipal CustomUserDetails userDetails){
+
+        if (userDetails.getIsAdmin()){
              List<UserDTO> usersDTO = userService.findUsers().stream()
                     .map(UserMapper::toDTO).collect(Collectors.toList());
             return ResponseEntity.ok(usersDTO);
@@ -64,7 +60,6 @@ public class UserController {
     })
     @GetMapping("/my-user")
     public ResponseEntity<UserDTO> getMyUser (@AuthenticationPrincipal CustomUserDetails userDetails){
-        // Para los User endpoints devolver el nombre y el apellido por separado
         UserDTO myUser = UserMapper.userDetailsToUserDTO(userDetails);
         return ResponseEntity.ok(myUser);
     }
@@ -82,7 +77,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);
-        if (!userOptional.isPresent()) {
+        if (!userOptional.isPresent() || !userOptional.get().getIsActive()) {
             throw new NotFoundException("Usuario no existe");
         }
 
@@ -90,7 +85,7 @@ public class UserController {
         User user = UserMapper.toExistingEntity(userDTO, userOptional.get());
         //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
 
-        if (userDetails.getUser().getRole().equals(UserRole.ROLE_ADMIN)) {
+        if (userDetails.getIsAdmin()) {
             if (userDTO.getIsAdmin() != null) {
                 user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
             }
@@ -110,6 +105,20 @@ public class UserController {
         User updatedUser = userService.updateUser(user);
         UserDTO updatedDTO = UserMapper.toDTO(updatedUser);
         return ResponseEntity.ok(updatedDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails){
+        if (userDetails.getIsAdmin()){
+            Optional<User> user = userService.findUserById(id);
+            if (user.isPresent()){
+                userService.deleteLogic(user.get());
+                return ResponseEntity.ok("Usuario eliminado");
+            }
+            throw new NotFoundException("usuario no existe");
+        }
+        //Cambiar a "AccesDeniedException"
+        throw new BadRequestException("no autorizado");
     }
 
 

@@ -3,10 +3,12 @@ package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.DetailDTO;
+import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Image;
+import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +19,7 @@ import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -76,20 +79,27 @@ public class CabinController {
     })
     @SecurityRequirement(name = "bearer")
     @PostMapping
-    public ResponseEntity<?> createCabin(@ModelAttribute CabinDTO cabinDTO) {
-        Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
+    public ResponseEntity<?> createCabin(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute CabinDTO cabinDTO) {
 
-        return result.fold(
-                errors -> {
-                    return ResponseEntity.badRequest().body(errors);
-                },
-                cabin -> {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
-                }
-        );
+        if (userDetails.getIsAdmin()){
+            Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
+
+            return result.fold(
+                    errors -> {
+                        return ResponseEntity.badRequest().body(errors);
+                    },
+                    cabin -> {
+                        return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
+                    }
+            );
+        }
+        throw new BadRequestException("Usuario no autorizado");
+
+
     }
 
 
+    //Se espera push para agregar validación admin.
     @Operation(summary = "Actualizar cabaña", description = "Permite actualizar una cabaña existente .")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cabaña actualizada exitosamente."),
@@ -99,6 +109,7 @@ public class CabinController {
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
+
 
         cabinDTO.setId(id);
 
@@ -118,9 +129,14 @@ public class CabinController {
     @ApiResponse(responseCode = "204", description = "Cabaña eliminada exitosamente.")
     @SecurityRequirement(name = "bearer")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
-        cabinService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteCabin(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails.getIsAdmin()){
+            cabinService.delete(id);
+            return ResponseEntity.noContent().build();
+        }
+
+        //Cambiar por una custom "AccesDeniedException"
+        throw new BadRequestException("Usuario no autorizado");
     }
 
 

@@ -52,6 +52,8 @@ public class User implements UserDetails {
     )
     private String password;
 
+    private Boolean isActive = true;
+
     public User(String name, String surname, String email, String phone, String country, UserRole role, String password) {
         this.name = name;
         this.surname = surname;
