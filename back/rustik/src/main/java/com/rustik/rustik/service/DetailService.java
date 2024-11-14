@@ -78,11 +78,10 @@ public class DetailService {
         detailDtos.forEach(detailDTO -> {
             detailDTO.setCabinId(cabin.getId());
             Detail detail = DetailMapper.toEntity(detailDTO, cabin);
-            detailRepository.save(detail);
             details.add(detail);
         });
 
-        return details;
+        return detailRepository.saveAll(details);
     }
 
 

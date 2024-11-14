@@ -14,12 +14,14 @@ import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CabinService {
@@ -46,13 +48,15 @@ public class CabinService {
         return cabinRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Either<List<String>, CabinDTO> save(CabinDTO cabinDTO) {
-
         List<String> errors = new ArrayList<>();
 
         // Validar que se hayan subido al menos 5 imágenes
-        if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
-            errors.add("No se han subido al menos 5 imágenes.");
+        if (cabinDTO.getId() == null ) {
+            if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
+                errors.add("No se han subido al menos 5 imágenes.");
+            }
         }
 
         // Validar si la cabaña ya existe
@@ -60,14 +64,25 @@ public class CabinService {
             errors.add("La cabaña con nombre " + cabinDTO.getName() + " ya existe.");
         }
 
+        // Traer la cabaña existente o null
+        Cabin currentCabin;
         if(cabinDTO.getId() != null && cabinDTO.getId() > 0) {
-            Cabin cabin = cabinRepository.findById(cabinDTO.getId()).orElse(null);
-
-            if (cabin == null) {
+            currentCabin = cabinRepository.findById(cabinDTO.getId()).orElse(null);
+            if (currentCabin == null) {
                 errors.add("Cabaña no existente");
+            }else{
+                System.out.println(currentCabin.getImages().size());
+                System.out.println(currentCabin.getCabinFeatures().size());
             }
+
+        }else {
+            currentCabin = null;
         }
+
+
+
         
+        // Comprobar que las características existan
         if(cabinDTO.getCabinFeatures() != null){
             cabinDTO.getCabinFeatures().forEach(detailDTO -> {
                 if(!featureRepository.existsById(detailDTO.getFeatureId()))
@@ -82,17 +97,35 @@ public class CabinService {
             return Either.left(errors);
         }
 
-        Cabin cabin = CabinMapper.toEntity(cabinDTO);
-        cabin = cabinRepository.save(cabin);
+        // Guardar la cabaña
+        Cabin cabin;
+        if (currentCabin != null) {
+            cabin = CabinMapper.toExistingEntity(currentCabin, cabinDTO);
+        }else{
+            cabin = CabinMapper.toEntity(cabinDTO);
+        }
+        Cabin savedCabin = cabinRepository.save(cabin);
 
         // Subir imágenes y obtener URLs
-        List<Image> imageUrls = imageService.uploadImages(cabin, cabinDTO.getImagesToUpload());
+
+        if (cabinDTO.getImagesToUpload() != null && cabinDTO.getImagesToUpload().size() > 0) {
+            try {
+                List<Image> imageUrls = imageService.uploadImages(cabin, cabinDTO.getImagesToUpload());
+                savedCabin.setImages(Stream.concat(savedCabin.getImages().stream(), imageUrls.stream()).collect(Collectors.toList()));
+            } catch (Exception e) {
+                throw new RuntimeException("Error al subir las imágenes: " + e.getMessage());
+            }
+        }
 
         //Crear los detalles
-        List<Detail> details = detailService.save(cabin, cabinDTO.getCabinFeatures());
-
-        cabin.setImages(imageUrls);
-        cabin.setCabinFeatures(details);
+        if (cabinDTO.getCabinFeatures() != null && cabinDTO.getCabinFeatures().size() > 0) {
+            try {
+                List<Detail> newDetails = detailService.save(cabin, cabinDTO.getCabinFeatures());
+                savedCabin.setCabinFeatures(newDetails);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al guardar las características: " + e.getMessage());
+            }
+        }
 
         // Convertir la entidad de la cabaña guardada en un DTO
         CabinDTO savedCabinDTO = CabinMapper.toDTO(cabin);
@@ -105,9 +138,8 @@ public class CabinService {
         cabinRepository.deleteById(id);
     }
 
-    public void saveCabins(List<Cabin> cabins) {
-
-        cabinRepository.saveAll(cabins);
+    public List<Cabin> saveCabins(List<Cabin> cabins) {
+        return cabinRepository.saveAll(cabins);
     }
 
     public List<CabinDTO> getRandomCabins(int count) {

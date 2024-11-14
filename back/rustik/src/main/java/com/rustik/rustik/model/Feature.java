@@ -16,8 +16,19 @@ public class Feature {
     private String name;
     private String icon;
 
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean hasQuantity = false;
+
     public Feature(String name, String icon) {
         this.name = name;
         this.icon = icon;
     }
+
+    public Feature(String name, String icon, Boolean hasQuantity) {
+        this.name = name;
+        this.icon = icon;
+        this.hasQuantity = hasQuantity;
+    }
+
+
 }

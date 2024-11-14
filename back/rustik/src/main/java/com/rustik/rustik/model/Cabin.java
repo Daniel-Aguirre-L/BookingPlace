@@ -43,4 +43,26 @@ public class Cabin {
         this.price = price;
         this.category = category;
     }
+
+    public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category, List<Image> images) {
+        this.name = name;
+        this.location = location;
+        this.capacity = capacity;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.images = images;
+    }
+
+    public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category, List<Image> images, List<Detail> cabinFeatures) {
+        this.name = name;
+        this.location = location;
+        this.capacity = capacity;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.images = images;
+        this.cabinFeatures = cabinFeatures;
+    }
+
 }

@@ -2,11 +2,9 @@ package com.rustik.rustik.service.dataInitializer;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.model.*;
-import com.rustik.rustik.repository.FeatureRepository;
+import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.ImageRepository;
-import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.FeatureService;
 import com.rustik.rustik.service.UserService;
@@ -14,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 @Component
@@ -25,6 +23,9 @@ public class InitialData implements ApplicationRunner {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private DetailRepository detailRepository;
 
     @Autowired
     private UserService userService;
@@ -47,10 +48,10 @@ public class InitialData implements ApplicationRunner {
         //CREA LISTADO DE FEATURES
         List<Feature> features = new ArrayList<>();
         features.add(new Feature("Wi-Fi", "I1"));
-        features.add(new Feature("Baños", "I2"));
-        features.add(new Feature("Habitaciones", "I3"));
+        features.add(new Feature("Baños", "I2", true));
+        features.add(new Feature("Habitaciones", "I3", true));
         features.add(new Feature("Cocina", "I4"));
-        features.add(new Feature("Parqueadero", "I5"));
+        features.add(new Feature("Parqueadero", "I5", true));
         features.add(new Feature("TV", "I6"));
         features.add(new Feature("Aire Acondicionado", "I7"));
         features.add(new Feature("Calentador", "I8"));
@@ -147,14 +148,19 @@ public class InitialData implements ApplicationRunner {
                 "Cabaña tipo búnker con luces que destacan su estilo moderno y un balcón con vistas al lago. Ideal para quienes buscan una experiencia única y privada en la naturaleza, esta cabaña combina confort y diseño contemporáneo en un entorno sereno.",
                 150.0, CabinCategory.MODERNA));
 
-        cabinService.saveCabins(cabins);
+        List<Cabin> saveCabins = cabinService.saveCabins(cabins);
 
+
+        //Crea las Imagenes consultando Cloudinary
+        /*
         for (int i = 1; i <= 20; i++) {
             String folder = "cabin " + i; // Crea el nombre de la carpeta
             System.out.println("Listando imágenes en la carpeta: " + folder);
             listImagesInFolder(i);
         }
+        */
 
+        crearImagenesYCaracteristicas(saveCabins, features);
 
     }
 
@@ -185,4 +191,38 @@ public class InitialData implements ApplicationRunner {
         }
 
     }
+
+
+    public void crearImagenesYCaracteristicas(List<Cabin> saveCabins, List<Feature> features){
+
+        Random random = new Random();
+        List<String> urls = List.of("https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/hmc4wsso1dnxos4cazae?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/jll9uuuzp9r3ym49bzsn?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/odvqmwc90hncx3jc5mjb?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/tvxnjtbqa8qbjnt2taoa?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%201/xvxsev6nndurbuxboqb2?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%202/fhievbbp496ta3gmyk0u?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%202/sceyvbltbkeydxybpyjc?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%202/sjprvz3x8lr8dwmwk9lt?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%202/xciy0fdpmkssfkydxhwz?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%202/zi4dzoeklw6dlvhvwiva?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%203/afu1ktzzn3f6axqqzkwr?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%203/bhipor7ipq9kfaqpxxzl?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%203/hgqnd6k2jhztqumh3xhm?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%203/il6ohwmolf3pabme9n8r?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%203/zjwbwyepbb3lfqcxagqw?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%204/gmceg8rw9c7u2tp7b9h1?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%204/kajt5kwjr1qj5xmiklrr?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%204/qdebwkakdhwzhpkyk0nt?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%204/t5qmnwhbgymdl3kmlw1p?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%204/udpqgbhy2metcfz8t2ov?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%205/bkdyqfxcgq2vokkkcobi?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%205/eggjjdklc8fzb5mw5lw8?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%205/fy7xtt0g7w9zfchai80i?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%205/k9ot0j5sg3qcwstxfxhi?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%205/rsnjpk5fjabihb6mteq0?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%206/abo6tlm3echbdriroloc?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%206/dflyrwvpwhc29m6wlhug?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%206/mtn8caosvq0wf3phktbi?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%206/wfhlm4uk1bzb0xu7m6xe?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%206/zomoy9dx6rnomeexukdy?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%207/jvrkz0g7tinwuerpx0xp?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%207/kbsyqcvr6gwij3fxmaby?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%207/w7vcby8orptn4s0cqxdi?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%207/xvb30k8qdqyms6rlkbhn?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%207/ymvpmqnalhk8ikfqqpt6?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%208/ngapbp2gacjxnnxsbseb?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%208/nygkze87py3kfl5wzhpd?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%208/pszf2dhr8jtxnnrizq3w?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%208/vgwvef2phzkjxk5ytk4c?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%208/wiaiyebenbvxsrp6insu?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%209/dioxn2u8kg8m4kyfyv66?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%209/qkrcx7h9j4omizb9v1dt?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%209/ug010dnxltml6unn4hz6?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%209/y0mfrgt1j3atfu6thhco?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%209/zkrok54gjwx40avk5qel?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2010/hdnn8w2gnkxtr0zo1vsw?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2010/jdkv6acef9xugu8gorsl?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2010/k36jwoodyckyrrolnadr?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2010/kasnvuetqewa1seudm6w?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2010/lccykdtfs5an8fwxpmkp?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2011/cqnaxs6zmjlswwreunrz?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2011/hgkaccurhm1ojukjftgp?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2011/jrtj70bkyfriqdewmm93?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2011/lzgr6hil9bjrgwk3x7mc?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2011/ot7lchhpc57giiizzswi?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2012/ghppexxhnkpc93vuxy8l?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2012/ktn9z9yaf1bfgmvavvff?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2012/s2ou0syb1ogcgxggzhoj?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2012/u1e3qwn4kpfh2f3unwsz?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2012/y6dcut5kamsqfxu2heom?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2013/atdfebiycksufqgidj8r?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2013/noc9okgpjaozbwwy95xd?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2013/nsw6n0dyu4mczjfggbl3?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2013/zgbh6tckssl80lvqaa3j?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2013/zrzaxgeravoszvw1w3dl?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2014/ddhk8w8zakwmphssaroh?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2014/f74gzhmdggjlfmjecdbz?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2014/im4nmkov9ozi8rnevp7i?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2014/jwloezfol0nq7ehy2838?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2014/vasddpks5wzxsma9dvkh?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2015/lnpwsalql0jwclvbvpy2?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2015/qvh0l8nztdov6nplnb79?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2015/skvkotcemnyadceke1tj?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2015/ti7vvvqox9lkf2jbjcxt?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2015/xhcumrepe4hevpochgjn?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2016/gfmtaetblhjdkwd6itv2?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2016/oimt2j4nyktplohdwmok?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2016/pzwymyglnr7cbpmnvgea?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2016/t4icpm9fkoqe4hk0uevd?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2016/zs4psubjimr002ejyzgq?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2017/egnllycijw7pnkdnb1sg?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2017/jopn5893ygukxzt45b8m?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2017/sg0o2whlwyhw7ykhdvp9?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2017/v4btkrdtlruejvlfhq5z?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2017/vntsrjzawmjtma42owez?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2018/bsaiic8u7hmsl0rexmi5?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2018/cyfbdoikhes8uz3mcztg?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2018/pwxw7sbwogenh2rzps7i?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2018/tkxxctvq8ygeb6jybrxu?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2018/zuaz6sixrhptf0icmtt8?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2019/bxztptfijomccd7wqv2o?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2019/cymkofvlyafclqgnejrh?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2019/gyrlqhhq9pvkl8eriawq?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2019/rwwsufyohrtsmkmwme9u?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2019/xbsbxazg0ui50bar5szy?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2020/gnsucunzsmrdrkw473ms?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2020/jzaxaun0bcbzxxyv3s5g?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2020/swlfl24a8kgfpsmizje4?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2020/uxvpjrkt3mpznauo9udh?_a=DAGAACCciZAA0","https://res.cloudinary.com/dmu6eqzqy/image/upload/v1/cabin%2020/vakvfy1vol4bcbjcnkfg?_a=DAGAACCciZAA0");
+        System.out.println(urls.size());
+        List<Image> newImages = new ArrayList<>();
+        List<Detail> newDetails = new ArrayList<>();
+
+        for (int i = 0; i <= 19; i++) {
+            for (int j = 0; j <= 4; j++) {
+                Image image = new Image();
+                image.setUrl(urls.get(5*i+j));
+                image.setImagePublicId(String.format("cabin %d/%d", i, j));
+                image.setCabin(saveCabins.get(i));
+                newImages.add(image);
+
+            }
+            for (int j = 0; j < random.nextInt(6); j++) {
+                Detail detail = new Detail();
+                detail.setCabin(saveCabins.get(i));
+                Feature addFeature = features.get(random.nextInt(16));
+                detail.setFeature(features.get(random.nextInt(16)));
+                if (addFeature.getHasQuantity()) {
+                    detail.setQuantity(random.nextInt(5));
+                }
+                newDetails.add(detail);
+            }
+            imageRepository.saveAll(newImages);
+            detailRepository.saveAll(newDetails);
+        }
+    }
+
 }

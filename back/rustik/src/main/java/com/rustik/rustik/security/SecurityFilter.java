@@ -33,6 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             try{
                 String userName = tokenService.getSubject(token);
                 CustomUserDetails userDetails = userDetail.loadUserByUsername(userName); //El UserName es el email.
+                userDetails.setToken(token);
 
                 if (userDetails != null){
                     if (tokenService.validateToken(token)) {
