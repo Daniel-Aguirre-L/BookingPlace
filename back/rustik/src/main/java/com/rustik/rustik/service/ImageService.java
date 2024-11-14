@@ -100,14 +100,24 @@ public class ImageService {
             return false;
         }
 
-
         Image imageSelected = imageRepository.findById(imageId).get();
+        Cabin cabin = imageSelected.getCabin();  // Obtén la cabaña asociada a la imagen
+
+        // Verifica si la cabaña tiene más de 5 imágenes
+        long imageCount = imageRepository.countByCabinId(cabin.getId());  // Cuenta cuántas imágenes tiene la cabaña
+
+        if (imageCount <= 5) {
+            throw new RuntimeException("No se puede eliminar la imagen, la cabaña debe tener al menos 5 imágenes.");
+        }
 
         try {
-            cloudinary.uploader().destroy(imageSelected.getImagePublicId(),ObjectUtils.emptyMap());
+            // Elimina la imagen de Cloudinary
+            cloudinary.uploader().destroy(imageSelected.getImagePublicId(), ObjectUtils.emptyMap());
         } catch (IOException e) {
-            throw new RuntimeException("Error al eliminar imagen",e);
+            throw new RuntimeException("Error al eliminar imagen", e);
         }
+
+        // Elimina la imagen de la base de datos
         imageRepository.deleteById(imageId);
         return true;
     }

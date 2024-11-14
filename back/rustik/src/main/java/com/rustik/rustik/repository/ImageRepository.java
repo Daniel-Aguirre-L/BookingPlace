@@ -12,4 +12,5 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
     List<Image> findByCabinId(Long cabinId);
+    long countByCabinId(Long cabinId);
 }

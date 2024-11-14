@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DetailRepository extends JpaRepository<Detail, Long> {
-
+    boolean existsByCabinIdAndFeatureId(Long cabinId, Long featureId);
 }

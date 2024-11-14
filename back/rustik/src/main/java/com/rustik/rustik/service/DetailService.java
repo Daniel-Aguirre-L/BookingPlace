@@ -62,6 +62,10 @@ public class DetailService {
             errors.add("Característica no existente");
         }
 
+        if (detailRepository.existsByCabinIdAndFeatureId(detailDto.getCabinId(), detailDto.getFeatureId())) {
+            errors.add("La cabaña ya tiene esta característica asignada.");
+        }
+
         if(!errors.isEmpty())
         {
             return Either.left(errors);
