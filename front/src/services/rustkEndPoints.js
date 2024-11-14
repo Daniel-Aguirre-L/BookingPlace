@@ -9,7 +9,7 @@ export const rustikEndpoints = {
     validateToken: "/auth/validate-token",
     myUser: "/users/my-user",
     users: "/users",
-    
+    features:"/features"
 
    
 }

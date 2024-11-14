@@ -8,6 +8,7 @@ export const routeList = {
     ADMIN_USERS: "/administracion/usuarios",
     ADMIN_BOOKINGS: "/administracion/reservas",
     ADMIN_CATALOGS: "/administracion/catalogo",
+    ADMIN_FEATURES:"/administracion/features",
     LOGIN: "/login",
     REGISTER: "/register",
     

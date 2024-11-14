@@ -7,6 +7,7 @@ import CatalogDetail from "./Pages/CatalogDetail";
 import ManageUser from "./Pages/ManageUser";
 import ManageBooking from "./Pages/ManageBooking";
 import ManageCatalog from "./Pages/ManageCatalog";
+import ManageFeatures from "./Pages/ManageFeatures";
 import ErrorPage from "./Pages/ErrorPage";
 import FormRegister from "./Pages/FormRegister";
 import MyProfile from "./Pages/MyProfile";
@@ -41,6 +42,7 @@ function App() {
             <Route path={routeList.ADMIN_USERS} element={<ManageUser />} />
             <Route path={routeList.ADMIN_BOOKINGS} element={<ManageBooking />} />
             <Route path={routeList.ADMIN_CATALOGS} element={<ManageCatalog />} />
+            <Route path={routeList.ADMIN_FEATURES} element={<ManageFeatures />} />
           </Route>
         </Route>
         <Route path="*" element={<ErrorPage />} />
