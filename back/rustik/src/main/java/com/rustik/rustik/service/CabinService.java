@@ -9,6 +9,7 @@ import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
 import com.rustik.rustik.model.Image;
 import com.rustik.rustik.repository.CabinRepository;
+import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.FeatureRepository;
 import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +28,17 @@ import java.util.stream.Stream;
 public class CabinService {
 
     private final CabinRepository cabinRepository;
+
+    private final DetailRepository detailRepository;
     private final ImageService imageService;
     private final DetailService detailService;
     private final FeatureRepository featureRepository;
 
 
     @Autowired
-    public CabinService(CabinRepository cabinRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
+    public CabinService(CabinRepository cabinRepository, DetailRepository detailRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
         this.cabinRepository = cabinRepository;
+        this.detailRepository = detailRepository;
         this.imageService = imageService;
         this.detailService = detailService;
         this.featureRepository = featureRepository;
@@ -70,18 +74,12 @@ public class CabinService {
             currentCabin = cabinRepository.findById(cabinDTO.getId()).orElse(null);
             if (currentCabin == null) {
                 errors.add("Cabaña no existente");
-            }else{
-                System.out.println(currentCabin.getImages().size());
-                System.out.println(currentCabin.getCabinFeatures().size());
             }
 
         }else {
             currentCabin = null;
         }
 
-
-
-        
         // Comprobar que las características existan
         if(cabinDTO.getCabinFeatures() != null){
             cabinDTO.getCabinFeatures().forEach(detailDTO -> {
@@ -98,20 +96,22 @@ public class CabinService {
         }
 
         // Guardar la cabaña
-        Cabin cabin;
+        Cabin savedCabin;
+
         if (currentCabin != null) {
-            cabin = CabinMapper.toExistingEntity(currentCabin, cabinDTO);
+            savedCabin = cabinRepository.save(CabinMapper.toExistingEntity(currentCabin, cabinDTO));
         }else{
-            cabin = CabinMapper.toEntity(cabinDTO);
+            savedCabin = cabinRepository.save(CabinMapper.toEntity(cabinDTO));
         }
-        Cabin savedCabin = cabinRepository.save(cabin);
 
-        // Subir imágenes y obtener URLs
-
+        // Subir imágenes y guardar imagenes
         if (cabinDTO.getImagesToUpload() != null && cabinDTO.getImagesToUpload().size() > 0) {
             try {
-                List<Image> imageUrls = imageService.uploadImages(cabin, cabinDTO.getImagesToUpload());
-                savedCabin.setImages(Stream.concat(savedCabin.getImages().stream(), imageUrls.stream()).collect(Collectors.toList()));
+                List<Image> imageUrls = imageService.uploadImages(savedCabin, cabinDTO.getImagesToUpload());
+                if (currentCabin == null ) {
+                    savedCabin.setImages(imageUrls);
+                }
+
             } catch (Exception e) {
                 throw new RuntimeException("Error al subir las imágenes: " + e.getMessage());
             }
@@ -120,15 +120,23 @@ public class CabinService {
         //Crear los detalles
         if (cabinDTO.getCabinFeatures() != null && cabinDTO.getCabinFeatures().size() > 0) {
             try {
-                List<Detail> newDetails = detailService.save(cabin, cabinDTO.getCabinFeatures());
-                savedCabin.setCabinFeatures(newDetails);
+                if (currentCabin != null) {
+                    //Borra las caracteristicas y las crea nuevamente
+                    currentCabin.getCabinFeatures().clear();
+                    List<Detail> newDetails = detailService.save(savedCabin, cabinDTO.getCabinFeatures());
+                    savedCabin = new Cabin(savedCabin.getId(), savedCabin.getName(), savedCabin.getLocation(), savedCabin.getCapacity(), savedCabin.getDescription(), savedCabin.getPrice(), savedCabin.getCategory(), newDetails, savedCabin.getImages());
+
+                }else{
+                    List<Detail> newDetails = detailService.save(savedCabin, cabinDTO.getCabinFeatures());
+                    savedCabin.setCabinFeatures(newDetails);
+                }
             } catch (Exception e) {
                 throw new RuntimeException("Error al guardar las características: " + e.getMessage());
             }
         }
 
         // Convertir la entidad de la cabaña guardada en un DTO
-        CabinDTO savedCabinDTO = CabinMapper.toDTO(cabin);
+        CabinDTO savedCabinDTO = CabinMapper.toDTO(savedCabin);
 
         // Devolver respuesta exitosa con el DTO
         return Either.right(savedCabinDTO);
