@@ -140,6 +140,13 @@ public class CabinController {
     }
 
 
+    @Operation(
+            summary = "Filtrar por categoria", description = "Permite filtrar las cabañas disponibles según las categorías proporcionadas."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cabañas filtradas por categorías"),
+            @ApiResponse(responseCode = "204", description = "No se encontraron cabañas para las categorías proporcionadas")
+    })
     @GetMapping("/filter")
     public ResponseEntity<List<CabinDTO>> getCabinsByCategories(@RequestParam List<CabinCategory> categories) {
         List<CabinDTO> cabins = cabinService.getCabinsByCategories(categories);
@@ -149,6 +156,14 @@ public class CabinController {
         return ResponseEntity.ok(cabins);
     }
 
+
+    @Operation(
+            summary = "Filtrar cabañas por nombre", description = "Permite filtrar las cabañas disponibles según el nombre."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cabañas filtradas por nombre"),
+            @ApiResponse(responseCode = "204", description = "No se encontraron cabañas con el nombre proporcionado")
+    })
     @GetMapping("/filterByName")
     public ResponseEntity<List<CabinDTO>> getCabinsByName(@RequestParam String name) {
         List<CabinDTO> cabins = cabinService.getCabinsByName(name);

@@ -72,9 +72,12 @@ public class UserService {
         User user = userRepository.findByEmail(logInDTO.getEmail())
                 .orElseThrow(() -> new BadRequestException("Credenciales incorrectas"));
 
-        if (!encoder.matches(logInDTO.getPassword(), user.getPassword())) {
+
+        if (!encoder.matches(logInDTO.getPassword(), user.getPassword()) || !user.getIsActive()) {
             throw new BadRequestException("Credenciales incorrectas");
         }
+
+
 
 
         String token = tokenService.generateToken(user);
