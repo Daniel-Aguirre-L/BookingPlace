@@ -97,20 +97,20 @@ const ManageUser = () => {
                             <thead className=" w-full h-full">
                                 <tr>
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-left">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-left font-montserrat">
                                         Usuario
                                     </th>
 
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center font-montserrat">
                                         Email
                                     </th>
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center font-montserrat">
                                         Teléfono
                                     </th>
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center font-montserrat">
                                         Acciones
                                     </th>
                                 </tr>
@@ -122,15 +122,15 @@ const ManageUser = () => {
                                             <div className="grid grid-cols-[auto_1fr] items-center gap-10" >                                                                        
                                                 <Avatar name={user.name} size={'medium'}/>                                                 
                                                 <div>
-                                                    <p className="text-gray-900 whitespace-no-wrap capitalize">{`${user.name.toLowerCase()} ${user.surname.toLowerCase()}`}</p>
+                                                    <p className="text-gray-900 whitespace-no-wrap capitalize font-montserrat">{`${user.name.toLowerCase()} ${user.surname.toLowerCase()}`}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
-                                            <p className="text-gray-900 whitespace-no-wrap text-center">{user.email}</p>
+                                            <p className="text-gray-900 whitespace-no-wrap text-center font-montserrat">{user.email}</p>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
-                                            <p className="text-gray-900 whitespace-no-wrap text-center">{user.phone}</p>
+                                            <p className="text-gray-900 whitespace-no-wrap text-center font-montserrat">{user.phone}</p>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
                                             <div className="flex justify-center items-center gap-5 my-auto ">
@@ -152,6 +152,7 @@ const ManageUser = () => {
                                         </td>
                                     </tr>
                                 ))}
+                                <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
                     </div>
