@@ -6,6 +6,7 @@ import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.model.*;
 import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.ImageRepository;
+import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.FeatureService;
 import com.rustik.rustik.service.UserService;
@@ -27,6 +28,9 @@ public class InitialData implements ApplicationRunner {
     private DetailRepository detailRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -42,7 +46,13 @@ public class InitialData implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         //CREA USUARIO ADMIN
         User admin = new User("admin","admin","admin@admin.com","2345678","uy", UserRole.ROLE_ADMIN,"1234Admin!");
-        userService.registerUser(admin);
+        User user1 = new User("user1","user1","u1@correo.com","2345677","CO", UserRole.ROLE_USER,"1234User!");
+        User user2 = new User("user2","user2","u2@correo.com","2345676","MX", UserRole.ROLE_USER,"1234User!");
+        User user3 = new User("user3","user3","u3@correo.com","2345675","UY", UserRole.ROLE_USER,"1234User!");
+        User user4 = new User("user4","user4","u4@correo.com","2345674","CL", UserRole.ROLE_USER,"1234User!");
+        User user5 = new User("user5","user5","u5@correo.com","2345673","CO", UserRole.ROLE_USER,"1234User!");
+
+        userRepository.saveAll(Arrays.asList(admin, user1,user2,user3,user4,user5));
 
         //CREA LISTADO DE FEATURES
         List<Feature> features = new ArrayList<>();

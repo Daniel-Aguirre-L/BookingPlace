@@ -46,7 +46,6 @@ const ManageUser = () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.users);
                 setUsers(data);
-                console.log(data);
 
             } catch (error) {
                 console.error("Error al llamar a la api", error);
@@ -60,7 +59,6 @@ const ManageUser = () => {
     const toggleAdmin =  async (userId,isAdmin) => { 
        try {
         const { data } = await rustikApi.put(`${rustikEndpoints.users}/${userId}`,{isAdmin:!isAdmin});
-        console.log(data);
 
         setUsers(prevUsers => prevUsers.map(user => user.id === userId ? 
             { ...data } : user ) ); 
@@ -108,7 +106,7 @@ const ManageUser = () => {
                                             <div className="grid grid-cols-[auto_1fr] items-center gap-10" >                                                                        
                                                 <Avatar name={user.name} size={'medium'}/>                                                 
                                                 <div>
-                                                    <p className="text-gray-900 whitespace-no-wrap">{`${user.name} ${user.surname}`}</p>
+                                                    <p className="text-gray-900 whitespace-no-wrap capitalize">{`${user.name.toLowerCase()} ${user.surname.toLowerCase()}`}</p>
                                                 </div>
                                             </div>
                                         </td>
