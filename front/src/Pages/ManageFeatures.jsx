@@ -3,14 +3,14 @@ import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints"
 import useNotificationStore from "../store/useNotificationStore";
 
-import AddProductModal from "../Components/AddProductModal";
 import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
-import Avatar from "../Components/Avatar";
 import FeatureIcon from "../Components/icons/FeatureIcon";
+import FormFeature from "../Components/FormFeature";
 
 const ManageFeatures = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const [currentData, setCurrentData] = useState({});
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
 
@@ -18,10 +18,19 @@ const ManageFeatures = () => {
         setModalOpen(true);
         window.scrollTo(0, 0);
     }
-    const handleCloseModal = () => setModalOpen(false);
+    const handleCloseModal = () => {
+        setCurrentData({});
+        setModalOpen(false)
+
+    };
 
     const [features, setFeatures] = useState([]);
 
+    const handleEditFeature = (feature) => {
+        setCurrentData(feature);
+        setModalOpen(true);
+    }
+    
     const handleDelete = async (id) => {
         const confirma = confirm("Confirmar eliminar característica")
         if (!confirma) return;
@@ -36,7 +45,12 @@ const ManageFeatures = () => {
                 text: "Característica eliminada correctamente.",
             });
         } catch (error) {
-            console.error("Error al borrar, intente más tarde", error);
+            setNotification({
+                visibility: true,
+                type: "error",
+                text: "Error al borrar, intente más tarde.",
+            });
+            console.error("Error al borrar, contacte a soporte técnico", error);
         } finally {
             hideLoaderModal();
         }
@@ -47,7 +61,6 @@ const ManageFeatures = () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.features);
                 setFeatures(data);
-                console.log(data);
 
             } catch (error) {
                 console.error("Error al llamar a la api", error);
@@ -112,6 +125,7 @@ const ManageFeatures = () => {
                                             <div className="flex justify-center items-center gap-5 my-auto ">
                                                 <button
                                                     className="active:scale-90"
+                                                    onClick={() => handleEditFeature(feature)}
                                                 >
                                                     <img src="/Icons/Editar.svg" alt="Editar usuario" />
                                                 </button>                                             
@@ -132,7 +146,7 @@ const ManageFeatures = () => {
                 </div>
             </div>
 
-            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <FormFeature isOpen={isModalOpen} onClose={handleCloseModal} currentData={currentData} isEditing={currentData.id || false }  /> 
         </div>
     )
 }

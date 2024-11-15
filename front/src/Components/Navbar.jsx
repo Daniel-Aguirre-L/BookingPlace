@@ -78,7 +78,6 @@ const Navbar = () => {
         <>
           <div
             className="max-md:hidden gap-2 flex justify-center items-center cursor-pointer"
-            onMouseEnter={handleMouseEnter}
             onClick={handleMouseEnter}
           >
             <span className="relative">

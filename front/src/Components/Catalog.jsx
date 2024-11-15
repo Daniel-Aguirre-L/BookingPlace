@@ -8,9 +8,7 @@ import FeatureIcon from './icons/FeatureIcon'
 const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    console.log(cabin)
-    
-   
+    // sort array cabin.cabinFeatures by booleano hasQuantity
     
     return (
         <div className="animate-fadeIn w-full p-4 md:p-6 mx-auto">
@@ -85,13 +83,15 @@ const Catalog = ({ cabin }) => {
                     {cabin.description}
                 </p>
 
-                <div>
+                <div className='px-4 py-10' >
 
-                    <ul className='grid grid-cols-2 md:grid-cols-6 '>
-                        {cabin.cabinFeatures.map((feature) => (
-                            <li key={feature.id} className="text-[#EEEEEE] text-sm md:text-base flex items-center ml-4">
-                                <span className='text-2xl text-secondary-color mr-2' ><FeatureIcon id={feature.featureIcon}  /></span>
-                                {feature.featureName} {feature.quantity ? `/ ${feature.quantity}`:''}
+                    <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 '>
+                        {cabin.cabinFeatures && cabin.cabinFeatures.sort((a, b) => b.hasQuantity - a.hasQuantity).map((feature) => (
+                            <li key={feature.id} className="text-light-text text-lg md:text-xl flex items-center">
+                                <span className='text-[2.5rem] text-secondary-color mr-[14px]' ><FeatureIcon id={feature.featureIcon}  /></span>
+                                <p  className='text-wrap' >
+                                {feature.featureName} {feature.quantity ? <span className='border border-secondary-color px-3 py-1 rounded-md max-h-12' > {feature.quantity}</span> : ''}
+                                </p>
                             </li>
                         ))}
                     </ul>

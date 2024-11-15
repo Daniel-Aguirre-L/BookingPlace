@@ -203,7 +203,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
     if (!isOpen) return null;
 
     return (
-      <div className="hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
+      <div className="animate-fadeIn hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
         <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
           <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
             <div className="sticky top-0 flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
@@ -280,11 +280,11 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
                     className="py-3 px-4  block w-full border-[#9CA3AF] border rounded-lg text-base  border-[#A9AEB9] text-[#9CA3AF]"
                   >
                      <option value="" disabled selected>Seleccione una opción</option>
-                    <option value="Glamping">Glamping</option>
-                    <option value="Rustica">Rustica</option>
-                    <option value="Invierno">Invierno</option>
-                    <option value="Verano">Verano</option>
-                    <option value="Moderna">Moderna</option>
+                    <option value="GLAMPING">Glamping</option>
+                    <option value="RUSTICA">Rustica</option>
+                    <option value="INVIERNO">Invierno</option>
+                    <option value="VERANO">Verano</option>
+                    <option value="MODERNA">Moderna</option>
                   </select>
                 </div>
                 <div>

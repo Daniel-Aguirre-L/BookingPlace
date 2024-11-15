@@ -1,7 +1,9 @@
 package com.rustik.rustik.service;
 
 
+import com.rustik.rustik.model.Detail;
 import com.rustik.rustik.model.Feature;
+import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.FeatureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.List;
 public class FeatureService {
 
     private final FeatureRepository featureRepository;
+    private final DetailRepository detailRepository;
 
     @Autowired
-    public FeatureService(FeatureRepository featureRepository) {
+    public FeatureService(FeatureRepository featureRepository, DetailRepository detailRepository) {
         this.featureRepository = featureRepository;
+        this.detailRepository = detailRepository;
     }
 
     public List<Feature> findAll() {
@@ -31,6 +35,8 @@ public class FeatureService {
     }
 
     public void delete(Long id) {
+        List<Detail> details = detailRepository.findByFeatureId(id);
+        detailRepository.deleteAll(details);
         featureRepository.deleteById(id);
     }
 
