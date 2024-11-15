@@ -14,7 +14,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
   };
 
   return (
-    <section className="bg-background-dark w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat " style={styles} >
+    <section className="bg-background-dark max-w-[1600px] w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat overflow-hidden" style={styles} >
       <h1 className="pageMargin text-primary-color font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem]">
         Escapa a la Naturaleza y <br />
         Reserva tu Cabaña ideal
@@ -27,7 +27,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
         onSubmit={handleSearch}
       >
         <input
-          className="w-full bg-transparent ml-6 text-dark-text h-[50%] outline-none  "
+          className="w-full bg-transparent ml-6 text-dark-text h-[50%] outline-none overflow-hidden"
           type="text"
           placeholder="Buscar cabaña"
           value={filter}

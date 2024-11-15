@@ -195,7 +195,7 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
         setNotification({
           visibility: true,
           type: "success",
-          text: "Cabaña agregada correctamente.",
+          text: "Cabaña guardada correctamente.", 
         });
         console.log('Product added successfully:', response.data);
         setFormData({

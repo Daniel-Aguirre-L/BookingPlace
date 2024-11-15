@@ -165,9 +165,9 @@ const FormFeature = ({ onClose, isOpen, currentData, isEditing }) => {
                     >
                       {
                         feature.hasQuantity ? (
-                          <img className="animate-fadeIn" src="/Icons/check-color.svg" alt="Seleccionar característica" className="w-6 h-6" />
+                          <img  src="/Icons/check-color.svg" alt="Seleccionar característica" className="animate-fadeIn w-6 h-6" />
                         ) : (
-                          <img className="animate-fadeIn" src="/Icons/cancel-color.svg" alt="Seleccionar característica" className="w-6 h-6" />
+                          <img  src="/Icons/cancel-color.svg" alt="Seleccionar característica" className="animate-fadeIn w-6 h-6" />
                         )
                       }
                     </button>
