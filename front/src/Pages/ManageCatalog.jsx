@@ -82,33 +82,33 @@ const ManageCatalog = () => {
 
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
-                        <table className="w-full rounded-lg p-2">
+                        <table className="w-full rounded-3xl p-2">
                             <thead className=" w-full h-full">
                                 <tr>
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-left">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-left font-montserrat">
                                         Cabaña
                                     </th>
 
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center font-montserrat">
                                         Id Cabaña
                                     </th>
                                     <th
-                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center">
+                                        className="px-5 py-7 text-lg  text-primary-color  tracking-wider text-center font-montserrat">
                                         Acciones
                                     </th>
                                 </tr>
-                            </thead>
-                            <tbody className="px-5 bg-white">
+                            </thead> 
+                            <tbody className="px-5 bg-white rounded-3xl">
                                 {cabins.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px]">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <div className="grid grid-cols-[auto_1fr] items-center gap-10" >
                                                 <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>
                                                 <div>
-                                                    <p className="text-gray-900 whitespace-no-wrap">{cabin.name}</p>
-                                                    <p className="text-gray-900 whitespace-no-wrap text-xs">{cabin.description}</p>
+                                                    <p className="text-gray-900 whitespace-no-wrap font-montserrat ">{cabin.name}</p>
+                                                    <p className="text-gray-900 whitespace-no-wrap text-xs font-montserrat">{cabin.description}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -136,6 +136,7 @@ const ManageCatalog = () => {
                                         </td>
                                     </tr>
                                 ))}
+                                 <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
                     </div>
