@@ -37,7 +37,7 @@ public class EmailService {
                             "<div style='margin: 0 auto; width: 100%%; text-align: center; font-size: 16px;'>" +
                             "<img src='http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360711/Rustik-logo/ulwcjystr37bqblnje3p.png' alt='Rustik'>" +
                             "</div>" +
-                            "<h1>¡Bienvenido %s!</h1>" +
+                            "<h1>¡Bienvenido(a) %s!</h1>" +
                             "<p style='font-size: 16px;'>¡Gracias por unirte a nuestra comunidad! Nos alegra saber que has elegido Rustik para planificar tu próxima escapada a la naturaleza. En nuestra plataforma podrás explorar una variedad de cabañas únicas, diseñadas para ofrecerte confort y tranquilidad.</p>" +
                             "<p style='font-size: 16px;'>Ahora que ya eres parte de Rustik, comienza a planificar tu viaje y aprovecha las herramientas que hemos preparado para ti:</p>" +
                             "<ul>" +
