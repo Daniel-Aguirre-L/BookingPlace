@@ -77,7 +77,9 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
     const handleFileChange = (newFiles, existingFiles, imageDeleted) => {
       setUploadedFiles(newFiles);
       setExistingFiles(existingFiles);
-      setImagesDeleted(prevDeleteFiles => [...prevDeleteFiles, ...imageDeleted]);
+      if(imageDeleted){
+        setImagesDeleted(prevDeleteFiles => [...prevDeleteFiles, parseInt(imageDeleted)]);
+      }
     };
   
     const handleInputChange = (e) => {
@@ -180,7 +182,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
           if(isEditing) {
             response = await rustikApiForm.put(`${rustikEndpoints.cabins}/${currentData.id}`, data);
             if (response.ok) {
-              console.log('aqui se eliminan las imagenes:');
+              console.log('el array de los id de las imagenes a eliminar son:');
               console.log(imagesDeleted)
             }
           } else {
@@ -292,7 +294,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
                     required
                     className="py-3 px-4  block w-full border-[#9CA3AF] border rounded-lg text-base  border-[#A9AEB9] text-[#9CA3AF]"
                   >
-                     <option value="" disabled selected>Seleccione una opción</option>
+                     <option value="" disabled defaultValue>Seleccione una opción</option>
                     <option value="GLAMPING">Glamping</option>
                     <option value="RUSTICA">Rustica</option>
                     <option value="INVIERNO">Invierno</option>

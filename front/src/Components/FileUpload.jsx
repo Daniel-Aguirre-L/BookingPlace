@@ -19,7 +19,7 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
         initialImages.map((image) => convertToFile(image.url, image.id))
       );
       setExistingImages(filesFromUrls);
-      onChange([],filesFromUrls, []);
+      onChange([],filesFromUrls, undefined);
     };
 
     if (initialImages.length === 0) {
@@ -41,7 +41,7 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
       setError('');
     }
     setFiles(prevFiles => [...prevFiles, ...newFiles]);
-    onChange([...files, ...newFiles], existingImages, [] );
+    onChange([...files, ...newFiles], existingImages, undefined );
 
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -57,13 +57,15 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
   const removeFile = (index, isExisting) => {
     if (isExisting) {
       const updatedImages = existingImages.filter((_, i) => i !== index);
-      const imagesDeleted = existingImages.filter((_, i) => i === index);
+      const imagesDeleted = existingImages.find((_, i) => i === index);
+      const fileName = imagesDeleted.name;
+      const imagesDeletedId = fileName.match(/^image_(\d+)\.jpg$/);
       setExistingImages(updatedImages);
-      onChange(files, updatedImages, imagesDeleted); 
+      onChange(files, updatedImages, imagesDeletedId ?  imagesDeletedId[1]: undefined); 
     } else {
       const updatedFiles = files.filter((_, i) => i !== index);
       setFiles(updatedFiles);
-      onChange(updatedFiles, existingImages, []);
+      onChange(updatedFiles, existingImages, undefined);
 
     }
 
