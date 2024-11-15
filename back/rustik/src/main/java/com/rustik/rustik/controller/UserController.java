@@ -5,6 +5,7 @@ package com.rustik.rustik.controller;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.exception.NotFoundException;
+import com.rustik.rustik.exception.UnauthorizedException;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
@@ -91,7 +92,12 @@ public class UserController {
 
         if (userDetails.getIsAdmin()) {
             if (userDTO.getIsAdmin() != null) {
-                user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+                user.setRole(userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+
+                // Si el admin se auto-revoca, forzar cierre de sesión
+                if (userDetails.getUser().getId().equals(id) && !userDTO.getIsAdmin()) {
+                    throw new UnauthorizedException("Tu rol ha cambiado. Por favor, cierra sesión e inicia nuevamente.");
+                }
             }
         }else {
             if (userDetails.getUser().getId() != id) {
