@@ -178,7 +178,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
           showLoaderModal();
           let response;
           if(isEditing) {
-            response = await rustikApiForm.put(rustikEndpoints.cabins, data);
+            response = await rustikApiForm.put(`${rustikEndpoints.cabins}/${currentData.id}`, data);
             if (response.ok) {
               console.log('aqui se eliminan las imagenes:');
               console.log(imagesDeleted)
