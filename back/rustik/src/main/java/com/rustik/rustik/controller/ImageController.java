@@ -2,6 +2,7 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.ImageDTO;
+import com.rustik.rustik.dto.ImageIdsDTO;
 import com.rustik.rustik.mapper.ImageMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Image;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,4 +108,24 @@ public class ImageController {
         }
         return ResponseEntity.noContent().build();
     }
+
+
+    @Operation(summary = "Eliminar imagenes", description = "Permite eliminar varias imagen permanentemente.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Imagenes eliminada exitosamente."),
+            @ApiResponse(responseCode = "404", description = "Imagenes no encontradas.")
+    })
+    @SecurityRequirement(name = "bearer")
+    @DeleteMapping("/eliminar-imagenes")
+    public ResponseEntity<Void> deleteImages(@RequestParam List<Long> ids) {
+        boolean deleted = imageService.deleteImagesById(ids);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+
+    }
+
+
+
 }

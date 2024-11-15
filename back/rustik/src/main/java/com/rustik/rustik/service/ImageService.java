@@ -122,6 +122,18 @@ public class ImageService {
         return true;
     }
 
+    public Boolean deleteImagesById( List<Long> imageIds) {
+        try {
+            imageRepository.deleteAllById(imageIds);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar imagenes", e);
+        }
+
+
+
+    }
+
     public List<Image> findImagesByCabin (Long cabinId){
         return imageRepository.findByCabinId(cabinId);
     }
