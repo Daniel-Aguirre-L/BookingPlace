@@ -108,21 +108,25 @@ public class CabinController {
     })
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
+    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO , @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        if (userDetails.getIsAdmin()){
+            cabinDTO.setId(id);
 
-        cabinDTO.setId(id);
+            Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
-        Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
+            return result.fold(
+                    errors -> {
+                        return ResponseEntity.badRequest().body(errors);
+                    },
+                    cabin -> {
+                        return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
+                    }
+            );
+        }
 
-        return result.fold(
-                errors -> {
-                    return ResponseEntity.badRequest().body(errors);
-                },
-                cabin -> {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
-                }
-        );
+        throw new BadRequestException("Usuario no autorizado");
+
     }
 
     @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
@@ -140,6 +144,13 @@ public class CabinController {
     }
 
 
+    @Operation(
+            summary = "Filtrar por categoria", description = "Permite filtrar las cabañas disponibles según las categorías proporcionadas."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cabañas filtradas por categorías"),
+            @ApiResponse(responseCode = "204", description = "No se encontraron cabañas para las categorías proporcionadas")
+    })
     @GetMapping("/filter")
     public ResponseEntity<List<CabinDTO>> getCabinsByCategories(@RequestParam List<CabinCategory> categories) {
         List<CabinDTO> cabins = cabinService.getCabinsByCategories(categories);
@@ -149,6 +160,14 @@ public class CabinController {
         return ResponseEntity.ok(cabins);
     }
 
+
+    @Operation(
+            summary = "Filtrar cabañas por nombre", description = "Permite filtrar las cabañas disponibles según el nombre."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cabañas filtradas por nombre"),
+            @ApiResponse(responseCode = "204", description = "No se encontraron cabañas con el nombre proporcionado")
+    })
     @GetMapping("/filterByName")
     public ResponseEntity<List<CabinDTO>> getCabinsByName(@RequestParam String name) {
         List<CabinDTO> cabins = cabinService.getCabinsByName(name);

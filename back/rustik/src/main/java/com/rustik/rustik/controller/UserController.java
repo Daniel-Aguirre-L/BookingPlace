@@ -111,6 +111,17 @@ public class UserController {
         return ResponseEntity.ok(updatedDTO);
     }
 
+
+    @Operation(
+            summary = "Delete user (Only for admin)",
+            description = "Este endpoint elimina un usuario."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario eliminado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Solicitud no autorizada"),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+            @ApiResponse(responseCode = "403", description = "Acceso denegado: el usuario no tiene permisos suficientes")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails){
         if (userDetails.getIsAdmin()){
