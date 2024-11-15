@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FileUpload from './FileUpload';
 import { rustikEndpoints } from "../services/rustkEndPoints";
 import { rustikApi, rustikApiForm } from "../services/rustikApi";
@@ -16,6 +16,7 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
   const [imagesDeleted, setImagesDeleted] = useState([]);
   const [error, setError] = useState('');
   const [features, setFeatures] = useState([]);
+  const featuresHasQuantity = useRef({});
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -65,6 +66,9 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
       try {
         const { data } = await rustikApiForm.get(rustikEndpoints.features);
         setFeatures(data.sort((a, b) => b.hasQuantity - a.hasQuantity));
+        data.forEach(feature => {
+          featuresHasQuantity.current[feature.id] = feature.hasQuantity;
+        });
       } catch (error) {
         console.error("Error al llamar a la api", error);
       }
@@ -73,8 +77,7 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
     getFeaturesData();
   }, []);
 
-
-  const handleFileChange = (newFiles, existingFiles, imageDeleted) => {
+    const handleFileChange = (newFiles, existingFiles, imageDeleted) => {
     setUploadedFiles(newFiles);
     setExistingFiles(existingFiles);
     if (imageDeleted) {
@@ -92,7 +95,7 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
         if (prevState.selectedFeatures.some(f => f.featureId === featureId)) {
           selectedFeatures = selectedFeatures.filter(f => f.featureId !== featureId);
         } else {
-          selectedFeatures.push({ featureId, quantity: 0, /*hasQuantity: selectedFeatures.filter(f => f.featureId === featureId)[0].hasQuantity */ });
+          selectedFeatures.push({ featureId, quantity: 0, hasQuantity: featuresHasQuantity.current[featureId] });
         }
 
         return {
@@ -116,7 +119,7 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
         });
 
         if (!updatedFeatures.some(f => f.featureId === Number(featureId))) {
-          updatedFeatures.push({ featureId: Number(featureId), quantity: action === 'increase' ? 1 : 0 });
+          updatedFeatures.push({ featureId: Number(featureId), quantity: action === 'increase' ? 1 : 0, hasQuantity: featuresHasQuantity.current[Number(featureId)] });
         }
 
         return {
@@ -164,9 +167,11 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
 
       formData.selectedFeatures.forEach((feature, index) => {
 
-        if (feature.hasQuantity) {
+        if (feature.hasQuantity && feature.quantity <= 0){
+          console.log("remove feature");
+        }else if (feature.hasQuantity && feature.quantity > 0) {
           data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
-          data.append(`cabinFeatures[${index}].quantity`, feature.quantity || 0);
+          data.append(`cabinFeatures[${index}].quantity`, feature.quantity);
         } else {
           data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
         }
@@ -184,7 +189,6 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
           console.log(response.status);
           if (response.status >= 200 && response.status < 300) {
             if (imagesDeleted.length > 0) {
-              const ids = {imagesDeleted}
               await rustikApi.delete(`${rustikEndpoints.deleteImages}?ids=` + imagesDeleted.toString());
               console.log(imagesDeleted)
             }

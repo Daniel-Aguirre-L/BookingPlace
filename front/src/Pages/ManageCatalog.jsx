@@ -6,6 +6,8 @@ import useNotificationStore from "../store/useNotificationStore";
 import AddProductModal from "../Components/AddProductModal";
 import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
+import { Link } from "react-router-dom";
+import { routeList } from "../helpers/routeList";
 
 
 const ManageCatalog = () => {
@@ -104,16 +106,18 @@ const ManageCatalog = () => {
                                 {cabins.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px]">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
-                                            <div className="grid grid-cols-[auto_1fr] items-center gap-10" >
+                                            <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} className="grid grid-cols-[auto_1fr] items-center gap-10" >
                                                 <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>
                                                 <div>
                                                     <p className="text-gray-900 whitespace-no-wrap font-montserrat ">{cabin.name}</p>
                                                     <p className="text-gray-900 whitespace-no-wrap text-xs font-montserrat">{cabin.description}</p>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
+                                        <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} >
                                             <p className="text-gray-900 whitespace-no-wrap text-center">{cabin.id}</p>
+                                        </Link>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
                                             <div className="flex justify-center items-center gap-5 my-auto ">

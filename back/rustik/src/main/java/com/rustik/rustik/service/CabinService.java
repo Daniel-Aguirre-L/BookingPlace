@@ -79,15 +79,18 @@ public class CabinService {
             currentCabin = null;
         }
 
+
         // Comprobar que las características existan
         if(cabinDTO.getCabinFeatures() != null){
             cabinDTO.getCabinFeatures().forEach(detailDTO -> {
-                if(!featureRepository.existsById(detailDTO.getFeatureId()))
+                if(detailDTO.getFeatureId() != null && !featureRepository.existsById(detailDTO.getFeatureId()))
                 {
                     errors.add("La característica con id " + detailDTO.getFeatureId() + " no existe");
                 }
             });
         }
+
+        
 
         if(!errors.isEmpty())
         {
@@ -99,6 +102,7 @@ public class CabinService {
 
         if (currentCabin != null) {
             savedCabin = cabinRepository.save(CabinMapper.toExistingEntity(currentCabin, cabinDTO));
+
         }else{
             savedCabin = cabinRepository.save(CabinMapper.toEntity(cabinDTO));
         }
@@ -185,6 +189,7 @@ public class CabinService {
     public List<DetailDTO> removeDuplicateFeaturesKeepLast(List<DetailDTO> details) {
         Map<Long, DetailDTO> map = new LinkedHashMap<>();
         for (DetailDTO detail : details) {
+            if(detail.getFeatureId() == null) continue;
             map.put(detail.getFeatureId(), detail);
         }
         return new ArrayList<>(map.values());

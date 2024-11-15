@@ -103,6 +103,7 @@ public class CabinMapper {
             existingCabin.setPrice(dto.getPrice());
         }
 
+
         if (dto.getCategory() != null) {
             existingCabin.setCategory(CabinCategory.valueOf(dto.getCategory().toUpperCase()));
         }
