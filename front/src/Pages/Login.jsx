@@ -73,7 +73,7 @@ const LoginPage = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Correo electrónico o número de teléfono"
+              placeholder="Correo electrónico"
             />
              {errors.email && <p className="text-red-500 text-xs text-start">{errors.email}</p>}
             <InputField

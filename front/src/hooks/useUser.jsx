@@ -91,10 +91,10 @@ export const useUser = () => {
                 setNotification({
                     visibility: true,
                     type: "error",
-                    text: `Por favor verifique los datos e intente nuevamente...`,
+                    text: `${error.response.data} Por favor verifique los datos e intente nuevamente...`,
                   });
             }
-            console.error(error.message);
+            console.error({error});
         }finally{
             hideLoaderModal();
         }
