@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,10 +23,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacio")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(min = 3, message = "El nombre debe tener al menos 3 caracteres")
     private String name;
 
-    @NotBlank(message = "El apellido debe estar completo")
+    @NotBlank(message = "El apellido no puede estar vacío")
+    @Size(min = 3, message = "El apellido debe tener al menos 3 caracteres")
     private String surname;
 
     @NotBlank(message = "El email debe estar completo")
