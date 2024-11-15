@@ -166,7 +166,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
 
           if (feature.hasQuantity) {
             data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
-            data.append(`cabinFeatures[${index}].quantity`, feature.quantity);
+            data.append(`cabinFeatures[${index}].quantity`, feature.quantity || 0);
           }else {
             data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
           }
