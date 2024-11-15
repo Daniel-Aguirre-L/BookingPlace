@@ -45,3 +45,14 @@ rustikApi.interceptors.request.use(
     },
     (error) => Promise.reject(error)
   );
+
+  rustikApiForm.interceptors.request.use(
+    (config) => {
+      const TOKEN2 = localStorage.getItem("token") || "";
+      if (TOKEN2) {
+        config.headers["Authorization"] = `Bearer ${TOKEN2}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );

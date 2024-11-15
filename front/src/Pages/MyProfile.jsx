@@ -167,6 +167,23 @@ const MyProfile = () => {
     }
   };
 
+  const handleResendMail = async () => {
+    try {
+      showLoaderModal();
+      await rustikApi.get(`${rustikEndpoints.resendConfirmationEmail}`);
+    } catch (error) {
+      console.error(error);
+      setNotification({
+        visibility: true,
+        type: "warning",
+        text: `No se pudo enviar correo, intente más tarde`,
+      });
+      
+    }finally{
+      hideLoaderModal();
+    }
+    
+  }
 
 
   return (
@@ -202,6 +219,7 @@ const MyProfile = () => {
           </fieldset>
           <fieldset className="w-full flex flex-col mb-8" >
             <label htmlFor="email" className="montserrat text-background-dark font-normal cursor-pointer"  >Email</label>
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center">
             <input
               className="border-0 bg-transparent cursor-pointer focus:outline-none focus:border-b focus:border-b-primary-color montserrat text-background-dark text-xl font-semibold"
               name="email"
@@ -212,6 +230,10 @@ const MyProfile = () => {
               readOnly
               // onChange={handleChange}
             />
+            <button className="py-1 px-3 rounded-lg font-medium bg-primary-color text-xs" type="button" onClick={handleResendMail} >Reenviar correo de verificación</button>
+
+            </div>
+            
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </fieldset>
           <fieldset className="w-full flex flex-col mb-8" >
