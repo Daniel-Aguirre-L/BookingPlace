@@ -10,6 +10,7 @@ import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.security.TokenService;
+import com.rustik.rustik.service.EmailService;
 import com.rustik.rustik.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
 
     public static final Logger logger = Logger.getLogger(UserController.class);
@@ -119,6 +123,16 @@ public class UserController {
         }
         //Cambiar a "AccesDeniedException"
         throw new BadRequestException("no autorizado");
+    }
+
+    @GetMapping("/confirmation-email")
+    public String resendConfirmationEmail(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        try{
+            emailService.sendRegistrationConfirmationEmail(userDetails.getUser().getEmail(), userDetails.getUser().getName());
+            return "email enviado a " + userDetails.getUser().getEmail();
+        }catch (Exception e){
+            throw new BadRequestException("no autorizado");
+        }
     }
 
 

@@ -19,7 +19,7 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
         initialImages.map((image) => convertToFile(image.url, image.id))
       );
       setExistingImages(filesFromUrls);
-      onChange(filesFromUrls);
+      onChange([],filesFromUrls);
     };
 
     if (initialImages.length === 0) {
@@ -41,7 +41,7 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
       setError('');
     }
     setFiles(prevFiles => [...prevFiles, ...newFiles]);
-    onChange([...existingImages, ...files, ...newFiles]);
+    onChange([...files, ...newFiles], existingImages );
 
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -58,11 +58,11 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
     if (isExisting) {
       const updatedImages = existingImages.filter((_, i) => i !== index);
       setExistingImages(updatedImages);
-      onChange(updatedImages.concat(files));
+      onChange(files, updatedImages); 
     } else {
       const updatedFiles = files.filter((_, i) => i !== index);
       setFiles(updatedFiles);
-      onChange(existingImages.concat(updatedFiles));
+      onChange(updatedFiles, existingImages);
 
     }
 

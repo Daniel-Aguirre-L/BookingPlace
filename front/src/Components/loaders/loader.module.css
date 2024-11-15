@@ -22,7 +22,7 @@
   }
 
   .loader {
-    @apply w-[120px] h-[22px] text-[#514b82] relative rounded-[20px] border-2 border-solid before:content-[""] before:absolute before:animate-[l6_2s_infinite] before:m-0.5 before:rounded-[inherit] before:inset-[0_100%_0_0];
+    @apply w-[120px] h-[22px] text-primary-color relative rounded-[20px] border-2 border-solid before:content-[""] before:absolute before:animate-[l6_2s_infinite] before:m-0.5 before:rounded-[inherit] before:inset-[0_100%_0_0];
   }
   .loader::before {
     background: currentColor;

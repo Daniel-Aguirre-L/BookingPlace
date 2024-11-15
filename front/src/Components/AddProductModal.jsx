@@ -11,6 +11,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [existingFiles, setExistingFiles] = useState([]);
     const [initialFiles, setInitialFiles] = useState([]);
     const [error, setError] = useState('');
     const [features, setFeatures] = useState([]);
@@ -28,7 +29,8 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
       if (isEditing && currentData) {
         const transformedFeatures = currentData.cabinFeatures.map(feature => ({
           featureId: feature.featureId,
-          quantity: feature.quantity
+          quantity: feature.quantity,
+          hasQuantity: feature.hasQuantity
         }));
         setError('');
         setFormData({
@@ -61,7 +63,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
       const getFeaturesData = async () => {
         try {
           const { data }  = await rustikApiForm.get(rustikEndpoints.features);
-          setFeatures(data);
+          setFeatures(data.sort((a, b) => b.hasQuantity - a.hasQuantity));
         } catch (error) {
           console.error("Error al llamar a la api", error);
         }
@@ -70,8 +72,10 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
       getFeaturesData();
     }, []);
 
-    const handleFileChange = (files) => {
-      setUploadedFiles(files);
+    
+    const handleFileChange = (newFiles, existingFiles) => {
+      setUploadedFiles(newFiles);
+      setExistingFiles(existingFiles);
     };
   
     const handleInputChange = (e) => {
@@ -84,7 +88,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
           if (prevState.selectedFeatures.some(f => f.featureId === featureId)) {
             selectedFeatures = selectedFeatures.filter(f => f.featureId !== featureId);
           } else {
-            selectedFeatures.push({ featureId, quantity: 0 });
+            selectedFeatures.push({ featureId, quantity: 0, /*hasQuantity: selectedFeatures.filter(f => f.featureId === featureId)[0].hasQuantity */ });
           }
     
           return {
@@ -101,6 +105,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
               return {
                 ...feature,
                 quantity: action === 'increase' ? feature.quantity + 1 : Math.max(feature.quantity - 1, 0),
+                hasQuantity: true
               };
             }
             return feature;
@@ -154,7 +159,9 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
         data.append('capacity', formData.capacity);
 
         formData.selectedFeatures.forEach((feature, index) => {
-          if (feature.quantity > 0) {
+
+          if (feature.hasQuantity) {
+            data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
             data.append(`cabinFeatures[${index}].quantity`, feature.quantity);
           }else {
             data.append(`cabinFeatures[${index}].featureId`, feature.featureId);
@@ -169,7 +176,9 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
           showLoaderModal();
           let response;
           if(isEditing) {
-             response = await rustikApiForm.put(rustikEndpoints.cabins, data);
+            
+                      
+            //response = await rustikApiForm.put(rustikEndpoints.cabins, data);
           } else {
              response = await rustikApiForm.post(rustikEndpoints.cabins, data);
           }

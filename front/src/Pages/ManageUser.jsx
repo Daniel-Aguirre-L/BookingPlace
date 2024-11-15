@@ -41,6 +41,22 @@ const ManageUser = () => {
         }
     };
 
+    const handleRsendConfirmationEmail = async () => {
+        try {
+            showLoaderModal();
+            const { data } = await rustikApi.post(`${rustikEndpoints.resendConfirmationEmail}`);
+            setNotification({
+                visibility: true,
+                type: "success",
+                text: "Se ha enviado un correo de confirmación a tu correo electrónico.",
+            });
+        } catch (error) {
+            console.error("Error al enviar el correo de confirmación, intente más tarde", error);
+        } finally {
+            hideLoaderModal();
+        }
+    };
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {

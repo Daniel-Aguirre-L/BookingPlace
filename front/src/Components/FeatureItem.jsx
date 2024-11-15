@@ -9,8 +9,8 @@ const FeatureItem = ({ feature, isSelected, onToggle, quantity }) => {
       },
     });
   };
-
-  const isQuantityFeature = ['Huespedes', 'Habitaciones', 'Baños', 'TV', 'Parqueadero'].includes(feature.name);
+  
+  const isQuantityFeature = feature.hasQuantity;
 
   return (
     <div className="mb-2 flex items-center">

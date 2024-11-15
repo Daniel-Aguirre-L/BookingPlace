@@ -7,8 +7,9 @@ export const rustikEndpoints = {
     login: "/auth/login",
     register: "/auth/register",
     validateToken: "/auth/validate-token",
-    myUser: "/users/my-user",
     users: "/users",
+    myUser: "/users/my-user",
+    resendConfirmationEmail: "/users/confirmation-email",
     features: "/features"
 
    
