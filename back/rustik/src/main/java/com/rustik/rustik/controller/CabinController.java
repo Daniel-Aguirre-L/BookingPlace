@@ -108,21 +108,25 @@ public class CabinController {
     })
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
+    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO , @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        if (userDetails.getIsAdmin()){
+            cabinDTO.setId(id);
 
-        cabinDTO.setId(id);
+            Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
-        Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
+            return result.fold(
+                    errors -> {
+                        return ResponseEntity.badRequest().body(errors);
+                    },
+                    cabin -> {
+                        return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
+                    }
+            );
+        }
 
-        return result.fold(
-                errors -> {
-                    return ResponseEntity.badRequest().body(errors);
-                },
-                cabin -> {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
-                }
-        );
+        throw new BadRequestException("Usuario no autorizado");
+
     }
 
     @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
