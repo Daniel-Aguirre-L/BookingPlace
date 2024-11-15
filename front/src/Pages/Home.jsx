@@ -65,7 +65,7 @@ const Home = () => {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
       setCabins(data);
       setPage(10);
-      setFilter(name);
+      data ?  setFilter(name) : setFilter("not found");
     } catch (error) {
       console.error("Error al llamar a la api", error);
     }
@@ -120,11 +120,16 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
       <CatalogList myCabins={myCabins} page={page} continuar={myCabins.length === cabins.length} filter={filter} handleShowMore={handleShowMore} handleOnClick={handleOnClick} ></CatalogList>
-      <Headline title={filter ? `El recomendado de ${filter.toLowerCase()}` : "El más reservado"} handleOnClick={handleVisitMasReservado}>
+      {filter !== "not found" && (
+      <Headline
+        title={filter ? `El recomendado de ${filter.toLowerCase()}` : "El más reservado"}
+        handleOnClick={handleVisitMasReservado}
+      >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
+    )}
       <DisplayCard cabin={cabins[Math.floor(Math.random() * cabins.length)]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
     </div>
 

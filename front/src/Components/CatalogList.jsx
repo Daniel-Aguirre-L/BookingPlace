@@ -35,7 +35,7 @@ const CatalogList = ({ myCabins, page, handleShowMore, continuar, filter, handle
           {
             filter && (
               <button
-                className="px-[0.8rem] py-[0.6rem] border-[2px] border-light-text rounded-[0.4rem]"
+                className="px-[0.8rem] py-[0.6rem] border-[2px] border-light-text rounded-[0.4rem] mb-10"
                 onClick={handleOnClick}
               >
                 Quitar Filtro

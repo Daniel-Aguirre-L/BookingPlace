@@ -38,7 +38,7 @@
   }
 
   .embla__slide__img_home {
-    @apply flex h-[300px] md:h-full w-full object-cover rounded-[1.8rem] brightness-[60%];
+    @apply flex h-[100px] md:h-full w-full object-cover rounded-[1.8rem] brightness-[60%];
   }
 
   
