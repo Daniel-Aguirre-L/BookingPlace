@@ -13,6 +13,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [existingFiles, setExistingFiles] = useState([]);
     const [initialFiles, setInitialFiles] = useState([]);
+    const [imagesDeleted, setImagesDeleted] = useState([]);
     const [error, setError] = useState('');
     const [features, setFeatures] = useState([]);
     const [formData, setFormData] = useState({
@@ -73,9 +74,10 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
     }, []);
 
     
-    const handleFileChange = (newFiles, existingFiles) => {
+    const handleFileChange = (newFiles, existingFiles, imageDeleted) => {
       setUploadedFiles(newFiles);
       setExistingFiles(existingFiles);
+      setImagesDeleted(prevDeleteFiles => [...prevDeleteFiles, ...imageDeleted]);
     };
   
     const handleInputChange = (e) => {
@@ -146,7 +148,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-      if (uploadedFiles.length  < 5) {
+      if (uploadedFiles.length + existingFiles.length  < 5) {
         setError('Debes seleccionar al menos 5 imágenes.');
       } else {
         setError('');
@@ -176,9 +178,11 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
           showLoaderModal();
           let response;
           if(isEditing) {
-            
-                      
-            //response = await rustikApiForm.put(rustikEndpoints.cabins, data);
+            response = await rustikApiForm.put(rustikEndpoints.cabins, data);
+            if (response.ok) {
+              console.log('aqui se eliminan las imagenes:');
+              console.log(imagesDeleted)
+            }
           } else {
              response = await rustikApiForm.post(rustikEndpoints.cabins, data);
           }
@@ -216,7 +220,7 @@ const AddProductModal = ({onClose, isOpen, currentData, isEditing}) => {
         <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
           <div className="flex flex-col md:w-600 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[85vh] overflow-auto">
             <div className="sticky top-0 flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
-              <h3 className="font-bold text-[#EEEEEEEE]">Agregar Cabaña</h3>
+              <h3 className="font-bold text-[#EEEEEEEE]">{isEditing? 'Editar ':'Agregar '} Cabaña</h3>
               <CloseButton onClick={handleClose} /> 
             </div>
             <form onSubmit={handleSubmit}>
