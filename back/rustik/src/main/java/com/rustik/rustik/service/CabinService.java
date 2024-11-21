@@ -1,6 +1,5 @@
 package com.rustik.rustik.service;
 
-
 import com.rustik.rustik.dto.CabinDTO;
 
 import com.rustik.rustik.dto.DetailDTO;
@@ -8,7 +7,6 @@ import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
-import com.rustik.rustik.model.Image;
 import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.FeatureRepository;
@@ -17,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.*;
@@ -59,7 +58,16 @@ public class CabinService {
         if (cabinDTO.getId() == null ) {
             if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
                 errors.add("No se han subido al menos 5 imágenes.");
+            }else{
+                int imageCount = 1;
+                for (MultipartFile image : cabinDTO.getImagesToUpload()) {
+                    if (image.isEmpty() || image.getName().isEmpty()) {
+                        errors.add("Imagen No. " + imageCount + " no es válida");
+                    }
+                    imageCount++;
+                }
             }
+
         }
 
         // Validar si la cabaña ya existe
@@ -108,6 +116,7 @@ public class CabinService {
         }
 
         // Subir imágenes y guardar imagenes
+        /*
         if (cabinDTO.getImagesToUpload() != null && cabinDTO.getImagesToUpload().size() > 0) {
             try {
                 List<Image> imageUrls = imageService.uploadImages(savedCabin, cabinDTO.getImagesToUpload());
@@ -119,6 +128,8 @@ public class CabinService {
                 throw new RuntimeException("Error al subir las imágenes: " + e.getMessage());
             }
         }
+
+         */
 
         //Crear los detalles
         if (cabinDTO.getCabinFeatures() != null && cabinDTO.getCabinFeatures().size() > 0) {

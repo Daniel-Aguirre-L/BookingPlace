@@ -82,6 +82,7 @@ public class CabinController {
     public ResponseEntity<?> createCabin(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute CabinDTO cabinDTO) {
 
         if (userDetails.getIsAdmin()){
+
             Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
             return result.fold(
