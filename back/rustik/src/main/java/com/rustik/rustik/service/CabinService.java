@@ -98,7 +98,6 @@ public class CabinService {
             });
         }
 
-        
 
         if(!errors.isEmpty())
         {
@@ -116,7 +115,6 @@ public class CabinService {
         }
 
         // Subir imágenes y guardar imagenes
-        /*
         if (cabinDTO.getImagesToUpload() != null && cabinDTO.getImagesToUpload().size() > 0) {
             try {
                 List<Image> imageUrls = imageService.uploadImages(savedCabin, cabinDTO.getImagesToUpload());
@@ -128,8 +126,6 @@ public class CabinService {
                 throw new RuntimeException("Error al subir las imágenes: " + e.getMessage());
             }
         }
-
-         */
 
         //Crear los detalles
         if (cabinDTO.getCabinFeatures() != null && cabinDTO.getCabinFeatures().size() > 0) {
