@@ -7,6 +7,7 @@ import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
+import com.rustik.rustik.model.Image;
 import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.FeatureRepository;
