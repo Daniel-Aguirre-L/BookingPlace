@@ -37,6 +37,9 @@ public class Cabin {
     @JsonIgnore
     private List<Image> images = new ArrayList<>(); // Relación con Image
 
+    @OneToMany(mappedBy = "cabin")
+    private List<Rating> ratings;
+
 
     public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category) {
         this.name = name;

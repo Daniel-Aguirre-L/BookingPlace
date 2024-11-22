@@ -36,7 +36,11 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "debe indicar su número de teléfono")
+    @NotBlank(message = "Debe indicar su número de teléfono")
+    @Pattern(
+            regexp = "^\\+?\\d{7,}$",
+            message = "El número de teléfono debe tener al menos 7 dígitos y puede empezar con '+'."
+    )
     @Column(unique = true)
     private String phone;
 

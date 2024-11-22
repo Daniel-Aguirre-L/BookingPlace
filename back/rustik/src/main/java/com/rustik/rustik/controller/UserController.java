@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +81,7 @@ public class UserController {
     })
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
+    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);
         if (!userOptional.isPresent() || !userOptional.get().getIsActive()) {
             throw new NotFoundException("Usuario no existe");

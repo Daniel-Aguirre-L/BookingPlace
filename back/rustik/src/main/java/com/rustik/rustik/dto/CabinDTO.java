@@ -18,6 +18,7 @@ public class CabinDTO {
     private String category;
     private List<DetailDTO> cabinFeatures; // Lista de detalles
     private List<ImageDTO> images = new ArrayList<>(); // Lista de url
+    private List<RatingDTO> ratings;
 
     @JsonIgnore
     private List<MultipartFile> imagesToUpload = new ArrayList<>(); // Lista de imagenes
