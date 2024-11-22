@@ -3,6 +3,7 @@ package com.rustik.rustik.mapper;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.dto.ImageDTO;
+import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
@@ -83,33 +84,44 @@ public class CabinMapper {
 
         //Cabin  cabin = existingCabin;
 
-        if (dto.getName() != null){
+        if (dto.getName() != null && !dto.getName().isEmpty()){
             existingCabin.setName(dto.getName());
         }
 
-        if (dto.getLocation() != null){
+        if (dto.getLocation() != null && !dto.getLocation().isEmpty()){
             existingCabin.setLocation(dto.getLocation());
         }
 
-        if (dto.getCapacity() != null){
+        if (dto.getCapacity() != null && dto.getCapacity() > 0){
             existingCabin.setCapacity(dto.getCapacity());
         }
 
-        if (dto.getDescription() != null){
+        if (dto.getDescription() != null && !dto.getDescription().isEmpty()){
             existingCabin.setDescription(dto.getDescription());
         }
 
-        if (dto.getPrice()!= null){
+        if (dto.getPrice()!= null && dto.getPrice() > 0){
             existingCabin.setPrice(dto.getPrice());
         }
 
 
-        if (dto.getCategory() != null) {
+        if (dto.getCategory() != null && !dto.getCategory().isEmpty() ) {
+            if (!isValidEnum(CabinCategory.class, dto.getCategory().toUpperCase())){
+                throw new BadRequestException("Categoria no reconocida");
+            }
             existingCabin.setCategory(CabinCategory.valueOf(dto.getCategory().toUpperCase()));
         }
 
         return existingCabin;
 
+    }
 
+    public static <E extends Enum<E>> boolean isValidEnum(Class<E> enumClass, String value) {
+        try {
+            Enum.valueOf(enumClass, value);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }
