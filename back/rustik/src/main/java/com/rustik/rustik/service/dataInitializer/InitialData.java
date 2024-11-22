@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.model.*;
 import com.rustik.rustik.repository.DetailRepository;
+import com.rustik.rustik.repository.FavoriteRepository;
 import com.rustik.rustik.repository.ImageRepository;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.service.CabinService;
@@ -31,6 +32,9 @@ public class InitialData implements ApplicationRunner {
     private UserRepository userRepository;
 
     @Autowired
+    private FavoriteRepository favoriteRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -51,7 +55,8 @@ public class InitialData implements ApplicationRunner {
         User user3 = new User("user3","user3","u3@correo.com","2345675","UY", UserRole.ROLE_USER,userService.encodePassword("1234User!"));
         User user4 = new User("user4","user4","u4@correo.com","2345674","CL", UserRole.ROLE_USER,userService.encodePassword("1234User!"));
         User user5 = new User("user5","user5","u5@correo.com","2345673","CO", UserRole.ROLE_USER,userService.encodePassword("1234User!"));
-        userRepository.saveAll(Arrays.asList(admin, user1,user2,user3,user4,user5));
+        List<User> users = Arrays.asList(admin, user1,user2,user3,user4,user5);
+        userRepository.saveAll(users);
 
 
         //CREA LISTADO DE FEATURES
@@ -171,6 +176,9 @@ public class InitialData implements ApplicationRunner {
 
         crearImagenesYCaracteristicas(saveCabins, features);
 
+        //Crea Favoritos
+        createFavorites(users, saveCabins);
+
     }
 
     public void listImagesInFolder( int i ) {
@@ -242,6 +250,24 @@ public class InitialData implements ApplicationRunner {
 
         imageRepository.saveAll(newImages);
         detailRepository.saveAll(new ArrayList<>(map.values()));
+
+    }
+
+    public void createFavorites(List<User> users, List<Cabin> cabins) {
+        Random random = new Random();
+        List<Favorite> favorites = new ArrayList<>();
+        for (User user : users) {
+            if (random.nextBoolean() || user.getName().equals("admin") || user.getName().equals("user1")) {
+                System.out.println("Generando favoritos para " + user.getUsername());
+                for (Cabin cabin : cabins) {
+                    if (random.nextInt(6)<2) {
+                        favorites.add(new Favorite(user, cabin));
+                    }
+                }
+            }
+        }
+
+        favoriteRepository.saveAll(favorites);
 
     }
 }
