@@ -4,7 +4,7 @@
 function Headline({ title, handleOnClick, filter, children }) {
   return (
     <div className="relative pageMargin flex flex-col my-[7rem]">
-      <h2 className="text-[2.65rem] text-primary-color font-semibold capitalize">
+      <h2 className="text-[2.65rem] text-primary-color font-semibold capitalize montserrat">
         {title}
       </h2>
       <p className="text-xl mr-[20rem] max-xl:mr-[13rem] max-md:mr-[8.5rem]">
