@@ -1,6 +1,5 @@
 package com.rustik.rustik.service;
 
-
 import com.rustik.rustik.dto.CabinDTO;
 
 import com.rustik.rustik.dto.DetailDTO;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.*;
@@ -59,7 +59,16 @@ public class CabinService {
         if (cabinDTO.getId() == null ) {
             if (cabinDTO.getImagesToUpload() == null || cabinDTO.getImagesToUpload().size() < 5) {
                 errors.add("No se han subido al menos 5 imágenes.");
+            }else{
+                int imageCount = 1;
+                for (MultipartFile image : cabinDTO.getImagesToUpload()) {
+                    if (image.isEmpty() || image.getName().isEmpty()) {
+                        errors.add("Imagen No. " + imageCount + " no es válida");
+                    }
+                    imageCount++;
+                }
             }
+
         }
 
         // Validar si la cabaña ya existe
@@ -79,15 +88,17 @@ public class CabinService {
             currentCabin = null;
         }
 
+
         // Comprobar que las características existan
         if(cabinDTO.getCabinFeatures() != null){
             cabinDTO.getCabinFeatures().forEach(detailDTO -> {
-                if(!featureRepository.existsById(detailDTO.getFeatureId()))
+                if(detailDTO.getFeatureId() != null && !featureRepository.existsById(detailDTO.getFeatureId()))
                 {
                     errors.add("La característica con id " + detailDTO.getFeatureId() + " no existe");
                 }
             });
         }
+
 
         if(!errors.isEmpty())
         {
@@ -99,6 +110,7 @@ public class CabinService {
 
         if (currentCabin != null) {
             savedCabin = cabinRepository.save(CabinMapper.toExistingEntity(currentCabin, cabinDTO));
+
         }else{
             savedCabin = cabinRepository.save(CabinMapper.toEntity(cabinDTO));
         }
@@ -185,6 +197,7 @@ public class CabinService {
     public List<DetailDTO> removeDuplicateFeaturesKeepLast(List<DetailDTO> details) {
         Map<Long, DetailDTO> map = new LinkedHashMap<>();
         for (DetailDTO detail : details) {
+            if(detail.getFeatureId() == null) continue;
             map.put(detail.getFeatureId(), detail);
         }
         return new ArrayList<>(map.values());
