@@ -16,7 +16,7 @@ export default {
         'roboto': ['Roboto', 'sans-serif'],
       },
       width: {
-        '600': '37.5rem',
+        '760': '47.5rem',
       },
       maxWidth: {
         '400': '25rem',
