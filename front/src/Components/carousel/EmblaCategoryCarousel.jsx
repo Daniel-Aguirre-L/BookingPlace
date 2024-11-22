@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import styles from "./carousel-styles.module.css";
@@ -7,8 +8,14 @@ const EmblaCategoryCarousel = ({ slides, options, getCategoryCabins }) => {
     AutoScroll({ playOnInit: true }),
   ]);
 
+  const autoPlay = useCallback(() => {
+    const autoScroll = emblaApi?.plugins()?.autoScroll
+    if (!autoScroll) return
+    autoScroll.play();
+  }, [emblaApi])
+
   return (
-    <div className={styles["embla"]}>
+    <div className={styles["embla"]} onMouseLeave={autoPlay}>
       <div className={styles["embla__viewport"]} ref={emblaRef}>
         <div className={styles["embla__container"]}>
           {slides.map((slide, index) => (

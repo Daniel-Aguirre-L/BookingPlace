@@ -5,11 +5,11 @@ export default {
     extend: {
       colors: {
         "background-dark": "#0c1123",
+        "background-light": "#dedede",
         "primary-color": "#088395",
         "secondary-color": "#fbffbd",
         "light-text": "#eeeeee",
         "dark-text": "#595858",
-        "background-light": "#dedede",
       },
       fontFamily: {
         'montserrat': ['Montserrat', 'sans-serif'],
