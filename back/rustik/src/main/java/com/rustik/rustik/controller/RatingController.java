@@ -94,10 +94,28 @@ public class RatingController {
         }
     }
 
-
     @Operation(summary = "Eliminar un rating", description = "Permite eliminar un rating existente.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRating(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRating(@PathVariable Long id) {
+
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> currentUserOptional = userService.findUserByEmail(currentUserEmail);
+
+        if (currentUserOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado");
+        }
+
+        User currentUser = currentUserOptional.get();
+
+        Rating rating = ratingService.findById(id);
+        if (rating == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rating no encontrado");
+        }
+
+        if (!rating.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos para eliminar este rating");
+        }
+
         ratingService.delete(id);
         return ResponseEntity.noContent().build();
     }
