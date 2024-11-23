@@ -11,7 +11,8 @@ export const rustikEndpoints = {
     users: "/users",
     myUser: "/users/my-user",
     resendConfirmationEmail: "/users/confirmation-email",
-    features: "/features"
+    features: "/features",
+    favorites: "/favorites",
 
    
 }
