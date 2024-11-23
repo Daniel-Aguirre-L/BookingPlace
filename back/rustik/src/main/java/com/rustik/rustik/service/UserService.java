@@ -1,21 +1,18 @@
 package com.rustik.rustik.service;
 
-import com.rustik.rustik.controller.UserController;
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
 import com.rustik.rustik.exception.BadRequestException;
-import com.rustik.rustik.exception.NotFoundException;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.security.TokenService;
-import jakarta.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -37,7 +34,6 @@ public class UserService {
     private BCryptPasswordEncoder encoder;
 
     public static final Logger logger = Logger.getLogger(UserService.class);
-
 
 
     public AuthUserDTO registerUser (User user) {

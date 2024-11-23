@@ -5,6 +5,7 @@ package com.rustik.rustik.controller;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.exception.NotFoundException;
+import com.rustik.rustik.exception.UnauthorizedException;
 import com.rustik.rustik.mapper.UserMapper;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -79,7 +81,7 @@ public class UserController {
     })
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody UserDTO userDTO ) throws NotFoundException {
+    public ResponseEntity<UserDTO> updateUser (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody @Valid UserDTO userDTO ) throws NotFoundException {
         Optional<User> userOptional = userService.findUserById(id);
         if (!userOptional.isPresent() || !userOptional.get().getIsActive()) {
             throw new NotFoundException("Usuario no existe");
@@ -91,7 +93,12 @@ public class UserController {
 
         if (userDetails.getIsAdmin()) {
             if (userDTO.getIsAdmin() != null) {
-                user.setRole( userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+                user.setRole(userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
+
+                // Si el admin se auto-revoca, forzar cierre de sesión
+                if (userDetails.getUser().getId().equals(id) && !userDTO.getIsAdmin()) {
+                    throw new UnauthorizedException("Tu rol ha cambiado. Por favor, cierra sesión e inicia nuevamente.");
+                }
             }
         }else {
             if (userDetails.getUser().getId() != id) {
