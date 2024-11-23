@@ -4,13 +4,16 @@ import com.rustik.rustik.dto.RatingDTO;
 import com.rustik.rustik.mapper.RatingMapper;
 import com.rustik.rustik.model.Rating;
 
+import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,11 +46,20 @@ public class RatingController {
     }
 
     @Operation(summary = "Crear un nuevo rating", description = "Permite crear un nuevo rating para una cabaña.")
-    @PostMapping
-    public ResponseEntity<RatingDTO> createRating(@RequestBody @Valid RatingDTO ratingDTO) {
-        Rating rating = ratingService.save(ratingDTO);
-        RatingDTO ratingDTOResponse = RatingMapper.toDTO(rating);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ratingDTOResponse);
+    @PostMapping("/{cabinId}" )
+    public ResponseEntity<RatingDTO> createRating(
+            @PathVariable Long cabinId,
+            @RequestBody @Valid RatingDTO ratingDTO,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+
+        Long userId = customUserDetails.getUser().getId();
+
+
+        Rating rating = ratingService.save(ratingDTO, customUserDetails.getUser(), cabinId);
+        RatingDTO responseDTO = RatingMapper.toDTO(rating);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @Operation(summary = "Actualizar un rating", description = "Permite actualizar un rating existente.")

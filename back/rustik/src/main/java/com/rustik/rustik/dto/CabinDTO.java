@@ -19,6 +19,8 @@ public class CabinDTO {
     private List<DetailDTO> cabinFeatures; // Lista de detalles
     private List<ImageDTO> images = new ArrayList<>(); // Lista de url
     private List<RatingDTO> ratings;
+    private Double averageScore;
+    private Long totalRatings;
 
     @JsonIgnore
     private List<MultipartFile> imagesToUpload = new ArrayList<>(); // Lista de imagenes

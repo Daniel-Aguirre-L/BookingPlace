@@ -2,15 +2,14 @@ package com.rustik.rustik.controller;
 
 
 import com.rustik.rustik.dto.CabinDTO;
-import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.mapper.CabinMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
-import com.rustik.rustik.model.Image;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.ImageService;
+import com.rustik.rustik.service.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,10 +30,12 @@ import java.util.stream.Collectors;
 public class CabinController {
 
     private final CabinService cabinService;
+    private final RatingService ratingService;
 
     @Autowired
-    public CabinController(CabinService cabinService, ImageService imageService) {
+    public CabinController(CabinService cabinService, ImageService imageService, RatingService ratingService) {
         this.cabinService = cabinService;
+        this.ratingService = ratingService;
     }
 
 
@@ -52,13 +54,26 @@ public class CabinController {
             @ApiResponse(responseCode = "200", description = "Cabaña encontrada."),
             @ApiResponse(responseCode = "404", description = "Cabaña no encontrada.")
     })
+
     @GetMapping("/{id}")
     public ResponseEntity<CabinDTO> getCabinById(@PathVariable Long id) {
         Cabin cabin = cabinService.findById(id);
         if (cabin == null) {
             return ResponseEntity.notFound().build();
         }
+
+        // Obtener el resumen de la puntuación (promedio y total de valoraciones)
+        Map<String, Object> ratingSummary = ratingService.getRatingSummaryForCabin(id);
+        Double averageScore = (Double) ratingSummary.get("averageScore");
+        Long totalRatings = (Long) ratingSummary.get("totalRatings");
+
+        // Convertir la cabaña a DTO
         CabinDTO cabinDTO = CabinMapper.toDTO(cabin);
+
+        // Agregar el promedio de puntuaciones y el total de valoraciones al DTO
+        cabinDTO.setAverageScore(averageScore);
+        cabinDTO.setTotalRatings(totalRatings);
+
         return ResponseEntity.ok(cabinDTO);
     }
 

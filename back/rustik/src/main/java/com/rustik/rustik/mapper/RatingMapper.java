@@ -13,7 +13,6 @@ public class RatingMapper {
         RatingDTO ratingDTO = new RatingDTO();
         ratingDTO.setId(rating.getId());
 
-        // Obtener el nombre del usuario a través de su relación directa
         User user = rating.getUser();
         if (user != null) {
             ratingDTO.setUserName(user.getName());
@@ -26,15 +25,12 @@ public class RatingMapper {
         return ratingDTO;
     }
 
-
     public static Rating toEntity(RatingDTO ratingDTO, User user, Cabin cabin) {
         Rating rating = new Rating();
 
-        // Asignar el usuario y la cabaña directamente
         rating.setUser(user);
         rating.setCabin(cabin);
 
-        // Asignar los demás campos
         rating.setScore(ratingDTO.getScore());
         rating.setReview(ratingDTO.getReview());
         rating.setCreatedAt(ratingDTO.getCreatedAt());

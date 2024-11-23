@@ -62,6 +62,7 @@ public class CabinMapper {
                 .collect(Collectors.toList());
         dto.setRatings(ratingDTOs);
 
+
         return dto;
     }
 

@@ -9,10 +9,14 @@ import com.rustik.rustik.model.User;
 import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.RatingRepository;
 import com.rustik.rustik.repository.UserRepository;
+import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class RatingService {
 
@@ -37,13 +41,10 @@ public class RatingService {
         return ratingRepository.findByCabinId(cabinId);
     }
 
-    public Rating save(RatingDTO ratingDTO) {
-        User user = userRepository.findById(ratingDTO.getUserId())
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+    public Rating save(RatingDTO ratingDTO, User user, Long cabinId) {
 
-        Cabin cabin = cabinRepository.findById(ratingDTO.getCabinId())
-                .orElseThrow(() -> new NotFoundException("Cabaña no encontrada"));
-
+        Cabin cabin = cabinRepository.findById(cabinId)
+                .orElseThrow(() -> new RuntimeException("Cabin not found"));
 
         Rating rating = RatingMapper.toEntity(ratingDTO, user, cabin);
 
@@ -61,5 +62,19 @@ public class RatingService {
 
     public void delete(Long id) {
         ratingRepository.deleteById(id);
+    }
+
+    public Map<String, Object> getRatingSummaryForCabin(Long cabinId) {
+        List<Tuple> result = ratingRepository.calculateAverageScoreAndCount(cabinId);
+        Tuple row = result.get(0);
+
+        Double averageScore = row.get("avgScore", Double.class);
+        Long totalRatings = row.get("totalRatings", Long.class);
+
+        Map<String, Object> summary = new HashMap<>();
+        summary.put("averageScore", averageScore);
+        summary.put("totalRatings", totalRatings);
+
+        return summary;
     }
 }
