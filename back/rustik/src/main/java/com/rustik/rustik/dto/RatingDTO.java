@@ -13,16 +13,13 @@ public class RatingDTO {
 
     private Long id;
 
+    private String userFullName;
 
-    @Size(min = 1, max = 100, message = "User name must be between 1 and 100 characters")
-    private String userName;
+    @Min(value = 1, message = "La puntuación debe ser al menos 1")
+    @Max(value = 5, message = "La puntuación no puede ser mayor a 5")
+    private Integer score;
 
-
-    @Min(value = 0, message = "Score must be at least 0")
-    @Max(value = 5, message = "Score must be at most 5")
-    private Double score; // Puntuación del rating, entre 0 y 5.
-
-    @Size(max = 500, message = "Review cannot exceed 500 characters")
+    @Size(max = 500, message = "La reseña no puede exceder los 500 caracteres")
     private String review; // Comentarios opcionales del rating
 
     private LocalDateTime createdAt;
