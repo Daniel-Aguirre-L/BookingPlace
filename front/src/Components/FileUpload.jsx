@@ -122,7 +122,7 @@ const FileUpload = ({ onChange, error, setError, initialImages = [] }) => {
                 </span>
                 <div>
                   <p className="text-sm font-medium text-gray-800">
-                    <span className="truncate inline-block max-w-[300px] align-bottom">{image.name}</span>
+                    <span className="truncate inline-block max-w-[200px] align-bottom overflow-hidden text-ellipsis whitespace-nowrap">{image.name}</span>
                   </p>
                 </div>
               </div>
