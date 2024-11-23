@@ -1,4 +1,14 @@
-# Rustik - Cabin Booking Application
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="front/public/Icons/logoSvg.svg">
+  <source media="(prefers-color-scheme: light)" srcset="http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360711/Rustik-logo/ulwcjystr37bqblnje3p.png">
+  <img src="http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360711/Rustik-logo/ulwcjystr37bqblnje3p.png" alt='Rustik'>
+</picture>
+</div>
+
+<br />
+
+<h1 align="center"> Cabin Booking Application</h1>
 
 Rustik is a web application that allows users to register and book available cabins for their desired dates. The application features a user-friendly interface for cabin bookings and an admin panel for managing cabins, users, and bookings.
 
@@ -22,9 +32,12 @@ Rustik is a web application that allows users to register and book available cab
 
 ## Technologies Used
 
-- **Backend**: Java, Spring Boot
 - **Frontend**: React.js
+- **Backend**: Java, Spring Boot
 - **Database**: MySQL
+- **Authentication**: JWT
+- **Image Hosting**: Cloudinary
+- **Email Sending**: Gmail API
 
 ## Setup Instructions
 
@@ -44,7 +57,7 @@ To set up the Rustik application, follow the instructions below for both the bac
      cd BookingPlace/backend/rustik     
      cp .envTemplate .env
      ```
-   - Edit the `.env` file to configure your database and other settings.
+   - Edit the `.env` file to configure your database, Cloudinary, and gmail API credentials.
 
 3. **Create the MySQL database**:
    - Open your MySQL client and run the following command:
@@ -53,11 +66,16 @@ To set up the Rustik application, follow the instructions below for both the bac
      ```
 
 4. **Run the Spring Boot application**:
-   - Make sure you have Maven installed. Run:
+   - Make sure you have Maven installed and run:
      ```bash
-     mvn spring-boot:run
+     ./mvnw spring-boot:run
      ```
-   - The server should now be running on `http://localhost:8080`.
+   or
+
+    ```cmd
+     mvnw spring-boot:run
+     ```
+   - - The server should now be running on `http://localhost:8080`.
 
 ### Frontend Setup
 
@@ -103,3 +121,13 @@ Contributions are welcome! Please follow these steps to contribute:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+<br />
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="front/public/Icons/shortlogo-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360812/Rustik-logo/o1sepuqvrih5biexqajy.png">
+  <img src="http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360812/Rustik-logo/o1sepuqvrih5biexqajy.png" alt='Rustik' style='height: 40px;' />
+</picture>
+</div>

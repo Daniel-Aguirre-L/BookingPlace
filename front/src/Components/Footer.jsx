@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="max-w-100 mx-auto my-0">
         <Link to={routeList.HOME}>
             <img
-              src="/Icons/Group 46.svg"
+              src="/Icons/shortlogo.svg"
               alt="logo footer"
               className="mx-auto my-0"
             />
