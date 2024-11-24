@@ -52,10 +52,10 @@ public class CabinMapper {
                     ratingDTO.setReview(rating.getReview());
                     ratingDTO.setCreatedAt(rating.getCreatedAt());
 
-                    // Asegúrate de que el nombre del usuario sea extraído correctamente
                     User user = rating.getUser();  // Obtener el usuario relacionado con la valoración
                     if (user != null) {
-                        ratingDTO.setUserName(user.getName());  // Establecer el nombre del usuario
+                        String fullName = user.getName() + " " + user.getSurname();
+                        ratingDTO.setUserFullName(fullName);
                     }
 
                     return ratingDTO;

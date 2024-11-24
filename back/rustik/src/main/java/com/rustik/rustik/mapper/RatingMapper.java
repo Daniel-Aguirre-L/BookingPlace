@@ -14,13 +14,12 @@ public class RatingMapper {
         ratingDTO.setId(rating.getId());
 
         User user = rating.getUser();
-        if (user != null) {
-            ratingDTO.setUserName(user.getName());
-        }
 
         ratingDTO.setScore(rating.getScore());
         ratingDTO.setReview(rating.getReview());
         ratingDTO.setCreatedAt(rating.getCreatedAt());
+        ratingDTO.setUserFullName(rating.getUser().getName() + " " + rating.getUser().getSurname());
+
 
         return ratingDTO;
     }

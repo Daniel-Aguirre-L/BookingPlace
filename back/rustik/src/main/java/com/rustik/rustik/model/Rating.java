@@ -1,5 +1,7 @@
 package com.rustik.rustik.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -23,7 +25,8 @@ public class Rating {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    private Double score;
+    private Integer score;
+
     private String review;
 
     private LocalDateTime createdAt;

@@ -48,15 +48,26 @@ public class RatingService {
 
         Rating rating = RatingMapper.toEntity(ratingDTO, user, cabin);
 
+        if (ratingRepository.existsByUserAndCabin(user, cabin)) {
+            throw new RuntimeException("El usuario ya ha puntuado esta cabaña");
+        }
+
         return ratingRepository.save(rating);
     }
 
-    public Rating update(Long id, RatingDTO ratingDTO) {
+    public Rating update(Long id, RatingDTO ratingDTO, User currentUser) {
+
         Rating rating = ratingRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Rating no encontrado"));
 
+        // Verificar si el usuario autenticado es el que creó el rating
+        if (!rating.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("No tienes permiso para editar este rating");
+        }
+
         rating.setScore(ratingDTO.getScore());
         rating.setReview(ratingDTO.getReview());
+
         return ratingRepository.save(rating);
     }
 
