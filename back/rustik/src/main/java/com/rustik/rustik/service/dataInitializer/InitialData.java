@@ -2,16 +2,20 @@ package com.rustik.rustik.service.dataInitializer;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.model.*;
 import com.rustik.rustik.repository.*;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.FeatureService;
+import com.rustik.rustik.service.StatsViewService;
 import com.rustik.rustik.service.UserService;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,6 +23,8 @@ import java.util.*;
 @Component
 public class InitialData implements ApplicationRunner {
 
+    @Autowired
+    private EntityManager entityManager;
     @Autowired
     private ImageRepository imageRepository;
 
@@ -35,6 +41,8 @@ public class InitialData implements ApplicationRunner {
     private RatingRepository ratingRepository;
 
     @Autowired
+    private StatsViewService statsViewService;
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -48,6 +56,10 @@ public class InitialData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        //creatStatsView(entityManager);
+        statsViewService.crearVista();
+
         //CREA USUARIO ADMIN
         User admin = new User("admin","admin","admin@admin.com","2345678","UY", UserRole.ROLE_ADMIN, userService.encodePassword("1234Admin!"));
         User user1 = new User("user1","user1","u1@correo.com","2345677","CO", UserRole.ROLE_USER, userService.encodePassword("1234User!"));
@@ -295,6 +307,38 @@ public class InitialData implements ApplicationRunner {
         ratingRepository.saveAll(ratings);
 
     }
+    /*
+    @Transactional
+    @PostConstruct
+    public void creatStatsView(EntityManager entityManager){
 
+        try{
+        String sql = "DROP VIEW IF EXISTS stats_view; " +
+                "CREATE VIEW stats_view AS " +
+                "SELECT 'nusu1' AS 'id', 'totalUser' AS 'group', 'Total Usuarios' AS 'description', count(u.id) AS 'val1', 0 AS 'itemid', 0 AS 'val2' " +
+                "FROM user u " +
+                "UNION " +
+                "SELECT 'ncab1' AS 'id', 'totalCabin' AS 'group', 'Total Cabañas' AS 'description', count(c.id) AS 'val1', 0 AS 'itemid', 0 AS 'val2' " +
+                "FROM cabin c " +
+                "UNION " +
+                "(SELECT concat('favr', ROW_NUMBER() OVER (ORDER BY COUNT(fa.id) DESC))  AS 'id', 'favoriteRanking' AS 'group', c.name AS 'description',  ROW_NUMBER() OVER (ORDER BY COUNT(fa.id) DESC) AS 'val1', fa.cabin_id AS 'itemid', COUNT(fa.id) AS 'val2' " +
+                "FROM favorite fa INNER JOIN cabin c ON fa.cabin_id = c.id " +
+                "GROUP BY fa.cabin_id " +
+                "LIMIT 5) " +
+                "UNION " +
+                "(SELECT concat('ratr', ROW_NUMBER() OVER (ORDER BY AVG(r.score) DESC))  AS 'id', 'ratingRanking' AS 'group', c.name AS 'description',  ROUND(AVG(r.score),2) AS 'val1', r.cabin_id AS 'itemid', 0 AS 'val2' " +
+                "FROM ratings r INNER JOIN cabin c ON r.cabin_id = c.id " +
+                "GROUP BY r.cabin_id " +
+                "LIMIT 5) ";
+
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
+
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+*/
 
 }
