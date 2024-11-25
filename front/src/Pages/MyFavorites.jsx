@@ -14,7 +14,7 @@ const MyFavorites = () => {
         console.log(data.cabinDTOS)
       } catch (error) {
         console.error("Error al obtener favoritos", error);
-      }
+      } 
     };
 
     getFavoritesData();
@@ -34,7 +34,7 @@ const MyFavorites = () => {
     }
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-8 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6  gap-8 mb-8">
       {favorites?.map((favorite) => (
         <div
           key={favorite?.id}

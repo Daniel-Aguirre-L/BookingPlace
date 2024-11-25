@@ -21,7 +21,7 @@ const UserLayout = () => {
 
       {
         isLoggedIn  && (
-            <div className="px-5 md:px-20 w-full" >
+            <div className="px-5 md:px-16 w-full" >
               
               <section className="w-full animate-fadeIn mb-5 md:mb-9">
                 <div className="w-full my-3 md:my-2" >
