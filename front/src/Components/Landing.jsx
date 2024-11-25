@@ -15,7 +15,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
 
   return (
     <section className="bg-background-dark max-w-[1600px] w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat overflow-hidden" style={styles} >
-      <h1 className="pageMargin text-primary-color font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem] montserrat ">
+      <h1 className="pageMargin mt-[8rem] text-primary-color font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem] montserrat ">
         Escapa a la Naturaleza y <br />
         Reserva tu Cabaña ideal
       </h1>
@@ -23,7 +23,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
         Tu refugio natural, a un clic de distancia.
       </p>
       <form 
-        className="pageMargin relative rounded-md bg-white flex text-[1.4rem] items-center mt-[2rem] h-[3rem] max-w-[25rem] overflow-hidden"
+        className="pageMargin relative rounded-md bg-white flex text-[1.4rem] items-center mt-[3rem] h-[3.35rem] max-w-[50rem] overflow-hidden"
         onSubmit={handleSearch}
       >
         <input

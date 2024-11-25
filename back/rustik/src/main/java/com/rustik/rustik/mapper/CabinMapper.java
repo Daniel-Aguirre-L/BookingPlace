@@ -3,10 +3,12 @@ package com.rustik.rustik.mapper;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.dto.ImageDTO;
+import com.rustik.rustik.dto.RatingDTO;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.CabinCategory;
 import com.rustik.rustik.model.Detail;
+import com.rustik.rustik.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +44,29 @@ public class CabinMapper {
                 .collect(Collectors.toList());
         dto.setImages(imageDTOs);
 
+        List<RatingDTO> ratingDTOs = cabin.getRatings().stream()
+                .map(rating -> {
+                    RatingDTO ratingDTO = new RatingDTO();
+                    ratingDTO.setId(rating.getId());
+                    ratingDTO.setScore(rating.getScore());
+                    ratingDTO.setReview(rating.getReview());
+                    ratingDTO.setCreatedAt(rating.getCreatedAt());
+
+                    User user = rating.getUser();  // Obtener el usuario relacionado con la valoración
+                    if (user != null) {
+                        String fullName = user.getName() + " " + user.getSurname();
+                        ratingDTO.setUserFullName(fullName);
+                    }
+
+                    return ratingDTO;
+                })
+                .collect(Collectors.toList());
+        dto.setRatings(ratingDTOs);
+
+
         return dto;
     }
+
     // Convertir de CabinDTO a Cabin
     public static Cabin toEntity(CabinDTO dto) {
 

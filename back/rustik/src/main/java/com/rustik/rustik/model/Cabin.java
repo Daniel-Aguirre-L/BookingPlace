@@ -1,6 +1,7 @@
 package com.rustik.rustik.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,9 @@ public class Cabin {
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Image> images = new ArrayList<>(); // Relación con Image
+
+    @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
 
     public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category) {

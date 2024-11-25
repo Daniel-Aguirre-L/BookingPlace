@@ -4,10 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.rustik.rustik.dto.DetailDTO;
 import com.rustik.rustik.model.*;
-import com.rustik.rustik.repository.DetailRepository;
-import com.rustik.rustik.repository.FavoriteRepository;
-import com.rustik.rustik.repository.ImageRepository;
-import com.rustik.rustik.repository.UserRepository;
+import com.rustik.rustik.repository.*;
 import com.rustik.rustik.service.CabinService;
 import com.rustik.rustik.service.FeatureService;
 import com.rustik.rustik.service.UserService;
@@ -33,6 +30,9 @@ public class InitialData implements ApplicationRunner {
 
     @Autowired
     private FavoriteRepository favoriteRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
 
     @Autowired
     private UserService userService;
@@ -179,6 +179,9 @@ public class InitialData implements ApplicationRunner {
         //Crea Favoritos
         createFavorites(users, saveCabins);
 
+        //Crea Reviews
+        createReviews(users, saveCabins);
+
     }
 
     public void listImagesInFolder( int i ) {
@@ -270,4 +273,28 @@ public class InitialData implements ApplicationRunner {
         favoriteRepository.saveAll(favorites);
 
     }
+
+    public void createReviews(List<User> users, List<Cabin> cabins) {
+        Random random = new Random();
+        List<Rating> ratings = new ArrayList<>();
+        for (Cabin cabin : cabins) {
+            for (User user : users) {
+                Integer score = random.nextInt(10) <= 2 ? random.nextInt(3) + 1 : random.nextInt(3) + 3;
+                String comentary;
+                if (score < 3) {
+                    comentary = "La cabaña era acogedora, pero había algunas áreas que podrían mejorarse. La limpieza no era perfecta y el agua caliente se agotaba rápidamente. Además, la señal de Wi-Fi era bastante débil. Fue una experiencia aceptable, pero creo que podrían realizar algunos ajustes para mejorarla.";
+                } else if (score == 3) {
+                    comentary = "Pasamos un tiempo maravilloso en la cabaña. Estaba bien equipada y la ubicación era perfecta para nuestras excursiones de senderismo. Aunque hubo algunos pequeños problemas con la calefacción, el personal los resolvió rápidamente. En general, una estadía muy agradable.";
+                } else {
+                    comentary = "¡Increíble experiencia! La cabaña estaba impecable y tenía todas las comodidades que podríamos haber deseado. La vista desde la terraza era simplemente espectacular, y el personal fue extremadamente amable y servicial. Definitivamente volveremos el próximo año. ¡Altamente recomendado!";
+                }
+                ratings.add(new Rating( cabin, user, score, comentary));
+            }
+        }
+
+        ratingRepository.saveAll(ratings);
+
+    }
+
+
 }
