@@ -17,6 +17,7 @@ export default {
       },
       width: {
         '760': '47.5rem',
+        '601': '37.563rem',
       },
       maxWidth: {
         '400': '25rem',

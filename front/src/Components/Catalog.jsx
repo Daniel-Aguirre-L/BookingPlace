@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CarouselModal from './carousel/CarouselModal';
 import PageTitleAndBack from './PageTitleAndBack';
 import FeatureIcon from './icons/FeatureIcon'
-
+import Comments from './Comments';
 
 const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
@@ -97,8 +97,10 @@ const Catalog = ({ cabin }) => {
                         ))}
                     </ul>
                 </div>
-
-             </div>
+                {/** Resenias**/}
+                <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-4 ml-4">Reseñas</h2>
+                <Comments />
+            </div>
 
              
 
