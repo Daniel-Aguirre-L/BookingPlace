@@ -1,13 +1,18 @@
 import React, { useState, } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ScrollRestoration, useNavigate } from 'react-router-dom';
 import CarouselModal from './carousel/CarouselModal';
 import PageTitleAndBack from './PageTitleAndBack';
 import FeatureIcon from './icons/FeatureIcon'
+import Policies from './Policies';
+import Rating from './Rating';
+import Reviews from './Reviews';
+
 
 
 const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    console.log({cabin} )
     // sort array cabin.cabinFeatures by booleano hasQuantity
     
     return (
@@ -98,13 +103,30 @@ const Catalog = ({ cabin }) => {
                     </ul>
                 </div>
 
+                 
+              
+                <Policies />
+                <div className="p-4">
+                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings}/>
+                </div>
+                  {
+                    cabin.ratings.length > 0 && cabin.ratings.map(review => {
+                        return (
+                            <div key={review.id} > 
+                             <Reviews review={review} totalRatings= {cabin.totalRatings}/></div>
+                        )
+                    })
+                  }
+                   
+ 
+
              </div>
 
              
 
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
              
-
+           
      
       
 
