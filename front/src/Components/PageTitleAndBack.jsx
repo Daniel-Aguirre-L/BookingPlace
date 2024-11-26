@@ -29,7 +29,7 @@ const PageTitleAndBack = ({ title = "Regresar" }) => {
   );
 
   return (
-    <div className="flex items-center mb-8 justify-between">
+    <div className="flex items-center mb-6 justify-between h-8">
       <span className="flex">
         <button
           onClick={() => navigate(-1)}
@@ -53,43 +53,41 @@ const PageTitleAndBack = ({ title = "Regresar" }) => {
         />
 
         <img
-          src="/Icons/heart.svg"
+          src="/Icons/heart-borders.svg"
           alt="favorite"
           className="hover:brightness-[75%] cursor-pointer"
         />
 
-        {shareOptionsOpen && (
-          <section
-            className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem] top-[4.5rem] right-0 md:top-[2.5rem] md:right-14 transition-all duration-300 ease-in-out z-10 ${
-              shareOptionsOpen
-                ? "opacity-100 translate-y-0 visible"
-                : "opacity-0 -translate-y-5 invisible"
-            }`}
-            onMouseLeave={closeShareOptions}
+        <section
+          className={`absolute flex flex-col rounded-[0.75rem] bg-primary-color p-8 w-[23rem] top-[4.5rem] right-0 md:top-[2.5rem] md:right-14 transition-all duration-300 ease-in-out z-10 ${
+            shareOptionsOpen
+              ? "opacity-100 translate-y-0 visible"
+              : "opacity-0 -translate-y-5 invisible"
+          }`}
+          onMouseLeave={closeShareOptions}
+        >
+          <MenuOption
+            imgUrl="/Icons/facebook.svg"
+            onClick={() => window.open("https://facebook.com", "_blank")}
           >
-            <MenuOption
-              imgUrl="/Icons/facebook.svg"
-              onClick={() => window.open("https://facebook.com", "_blank")}
-            >
-              Facebook
-            </MenuOption>
-            <MenuOption
-              imgUrl="/Icons/instagram.svg"
-              onClick={() => window.open("https://instagram.com", "_blank")}
-            >
-              Instagram
-            </MenuOption>
-            <MenuOption
-              imgUrl="/Icons/x.svg"
-              onClick={() => window.open("https://twitter.com", "_blank")}
-            >
-              Twitter
-            </MenuOption>
-            <MenuOption imgUrl="/Icons/embed.svg" onClick={""}>
-              Copiar Enlace
-            </MenuOption>
-          </section>
-        )}
+            Facebook
+          </MenuOption>
+          <MenuOption
+            imgUrl="/Icons/instagram.svg"
+            onClick={() => window.open("https://instagram.com", "_blank")}
+          >
+            Instagram
+          </MenuOption>
+          <MenuOption
+            imgUrl="/Icons/x.svg"
+            onClick={() => window.open("https://twitter.com", "_blank")}
+          >
+            Twitter
+          </MenuOption>
+          <MenuOption imgUrl="/Icons/embed.svg" onClick={""}>
+            Copiar Enlace
+          </MenuOption>
+        </section>
       </span>
     </div>
   );
