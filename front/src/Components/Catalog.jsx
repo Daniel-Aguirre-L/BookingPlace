@@ -9,32 +9,35 @@ import ShareFavButtons from './ShareFavButtons';
 import { rustikApi } from '../services/rustikApi';
 import { rustikEndpoints } from '../services/rustkEndPoints';
 import { getRatingDescription } from '../helpers/getRatingDescription';
+import { usePagination } from '../hooks/usePagination';
 
 
 const Catalog = ({ cabin }) => {
-    
+
     const [showModal, setShowModal] = useState(false);
     const url = (import.meta.env.VITE_RUSTIK_WEB || "") + "/catalogo/" + (cabin.id ?? "");
 
     const [isFavorite, setIsFavorite] = useState(false);
-    
+
+    const { currentData, PaginationControls  } = usePagination(cabin.ratings);
+
 
     const getFavoritesData = async () => {
         try {
-          const { data } = await rustikApi.get(rustikEndpoints.favorites);
-          setIsFavorite(data.cabinDTOS.some(favorite => favorite.id === cabin.id));
+            const { data } = await rustikApi.get(rustikEndpoints.favorites);
+            setIsFavorite(data.cabinDTOS.some(favorite => favorite.id === cabin.id));
         } catch (error) {
-          console.error("Error al obtener favoritos", error);
-        } 
-      };
+            console.error("Error al obtener favoritos", error);
+        }
+    };
 
     useEffect(() => {
-      getFavoritesData();
-          
+        getFavoritesData();
+
     }, [])
-    
-    console.log({cabin});
-    
+
+    console.log({ cabin });
+
     return (
         <div className="animate-fadeIn w-full py-[26px] px-4 md:px-24 mx-auto">
             <div className='transition-all' >
@@ -92,7 +95,7 @@ const Catalog = ({ cabin }) => {
                         </div>
                         <div className="flex items-center mt-2">
                             <span className="border border-[#FBFFBD] text-[#088395] font-semibold p-2 rounded mr-2">
-                                {  cabin.averageScore.toFixed(1) }
+                                {cabin.averageScore.toFixed(1)}
                             </span>
                             <span className="text-[#EEEEEE] montserrat text-sm ">{getRatingDescription(cabin.averageScore)} </span>
                             <span className="text-[#088395] ml-2 text-sm">{cabin.totalRatings} reseñas</span>
@@ -120,9 +123,9 @@ const Catalog = ({ cabin }) => {
                     <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 '>
                         {cabin.cabinFeatures && cabin.cabinFeatures.sort((a, b) => b.hasQuantity - a.hasQuantity).map((feature) => (
                             <li key={feature.id} className="text-light-text text-lg md:text-xl flex items-center">
-                                <span className='text-[2.5rem] text-secondary-color mr-[14px]' ><FeatureIcon id={feature.featureIcon}  /></span>
-                                <p  className='text-wrap' >
-                                {feature.featureName} {feature.quantity ? <span className='border border-secondary-color px-3 py-1 rounded-md max-h-12' > {feature.quantity}</span> : ''}
+                                <span className='text-[2.5rem] text-secondary-color mr-[14px]' ><FeatureIcon id={feature.featureIcon} /></span>
+                                <p className='text-wrap' >
+                                    {feature.featureName} {feature.quantity ? <span className='border border-secondary-color px-3 py-1 rounded-md max-h-12' > {feature.quantity}</span> : ''}
                                 </p>
                             </li>
                         ))}
@@ -130,17 +133,21 @@ const Catalog = ({ cabin }) => {
                 </div>
                 <Policies />
                 <div className="p-4">
-                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings}/>
+                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} />
                 </div>
-                  {
-                    cabin.ratings.length > 0 && cabin.ratings.map(review => {
+                <div className='transition-all' >
+                {
+                    currentData.length > 0 && currentData.map(review => {
                         return (
-                            <div key={review.id} > 
-                             <Reviews review={review} totalRatings= {cabin.totalRatings}/></div>
+                            <div key={review.id} >
+                                <Reviews review={review} /></div>
                         )
                     })
-                  }
-             </div>
+                }
+                </div>
+                <PaginationControls />
+                
+            </div>
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
         </div>
     );
