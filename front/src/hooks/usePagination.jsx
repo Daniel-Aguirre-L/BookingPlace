@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-export const usePagination = (initialData, dataPerPage = 4) => {
+export const usePagination = (data, dataPerPage = 4) => {
+    
+    const [initialData, setInitialData] = useState(data);
     const [currentPage, setCurrentPage] = useState(1);
     const [commentsPerPage, setCommentsPerPage] = useState(dataPerPage);
     const [currentData, setCurrentData] = useState(
@@ -37,13 +39,24 @@ export const usePagination = (initialData, dataPerPage = 4) => {
         }
     };
 
+    const setPaginationData = (newData) => {
+        setInitialData(newData);
+        setCurrentData(
+            newData && newData.length > 0 ?
+            [...newData.slice(
+            (currentPage - 1) * commentsPerPage,
+            (currentPage - 1) * commentsPerPage + commentsPerPage
+        )]:[])
+
+    };
+
     const PaginationControls = () => {
         return (
             <div className="flex items-center justify-center">
                     <button onClick={prevPage} disabled={currentPage === 1} className="px-5 py-2">
                         &lt;
                     </button>
-                    <span className="text-gray-700">{currentPage} of {totalPages}</span>
+                    <span >{currentPage} de {totalPages}</span>
                     <button onClick={nextPage} disabled={currentPage === totalPages} className="px-5 py-2">
                         &gt;
                     </button>
@@ -57,7 +70,8 @@ export const usePagination = (initialData, dataPerPage = 4) => {
         currentData,
         totalPages,
         currentPage,
-
+        
+        setPaginationData,
         PaginationControls,
         setCommentsPerPage,
         prevPage,

@@ -8,6 +8,7 @@ import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
 import { Link } from "react-router-dom";
 import { routeList } from "../helpers/routeList";
+import { usePagination } from "../hooks/usePagination";
 
 
 const ManageCatalog = () => {
@@ -16,7 +17,8 @@ const ManageCatalog = () => {
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [isEditing, setIsEditing] = useState(false);
     const [currentData, setCurrentData] = useState(null); 
-
+    const [cabins, setCabins] = useState([]);
+    
     const handleOpenModal = (cabin) => {
         if(cabin && cabin.id){
             setIsEditing(true);
@@ -30,7 +32,7 @@ const ManageCatalog = () => {
     }
     const handleCloseModal = () => setModalOpen(false);
 
-    const [cabins, setCabins] = useState([]);
+    const { currentData: currentCabinList, setPaginationData,  PaginationControls } = usePagination(cabins, 5);    
 
     const handleDelete = async (id) => {
         const confirma = confirm("Confirmar eliminar cabaña")
@@ -56,7 +58,8 @@ const ManageCatalog = () => {
         const fetchCabins = async () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.cabins);
-                setCabins(data);
+                setCabins([...data.reverse()]);
+                setPaginationData(data);
             } catch (error) {
                 console.error("Error al llamar a la api", error);
             }
@@ -71,7 +74,9 @@ const ManageCatalog = () => {
             <div className="container w-screen px-5" >
                 <div className="py-8 animate-fadeIn">
                     <div className="flex w-full justify-between items-center">
-                        <PageTitleAndBack title={`Mis cabañas`} />
+                        <div className="mb-8" >
+                            <PageTitleAndBack title={`Mis cabañas`} />
+                        </div>
                         <div className="px-5 py-4 flex justify-end">
                             <button
                                 className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
@@ -103,7 +108,7 @@ const ManageCatalog = () => {
                                 </tr>
                             </thead> 
                             <tbody className="px-5 bg-white rounded-3xl">
-                                {cabins.map((cabin) => (
+                                {currentCabinList.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px]">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} className="grid grid-cols-[auto_1fr] items-center gap-10" >
@@ -143,6 +148,9 @@ const ManageCatalog = () => {
                                  <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
+                        <div className="text-background-dark">
+                            <PaginationControls />
+                        </div>
                     </div>
                 </div>
             </div>

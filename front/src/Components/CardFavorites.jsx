@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routeList } from "../helpers/routeList";
 import LikeButton from "./LikeButton";
@@ -19,7 +19,10 @@ const CardFavorites = ({favorite, refreshFavoritos}) => {
         }`}
         onLoad={() => setLoaded(true)}
       />
-      <LikeButton id={favorite?.id} isFavorite onUnlike={refreshFavoritos}/>
+      <div className="flex w-full justify-end p-1 text-2xl" >
+        <LikeButton id={favorite?.id} isFavorite onUnlike={refreshFavoritos}/>
+      </div>
+
       <div className="absolute bottom-0 left-0 w-full  bg-[linear-gradient(0deg,rgba(12,17,35,0.95)_5%,rgba(0,0,0,0)_90%)] px-4 py-2 text-white">
         <div className="mt-2 flex justify-between items-center">
           <div className="max-w-28">
