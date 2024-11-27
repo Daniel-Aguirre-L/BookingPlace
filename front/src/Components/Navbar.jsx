@@ -46,7 +46,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="flex justify-between items-center px-6 md:px-24 py-[26px]">
+    <nav className="flex justify-between items-center px-4 md:px-24 py-[26px]">
       <Link to="/">
         <img src="/Icons/logoSvg.svg" alt="icono" />
       </Link>

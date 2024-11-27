@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Catalog from '../Components/Catalog';
 import { useParams } from 'react-router-dom';
 import { rustikEndpoints } from '../services/rustkEndPoints';
@@ -9,6 +9,8 @@ const CatalogDetail = () => {
     const params = useParams();
     const { id } = params;
     const [cabin, setCabin] = useState({});
+    
+    useEffect(() => { window.scrollTo(0, 0); }, []);
 
     useEffect(() => {
         const apicall = async () => {
@@ -24,7 +26,7 @@ const CatalogDetail = () => {
 
     
     return (
-        cabin.name && <Catalog cabin={cabin}  />
+      cabin.name && <Catalog cabin={cabin}  />
     );
 };
 

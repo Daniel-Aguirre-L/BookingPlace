@@ -1,35 +1,92 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import useNotificationStore from "../store/useNotificationStore";
+import { rustikApi } from "../services/rustikApi";
+import { rustikEndpoints } from "../services/rustkEndPoints";
 
-const LikeButton = ({ id, isFavorite = false, onLike, onUnlike }) => {
-  const [liked, setLiked] = useState(isFavorite);
+const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) => {
+  
+  const { setNotification } = useNotificationStore();
+  //const [liked, setLiked] = useState(isFavorite);
+
+  
+  
+
+  
+  const removeFavorite = async () =>{
+    try {
+      const response = await rustikApi.delete(`${rustikEndpoints.favorites}/${id}`);
+      if (response.status >= 200 && response.status < 300) {
+        onUnlike();
+        // setLiked(!liked);
+      } else {
+        console.error("Error al eliminar el favorito:", response.status);
+        setNotification({
+          visibility: true,
+          type: "error",
+          text: "No se pudo eliminar el favorito, intenta más tarde.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      setNotification({
+        visibility: true,
+        type: "error",
+        text: "No se pudo remover el favorito, intenta más tarde.",
+      });
+    }
+  }
+
+  const addFavorite = async () =>{
+    try {
+      const response = await rustikApi.post(`${rustikEndpoints.favorites}/${id}`);
+      if (response.status >= 200 && response.status < 300) {
+        onLike();
+        // setLiked(!liked);
+      } else {
+        console.error("Error al agregar el favorito:", response.status);
+        setNotification({
+          visibility: true,
+          type: "error",
+          text: "No se pudo agregar el favorito, intenta más tarde.",
+        });
+      }
+    } catch (error) {
+      setNotification({
+        visibility: true,
+        type: "error",
+        text: "No se pudo agregar el favorito, intenta más tarde.",
+      });
+      console.error("Error en la solicitud:", error);
+    }
+  }
 
   const toggleLike = () => {
-    setLiked(!liked);
-
-    if (!liked && onLike) {
-      onLike(id)
-    } else if (liked && onUnlike) {
-      onUnlike(id);
+    if (!isFavorite && onLike) {
+      addFavorite();
+    } else if (isFavorite && onUnlike) {
+      removeFavorite();
     }
   };
+
+  
 
   return (
     <button
       type="button"
       onClick={toggleLike}
-      className="absolute top-2 right-2 cursor-pointer"
+      className="relative cursor-pointer"
     >
        <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill={liked ? "#C70303" : "none"}
+        fill={isFavorite ? "#C70303" : "#DFDFDF"}
         viewBox="0 0 24 24"
         strokeWidth={1.5}
-        stroke={liked ? "#C70303" : "#CE1C1C"}
-        className={`w-6 h-6 cursor-pointer transition-transform ${
-          liked ? "" : "hover:scale-105"
+        stroke={isFavorite ? "#C70303" : "#CE1C1C"}
+        className={`inline-block w-[1em] h-[1em] cursor-pointer transition-transform ${
+          isFavorite ? "" : "hover:scale-105"
         }`}
         style={{
-          filter: liked
+          filter: isFavorite
             ? "none"
             : "drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.25))",
         }}

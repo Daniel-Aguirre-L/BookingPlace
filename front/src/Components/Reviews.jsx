@@ -1,5 +1,6 @@
 import React from "react";
 import Avatar from "./Avatar";
+import { getRatingDescription } from "../helpers/getRatingDescription";
 
 function Reviews({ review, totalRatings, }) {
   return (
@@ -18,13 +19,9 @@ function Reviews({ review, totalRatings, }) {
 
           <div>
             <p className="text-lg font-bold text-primary-color font-montserrat text-sm">
-              {review.score}{" "}
-              <span className="text-light-text font-bold">
-                | {new Date(review.createdAt).toLocaleDateString()}
-              </span>
-              <span className="text-light-text font-bold">
-                {" "}
-                | {review.userFullName}
+
+              {review.score} {getRatingDescription(review.score)} | <span className="text-light-text font-bold">
+                 {review.userFullName}
               </span>
             </p>
             

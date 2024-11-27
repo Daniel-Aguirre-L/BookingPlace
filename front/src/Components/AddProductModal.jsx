@@ -201,7 +201,6 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
           type: "success",
           text: "Cabaña guardada correctamente.", 
         });
-        console.log('Product added successfully:', response.data);
         setFormData({
           name: '',
           price: '',

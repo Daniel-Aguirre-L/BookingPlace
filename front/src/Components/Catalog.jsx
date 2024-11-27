@@ -1,25 +1,49 @@
-import React, { useState, } from 'react';
-import { ScrollRestoration, useNavigate } from 'react-router-dom';
+import { useEffect, useState, } from 'react';
 import CarouselModal from './carousel/CarouselModal';
 import PageTitleAndBack from './PageTitleAndBack';
 import FeatureIcon from './icons/FeatureIcon'
 import Policies from './Policies';
 import Rating from './Rating';
 import Reviews from './Reviews';
-
+import ShareFavButtons from './ShareFavButtons';
+import { rustikApi } from '../services/rustikApi';
+import { rustikEndpoints } from '../services/rustkEndPoints';
+import { getRatingDescription } from '../helpers/getRatingDescription';
 
 
 const Catalog = ({ cabin }) => {
-    const navigate = useNavigate();
+    
     const [showModal, setShowModal] = useState(false);
-    console.log({cabin} )
-    // sort array cabin.cabinFeatures by booleano hasQuantity
+    const url = (import.meta.env.VITE_RUSTIK_WEB || "") + "/catalogo/" + (cabin.id ?? "");
+
+    const [isFavorite, setIsFavorite] = useState(false);
+    
+
+    const getFavoritesData = async () => {
+        try {
+          const { data } = await rustikApi.get(rustikEndpoints.favorites);
+          setIsFavorite(data.cabinDTOS.some(favorite => favorite.id === cabin.id));
+        } catch (error) {
+          console.error("Error al obtener favoritos", error);
+        } 
+      };
+
+    useEffect(() => {
+      getFavoritesData();
+          
+    }, [])
+    
+    console.log({cabin});
     
     return (
-        <div className="animate-fadeIn w-full p-4 md:p-6 mx-auto">
+        <div className="animate-fadeIn w-full py-[26px] px-4 md:px-24 mx-auto">
             <div className='transition-all' >
-                <PageTitleAndBack title={`${cabin.category} / ${cabin.name}`} />
-
+                <div className='w-full flex flex-col md:flex-row justify-between md:items-center mb-8'>
+                    <PageTitleAndBack title={`${cabin.category} / ${cabin.name}`} />
+                    <div className='self-end md:self-auto' >
+                        <ShareFavButtons cabin={cabin} url={url} isFavorite={isFavorite} refreshFavoritos={getFavoritesData} />
+                    </div>
+                </div>
                 <div className="relative overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {/* Imggrabde */}
@@ -55,41 +79,43 @@ const Catalog = ({ cabin }) => {
                 </div>
 
                 {/* Detalles */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center my-5 ">
                     <div className="mb-4 md:mb-0">
                         <div className="flex flex-col">
-                            <h1 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">{cabin.name}</h1>
-                            <p className="text-[#EEEEEE] flex items-center">
+                            <h2 className="montserrat text-2xl md:text-[33px] font-bold text-[#088395] mb-1">
+                                {cabin.name} <span className="block md:inline font-roboto text-base text-light-text md:ml-[10px]" >Categoria / <span className="font-roboto text-base text-secondary-color capitalize">{cabin.category.toLowerCase()}</span> </span>
+                            </h2>
+                            <p className="text-[#EEEEEE] flex items-center my">
                                 <img src="/Icons/gps.svg" alt="gps" className="mr-2" />
                                 {cabin.location}
                             </p>
                         </div>
                         <div className="flex items-center mt-2">
                             <span className="border border-[#FBFFBD] text-[#088395] font-semibold p-2 rounded mr-2">
-                                4.2
+                                {  cabin.averageScore.toFixed(1) }
                             </span>
-                            <span className="text-[#EEEEEE]">Very Good </span>
-                            <span className="text-[#088395] ml-2">371 reviews</span>
+                            <span className="text-[#EEEEEE] montserrat text-sm ">{getRatingDescription(cabin.averageScore)} </span>
+                            <span className="text-[#088395] ml-2 text-sm">{cabin.totalRatings} reseñas</span>
                         </div>
                     </div>
                     <div className="flex flex-col items-start md:items-end">
-                        <h2 className="text-lg md:text-xl font-semibold text-[#088395]">
+                        <h3 className="text-lg md:text-xl font-semibold text-[#088395]">
                             <span className="text-xl md:text-2xl">${cabin.price}</span>
                             <span className="text-sm md:text-lg font-light"> p/noche</span>
-                        </h2>
+                        </h3>
                         <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold">
                             Reservar
                         </button>
                     </div>
                 </div>
 
-                <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-1 ml-4">Detalles</h2>
-                <p className="p-4 text-[#EEEEEE] text-sm md:text-base">
+                <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Detalles</h2>
+                <p className="py-4 text-[#EEEEEE] text-sm md:text-base">
                     {cabin.description}
                 </p>
 
-                <h2 className="text-xl md:text-2xl font-bold text-[#088395] my-4 ml-4">Características</h2>
-                <div className='px-4 mb-14' >
+                <h2 className="text-xl md:text-2xl font-bold text-[#088395] my-4">Características</h2>
+                <div className='mb-14' >
 
                     <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 '>
                         {cabin.cabinFeatures && cabin.cabinFeatures.sort((a, b) => b.hasQuantity - a.hasQuantity).map((feature) => (
@@ -102,9 +128,6 @@ const Catalog = ({ cabin }) => {
                         ))}
                     </ul>
                 </div>
-
-                 
-              
                 <Policies />
                 <div className="p-4">
                     <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings}/>
@@ -117,19 +140,8 @@ const Catalog = ({ cabin }) => {
                         )
                     })
                   }
-                   
- 
-
              </div>
-
-             
-
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
-             
-           
-     
-      
-
         </div>
     );
 };
