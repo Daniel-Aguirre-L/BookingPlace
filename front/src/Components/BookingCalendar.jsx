@@ -51,6 +51,19 @@ function BookingCalendar({ setBookingDates, visible, setVisible }) {
       protection={true}
       options={{ locale: "es-UY", weekStartsOn: 1, useAttributes: true }}
       onChange={setSelected}
+      onOverbook={(date, type) =>
+        type=="PAST"
+          ? setNotification({
+              visibility: true,
+              type: "warning",
+              text: `La fecha seleccionada: ${formatDate(date)} no puede ser en el pasado.`,
+            })
+          : setNotification({
+              visibility: true,
+              type: "error",
+              text: `La fecha seleccionada: ${formatDate(date)} ya fue reservada.`,
+            })
+      }
       className={`rounded-xl right-[10rem] top-[-8rem] transition-all duration-300 ease-in-out ${
         visible
           ? "opacity-100 scale-100 translate-y-0 visible"
