@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import Comments from './Comments';
 
 const Rating = ({  score, totalRatings}) => {
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
+    <>
     <div className="flex flex-col space-y-4 border-b border-secondary-color pb-5">
       <div className="flex justify-between w-full items-center ">
         <h3 className="text-xl md:text-2xl font-bold text-primary-color font-moserrat">Reseñas</h3>
@@ -22,7 +25,10 @@ const Rating = ({  score, totalRatings}) => {
           </div>
 
           <div className="ml-4 ">
-            <button className="bg-primary-color text-light-text h-10 px-4 rounded font-semibold font-moserrat">
+            <button 
+              className="bg-primary-color text-light-text h-10 px-4 rounded font-semibold font-moserrat"
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
               Dar tu reseña
             </button>
 
@@ -31,9 +37,10 @@ const Rating = ({  score, totalRatings}) => {
           
         </div>
       </div>
-
-    
     </div>
+
+    <Comments isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+    </>
   );
 };
 

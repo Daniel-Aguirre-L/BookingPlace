@@ -1,44 +1,18 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import CloseButton from './CloseButton';
+import { rustikEndpoints } from '../services/rustkEndPoints';
+import { rustikApiForm } from "../services/rustikApi";
+import useNotificationStore from '../store/useNotificationStore';
 
-const comments = [
-  {
-    id: 1,
-    name: 'Juan Pérez',
-    photo: 'https://via.placeholder.com/50',
-    rating: 4.5,
-    text: 'Excelente producto, superó mis expectativas. Definitivamente lo recomendaría.',
-  },
-  {
-    id: 2,
-    name: 'Ana López',
-    photo: 'https://via.placeholder.com/50',
-    rating: 3.0,
-    text: 'Está bien, pero esperaba más calidad por el precio.',
-  },
-  {
-    id: 3,
-    name: 'Carlos Gómez',
-    photo: 'https://via.placeholder.com/50',
-    rating: 5.0,
-    text: 'Impresionante, llegó rápido y es exactamente lo que quería.',
-  },
-];
-
-
-const Comments = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+const Comments = ({ isModalOpen, setIsModalOpen }) => {
+  const { setNotification } = useNotificationStore();
+  const { id } = useParams();
+  const [errors, setErrors] = useState({ rating: '', review: '' });
   const [formData, setFormData] = useState({
     rating: 0,
     review: '',
   });
-
-  const commentsPerPage = 2;
-
-  const totalPages = Math.ceil(comments.length / commentsPerPage);
-  const startIndex = (currentPage - 1) * commentsPerPage;
-  const currentComments = comments.slice(startIndex, startIndex + commentsPerPage);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -49,81 +23,59 @@ const Comments = () => {
       ...prevData,
       [field]: value,
     }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: '',
+    }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const { rating, review } = formData;
+    let validationErrors = {};
 
-    if (rating === 0 || review.trim() === '') {
-      alert('Por favor completa la calificación y la reseña.');
+    if (rating === 0) {
+      validationErrors.rating = 'Por favor selecciona una calificación.';
+    }
+
+    if (review.trim() === '') {
+      validationErrors.review = 'Por favor escribe tu reseña.';
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    console.log(formData);
-    alert('¡Gracias por tu calificación!');
-    setIsModalOpen(false);
-    setFormData({
-      rating: 0,
-      review: '',
-    });
+    try {
+      const dataToSend = { 
+        "score": formData.rating,
+        "review": formData.review
+      };
+
+      const response = await rustikApiForm.post(`${rustikEndpoints.raiting}/${id}`, dataToSend);
+      if (response.status === 200 || response.status === 201) {
+        setIsModalOpen(false);
+        setNotification({
+          visibility: true,
+          type: "success",
+          text: "¡Gracias por tu calificación!", 
+        });
+        setFormData({
+          rating: 0,
+          review: '',
+        });
+        setErrors({});
+      } else {
+        alert('Hubo un problema al enviar tu reseña. Inténtalo más tarde.');
+      }
+    } catch (error) {
+      console.error('Error al enviar la reseña:', error);
+    }
   };
 
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
 
   return(
     <>
-      <div className='flex justify-between ml-4'>
-        <div className='flex gap-4'>
-          <span className='montserrat text-[#EEEEEE] text-5xl'>4.2</span>
-          <div>
-            <p className='text-[#FBFFBD] montserrat font-semibold text-xl'>Very good</p>
-            <p className='text-[#EEEEEE] montserrat text-sm'>371 verified reviews</p>
-          </div>
-        </div>
-        <button
-          onClick={toggleModal}
-          className="bg-[#088395] text-[#EEEEEE] px-4 py-2 rounded mx-3"
-        >
-            Da tu reseña
-        </button>
-      </div>
-      <div className="mx-4">
-        <hr className=" my-5 border-gray-300" />
-        {currentComments.map((comment) => (
-          <div key={comment.id}>
-            <div className="flex items-start my-10 gap-3">
-              <img src={comment.photo} alt={comment.name} className="w-14 h-14 rounded-full object-cover" />
-              <div className="flex-1">
-                <div className="flex items-center gap-3">
-                  <span className="text-primary-color text-sm font-bold montserrat">
-                      {comment.rating.toFixed(1)} Amaizing
-                  </span> |
-                  <h3 className="text-base font-medium text-[#F9F9F9] montserrat">{comment.name}</h3>
-                </div>
-                <p className="text-[#F9F9F9] text-sm  mt-2 montserrat">{comment.text}</p>
-              </div>
-            </div>
-            <hr className="my-4 border-[#FBFFBD]" />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-center mt-4">
-        <button onClick={handlePrev} disabled={currentPage === 1} className="px-5 py-2">
-          &lt;
-        </button>
-        <span className="text-gray-700">{currentPage} of {totalPages}</span>
-        <button onClick={handleNext} disabled={currentPage === totalPages} className="px-5 py-2">
-           &gt;
-        </button>
-      </div>
-
       {isModalOpen && (
         <div className="animate-fadeIn hs-overlay fixed top-0 left-0 w-full h-full d-flex my-0 mx-auto bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
           <div className=" my-10 mx-auto flex flex-col md:w-601 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[72vh] overflow-auto">
@@ -157,6 +109,9 @@ const Comments = () => {
                     </button>
                   ))}
                 </div>
+                {errors.rating && (
+                  <p className="text-sm text-red-500">{errors.rating}</p> // Mensaje de error de calificación
+                )}
               </div>
               <div>
                 <label className="text-base mb-2 text-[#088395] block">Reseña</label>
@@ -168,6 +123,9 @@ const Comments = () => {
                   placeholder="Escribe tu reseña."
                   className="w-full border border-[#A9AEB9] rounded-lg text-base p-2 focus:outline-none text-[#9CA3AF]"
                 ></textarea>
+                {errors.review && (
+                  <p className="text-sm text-red-500">{errors.review}</p> // Mensaje de error de reseña
+                )}
               </div>
               <button
                 onClick={handleSubmit}

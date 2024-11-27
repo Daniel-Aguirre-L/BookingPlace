@@ -13,7 +13,8 @@ export const rustikEndpoints = {
     resendConfirmationEmail: "/users/confirmation-email",
     features: "/features",
     favorites: "/favorites",
-    reviews: '/reviews'
+    reviews: '/reviews',
+    raiting: '/ratings'
 
    
 }

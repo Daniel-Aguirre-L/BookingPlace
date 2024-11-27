@@ -12,7 +12,6 @@ import Reviews from './Reviews';
 const Catalog = ({ cabin }) => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    console.log({cabin} )
     // sort array cabin.cabinFeatures by booleano hasQuantity
     
     return (
