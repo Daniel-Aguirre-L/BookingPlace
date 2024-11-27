@@ -21,6 +21,8 @@ import jakarta.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,15 +50,15 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida exitosamente."),
             @ApiResponse(responseCode = "400", description = "Usuario no autorizado."),
     }    )
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getUser (@AuthenticationPrincipal CustomUserDetails userDetails){
 
-        if (userDetails.getIsAdmin()){
-             List<UserDTO> usersDTO = userService.findUsers().stream()
-                    .map(UserMapper::toDTO).collect(Collectors.toList());
-            return ResponseEntity.ok(usersDTO);
-        }
-        throw new BadRequestException("Usuario no autorizado");
+    @GetMapping
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<UserDTO>> getUser (){
+
+        List<UserDTO> usersDTO = userService.findUsers().stream()
+                .map(UserMapper::toDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(usersDTO);
+
     }
 
     @Operation(summary = "Get details of the authenticated user", description = "Devuelve la información del usuario logeado")
@@ -130,17 +132,14 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Acceso denegado: el usuario no tiene permisos suficientes")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails){
-        if (userDetails.getIsAdmin()){
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
             Optional<User> user = userService.findUserById(id);
             if (user.isPresent()){
                 userService.deleteLogic(user.get());
                 return ResponseEntity.ok("Usuario eliminado");
             }
             throw new NotFoundException("usuario no existe");
-        }
-        //Cambiar a "AccesDeniedException"
-        throw new BadRequestException("no autorizado");
     }
 
     @GetMapping("/confirmation-email")
