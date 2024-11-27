@@ -36,8 +36,12 @@ function Card({ title, children, price, images, id }) {
         >
           Reserva
         </button>
-        
       </section>
+      <img
+          src="/Icons/heart-borders.svg"
+          alt="favorite"
+          className="absolute top-5 right-5 hover:brightness-[75%] cursor-pointer w-8"
+        />
     </div>
   );
 }
