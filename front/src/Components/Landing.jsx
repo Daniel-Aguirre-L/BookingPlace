@@ -8,12 +8,12 @@ const styles = {
 };
 
 function Landing({ filter, setFilter, getNameCabins }) {
-  const [calendarVisible, setCalendarVisible] = useState(false)
-  const [bookingDates, setBookingDates] = useState(["", ""]);
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [bookingDates, setBookingDates] = useState([]);
 
   const setDate = () => {
     setCalendarVisible(true);
-  }
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -46,31 +46,39 @@ function Landing({ filter, setFilter, getNameCabins }) {
           onFocus={() => (window.location.hash = "")}
         />
         <input
-          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+          className={`w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] ${
+            !bookingDates[0] ? "cursor-pointer" : null
+          }`}
           type="text"
-          placeholder="Fecha de Entrada"
+          placeholder="Seleccione fecha de reserva"
           value={bookingDates[0]}
           onChange={(e) => setFilter(e.target.value)}
-          onClick={() => (setDate())}
+          onClick={() => setDate()}
           readOnly
         />
-        <input
-          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-          type="text"
-          placeholder="Fecha de Salida"
-          value={bookingDates[1]}
-          onChange={(e) => setFilter(e.target.value)}
-          onClick={() => (setDate())}
-          readOnly
-        />
-
+        {bookingDates[0] && (
+          <input
+            className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+            type="text"
+            placeholder="Fecha de Salida"
+            value={bookingDates[1]}
+            onChange={(e) => setFilter(e.target.value)}
+            onClick={() => setDate()}
+            readOnly
+          />
+        )}
         <button
           className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
           type="submit"
-        ><span className="md:hidden font-montserrat">Buscar ‌‌ </span>
+        >
+          <span className="md:hidden font-montserrat">Buscar ‌‌ </span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
-        <BookingCalendar setBookingDates={setBookingDates} visible={calendarVisible} setVisible={setCalendarVisible} />
+        <BookingCalendar
+          setBookingDates={setBookingDates}
+          visible={calendarVisible}
+          setVisible={setCalendarVisible}
+        />
       </form>
     </section>
   );

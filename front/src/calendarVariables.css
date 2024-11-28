@@ -53,13 +53,13 @@
 .calendar__calendar-container:not([data-scrollable])
   .calendar__month-content[data-some-month]
   span:first-child {
-  color: #007aff;
+  color: rgb(8,131,149);
 }
 
 .calendar__calendar-container:not([data-scrollable])
   .calendar__month-content[data-some-year]
   span:nth-child(2) {
-  color: #007aff;
+  color: rgb(8,131,149);
 }
 
 .calendar__calendar-container[data-scrollable] .calendar__month-content {
@@ -215,12 +215,12 @@
 }
 
 .calendar__day-selection {
-  background-color: #2c2c2c;
+  background-color: rgb(8,131,149);
   z-index: 10;
 }
 
 .calendar__day-reservation {
-  background-color: #f2f1ef;
+  background-color: #e4e4e4;
   z-index: 0;
 }
 
@@ -230,7 +230,7 @@
 
 .calendar__day-container[data-reserved],
 .calendar__day-container[data-past]:not(:has(> .calendar__day-today)) {
-  color: #a3a2a1;
+  color: #8f8f8f;
 }
 
 .calendar__calendar-container[data-scrollable]
