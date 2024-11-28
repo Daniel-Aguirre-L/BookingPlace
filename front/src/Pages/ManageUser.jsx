@@ -29,8 +29,11 @@ const ManageUser = () => {
         try {
             showLoaderModal();
             await rustikApi.delete(`${rustikEndpoints.users}/${id}`);
-            const updatedUsers = users.filter((user) => user.id !== id);
-            setUsers(updatedUsers);
+            setUsers((prevUsers) => {
+                const updatedUsers = prevUsers.filter((user) => user.id !== id);
+                setPaginationData(updatedUsers); 
+                return updatedUsers;
+            });
             setNotification({
                 visibility: true,
                 type: "success",
@@ -76,17 +79,43 @@ const ManageUser = () => {
     }, [isModalOpen]);
 
     const toggleAdmin =  async (userId,isAdmin) => { 
-       try {
-        const { data } = await rustikApi.put(`${rustikEndpoints.users}/${userId}`,{isAdmin:!isAdmin});
+    try {
+        showLoaderModal();
+        const { data : updatedUser } = await rustikApi.put(`${rustikEndpoints.users}/${userId}`,{isAdmin:!isAdmin});
 
-        setUsers(prevUsers => prevUsers.map(user => user.id === userId ? 
-            { ...data } : user ) ); 
+        setUsers((prevUsers) => {
+            const updatedUsers = prevUsers.map((user) =>
+                user.id === userId ? { ...user, isAdmin: updatedUser.isAdmin } : user
+            );
+            setPaginationData(updatedUsers); 
+            return updatedUsers;
+        });
         
-       } catch (error) {
-        console.error("Error al llamar a la api", error);
-       }
-       
-    };
+        setNotification({
+            visibility: true,
+            type: "success",
+            text: "El rol de administrador se actualizó correctamente.",
+        });
+    } catch (error) {
+        console.error("Error al actualizar el rol de administrador", error);
+        if (error.response && error.response.data) {
+            const errorMessage = error.response.data.message || "No puedes revocar tu propio rol de administrador.";
+            setNotification({
+                visibility: true,
+                type: "error",
+                text: errorMessage,
+            });
+        } else {
+            setNotification({
+                visibility: true,
+                type: "error",
+                text: "Error al procesar la solicitud, intente más tarde.",
+            });
+        }
+    } finally {
+        hideLoaderModal();
+    }
+};
 
     return (
         <div className="animate-fadeIn" >

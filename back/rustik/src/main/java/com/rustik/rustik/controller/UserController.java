@@ -89,9 +89,14 @@ public class UserController {
             throw new NotFoundException("Usuario no existe");
         }
 
+        if (userDetails.getUser().getId().equals(id)) {
+            if (userDTO.getIsAdmin() != null && !userDTO.getIsAdmin()) {
+                throw new BadRequestException("No puedes revocar tu propio rol de administrador.");
+            }
+        }
+
         String currentPassword =  userOptional.get().getPassword();
         User user = UserMapper.toExistingEntity(userDTO, userOptional.get());
-        //si el put lo hace un admin, puede hacer admin o quitar privilegio de admin al user.
 
         if (userDetails.getIsAdmin()) {
             if (userDTO.getIsAdmin() != null) {
@@ -111,14 +116,7 @@ public class UserController {
             user.setPassword(currentPassword);
         }
 
-
         User updatedUser = userService.updateUser(user);
-
-        // Si el admin se auto-revoca, forzar cierre de sesión
-        if (userDetails.getIsAdmin() && userDetails.getUser().getId().equals(id) && !userDTO.getIsAdmin()) {
-
-            throw new UnauthorizedException("Tu rol ha cambiado. Por favor, cierra sesión e inicia nuevamente.");
-        }
         UserDTO updatedDTO = UserMapper.toDTO(updatedUser);
         return ResponseEntity.ok(updatedDTO);
     }
