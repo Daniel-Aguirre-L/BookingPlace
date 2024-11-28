@@ -112,7 +112,7 @@ const Home = () => {
 
   return (
     <div className="animate-fadeIn " >
-      <Landing filter={filter} setFilter={setFilter} getNameCabins={getNameCabins} ></Landing>
+      <Landing filter={filter} setFilter={setFilter} getNameCabins={getNameCabins} cabinHelper={cabins.length > 0 ? cabins.map(cabin => cabin.name) : []} ></Landing>
       <EmblaCategoryCarousel slides={SLIDES} options={{ loop: true }} getCategoryCabins={getCategoryCabins} />
       <Headline title={filter ? `Cabañas ${filter.toLowerCase()}` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter} >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

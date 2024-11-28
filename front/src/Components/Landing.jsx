@@ -7,9 +7,10 @@ const styles = {
   backgroundSize: "cover",
 };
 
-function Landing({ filter, setFilter, getNameCabins }) {
+function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
   const [calendarVisible, setCalendarVisible] = useState(false)
   const [bookingDates, setBookingDates] = useState(["", ""]);
+  const [serchingText, setSerchingText] = useState(false);
 
   const setDate = () => {
     setCalendarVisible(true);
@@ -20,6 +21,15 @@ function Landing({ filter, setFilter, getNameCabins }) {
     getNameCabins(filter);
     window.location.hash = "cabañas";
   };
+
+  const getSearchOptions = (text="lago") => {
+    if (!text) return [];
+    return cabinHelper.filter((option) =>
+      option.toLowerCase().includes(text.toLowerCase())
+    );
+
+  }
+
 
   return (
     <section
@@ -37,32 +47,64 @@ function Landing({ filter, setFilter, getNameCabins }) {
         className="pageMargin relative rounded-md bg-white md:flex text-[1.4rem] items-center mt-[3rem] md:h-[3.35rem] h-fit  max-w-[50rem] font-montserrat"
         onSubmit={handleSearch}
       >
-        <input
-          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] "
-          type="text"
-          placeholder="Nombre de la cabaña"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          onFocus={() => (window.location.hash = "")}
-        />
-        <input
-          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-          type="text"
-          placeholder="Fecha de Entrada"
-          value={bookingDates[0]}
-          onChange={(e) => setFilter(e.target.value)}
-          onClick={() => (setDate())}
-          readOnly
-        />
-        <input
-          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-          type="text"
-          placeholder="Fecha de Salida"
-          value={bookingDates[1]}
-          onChange={(e) => setFilter(e.target.value)}
-          onClick={() => (setDate())}
-          readOnly
-        />
+        <fieldset className="flex relative" >
+          <input
+            className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] "
+            type="text"
+            placeholder="Nombre de la cabaña"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onFocus={() => {
+              window.location.hash = ""
+              setSerchingText(true);
+            }}
+            onBlur={()=>{
+              setTimeout(()=>{
+                setSerchingText(false);
+              },100);
+            }}
+          />
+          
+          {
+            
+            serchingText && getSearchOptions(filter).length > 0 &&
+            <div className="absolute max-h-52 w-full top-10 bg-white z-20 overflow-y-scroll text-background-dark rounded-b-lg" >
+              {
+                getSearchOptions(filter).map((option, index)=>
+                  <p key={`option-${index}`}
+                  className="p-2 hover:bg-gray-300 cursor-pointer pl-6 text-base"
+                  onClick={() => {
+                    setFilter(option);
+                    setSerchingText(false);
+                  }}
+                  >
+                    {option.toLowerCase()}
+                  </p>
+                )
+              }
+
+            </div>
+          }
+
+            <input
+              className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+              type="text"
+              placeholder="Fecha de Entrada"
+              value={bookingDates[0]}
+              onChange={(e) => setFilter(e.target.value)}
+              onClick={() => (setDate())}
+              readOnly
+            />
+            <input
+              className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+              type="text"
+              placeholder="Fecha de Salida"
+              value={bookingDates[1]}
+              onChange={(e) => setFilter(e.target.value)}
+              onClick={() => (setDate())}
+              readOnly
+            />
+        </fieldset>
 
         <button
           className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
