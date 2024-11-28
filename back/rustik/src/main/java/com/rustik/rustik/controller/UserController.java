@@ -97,10 +97,7 @@ public class UserController {
             if (userDTO.getIsAdmin() != null) {
                 user.setRole(userDTO.getIsAdmin() ? UserRole.ROLE_ADMIN : UserRole.ROLE_USER);
 
-                // Si el admin se auto-revoca, forzar cierre de sesión
-                if (userDetails.getUser().getId().equals(id) && !userDTO.getIsAdmin()) {
-                    throw new UnauthorizedException("Tu rol ha cambiado. Por favor, cierra sesión e inicia nuevamente.");
-                }
+
             }
         }else {
             if (userDetails.getUser().getId() != id) {
@@ -116,6 +113,12 @@ public class UserController {
 
 
         User updatedUser = userService.updateUser(user);
+
+        // Si el admin se auto-revoca, forzar cierre de sesión
+        if (userDetails.getIsAdmin() && userDetails.getUser().getId().equals(id) && !userDTO.getIsAdmin()) {
+
+            throw new UnauthorizedException("Tu rol ha cambiado. Por favor, cierra sesión e inicia nuevamente.");
+        }
         UserDTO updatedDTO = UserMapper.toDTO(updatedUser);
         return ResponseEntity.ok(updatedDTO);
     }
