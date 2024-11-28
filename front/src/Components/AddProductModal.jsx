@@ -186,11 +186,9 @@ const AddProductModal = ({ onClose, isOpen, currentData, isEditing }) => {
         let response;
         if (isEditing) {
           response = await rustikApiForm.put(`${rustikEndpoints.cabins}/${currentData.id}`, data);
-          console.log(response.status);
           if (response.status >= 200 && response.status < 300) {
             if (imagesDeleted.length > 0) {
               await rustikApi.delete(`${rustikEndpoints.deleteImages}?ids=` + imagesDeleted.toString());
-              console.log(imagesDeleted)
             }
           }
         } else {

@@ -1,9 +1,17 @@
 
+import { useState } from "react";
 import { getRatingDescription } from "../helpers/getRatingDescription";
+import Comments from "./Comments";
 
-const Rating = ({  score, totalRatings}) => {
+const Rating = ({  score, totalRatings, getCabin}) => {
+
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const closeModal = async (value) => {
+    await getCabin();
+    setShowReviewsModal(value);
+    
+  };
   
-
   return (
     <div className="flex flex-col space-y-4 border-b border-secondary-color pb-5">
       <div className="flex justify-between w-full items-center ">
@@ -21,12 +29,16 @@ const Rating = ({  score, totalRatings}) => {
             </span>
           </div>
           <div className="ml-4 ">
-            <button className="bg-primary-color text-light-text min-h-10 px-4 rounded font-semibold font-moserrat">
+            <button 
+              className="bg-primary-color text-light-text min-h-10 px-4 rounded font-semibold font-moserrat"
+              onClick={() => setShowReviewsModal(true)}
+            >
               Dar tu reseña
             </button>
           </div>
         </div>
       </div>
+      <Comments isModalOpen={showReviewsModal} setIsModalOpen={closeModal} />
     </div>
   );
 };

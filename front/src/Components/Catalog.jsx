@@ -10,18 +10,16 @@ import { rustikApi } from '../services/rustikApi';
 import { rustikEndpoints } from '../services/rustkEndPoints';
 import { getRatingDescription } from '../helpers/getRatingDescription';
 import { usePagination } from '../hooks/usePagination';
+import Comments from './Comments';
 
 
-const Catalog = ({ cabin }) => {
+const Catalog = ({ cabin, getCabin }) => {
 
     const [showModal, setShowModal] = useState(false);
     const url = (import.meta.env.VITE_RUSTIK_WEB || "") + "/catalogo/" + (cabin.id ?? "");
-
     const [isFavorite, setIsFavorite] = useState(false);
-
-    const { currentData, PaginationControls  } = usePagination(cabin.ratings);
-
-
+    const { currentData, PaginationControls, setPaginationData  } = usePagination(cabin.ratings);
+    
     const getFavoritesData = async () => {
         try {
             const { data } = await rustikApi.get(rustikEndpoints.favorites);
@@ -32,11 +30,13 @@ const Catalog = ({ cabin }) => {
     };
 
     useEffect(() => {
+        setPaginationData(cabin.ratings);
+    }, [cabin])
+
+    useEffect(() => {
         getFavoritesData();
 
     }, [])
-
-    console.log({ cabin });
 
     return (
         <div className="animate-fadeIn w-full py-[26px] px-4 md:px-24 mx-auto">
@@ -133,7 +133,7 @@ const Catalog = ({ cabin }) => {
                 </div>
                 <Policies />
                 <div className="p-4">
-                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} />
+                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} />
                 </div>
                 <div className='transition-all' >
                 {
@@ -148,6 +148,7 @@ const Catalog = ({ cabin }) => {
                 <PaginationControls />
                 
             </div>
+            
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
         </div>
     );
