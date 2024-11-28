@@ -18,6 +18,7 @@ import io.vavr.control.Either;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,9 +95,8 @@ public class CabinController {
     })
     @SecurityRequirement(name = "bearer")
     @PostMapping
-    public ResponseEntity<?> createCabin(@AuthenticationPrincipal CustomUserDetails userDetails, @ModelAttribute CabinDTO cabinDTO) {
-
-        if (userDetails.getIsAdmin()){
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<?> createCabin(@ModelAttribute CabinDTO cabinDTO) {
 
             Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
@@ -108,14 +108,11 @@ public class CabinController {
                         return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
                     }
             );
-        }
-        throw new BadRequestException("Usuario no autorizado");
 
 
     }
 
 
-    //Se espera push para agregar validación admin.
     @Operation(summary = "Actualizar cabaña", description = "Permite actualizar una cabaña existente .")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cabaña actualizada exitosamente."),
@@ -124,9 +121,9 @@ public class CabinController {
     })
     @SecurityRequirement(name = "bearer")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO , @AuthenticationPrincipal CustomUserDetails userDetails) {
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<?> updateCabin(@PathVariable Long id, @ModelAttribute CabinDTO cabinDTO) {
 
-        if (userDetails.getIsAdmin()){
             cabinDTO.setId(id);
 
             Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
@@ -139,24 +136,18 @@ public class CabinController {
                         return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
                     }
             );
-        }
-
-        throw new BadRequestException("Usuario no autorizado");
-
     }
 
     @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
     @ApiResponse(responseCode = "204", description = "Cabaña eliminada exitosamente.")
     @SecurityRequirement(name = "bearer")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCabin(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        if (userDetails.getIsAdmin()){
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
+
             cabinService.delete(id);
             return ResponseEntity.noContent().build();
-        }
 
-        //Cambiar por una custom "AccesDeniedException"
-        throw new BadRequestException("Usuario no autorizado");
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class RatingService {
@@ -42,17 +43,20 @@ public class RatingService {
     }
 
     public Rating save(RatingDTO ratingDTO, User user, Long cabinId) {
-
         Cabin cabin = cabinRepository.findById(cabinId)
-                .orElseThrow(() -> new RuntimeException("Cabin not found"));
+                .orElseThrow(() -> new RuntimeException("Cabaña no encontrada"));
 
-        Rating rating = RatingMapper.toEntity(ratingDTO, user, cabin);
+        Optional<Rating> existingRating = ratingRepository.findByUserAndCabin(user, cabin);
 
-        if (ratingRepository.existsByUserAndCabin(user, cabin)) {
-            throw new RuntimeException("El usuario ya ha puntuado esta cabaña");
+        if (existingRating.isPresent()) {
+            Rating rating = existingRating.get();
+            rating.setScore(ratingDTO.getScore());
+            rating.setReview(ratingDTO.getReview());
+            return ratingRepository.save(rating);
+        } else {
+            Rating rating = RatingMapper.toEntity(ratingDTO, user, cabin);
+            return ratingRepository.save(rating);
         }
-
-        return ratingRepository.save(rating);
     }
 
     public Rating update(Long id, RatingDTO ratingDTO, User currentUser) {
@@ -88,4 +92,5 @@ public class RatingService {
 
         return summary;
     }
+
 }
