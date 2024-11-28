@@ -31,6 +31,12 @@ const SelectDate = ({ onClose, isOpen }) => {
   const handleSubmit = async (e) => {
     setBookingDates(["", ""]);
     onClose();
+    bookingDates[0] &&
+      setNotification({
+        visibility: true,
+        type: "success",
+        text: `¡Gracias por reservar! Su estadía comienza el ${bookingDates[0]} y termina el ${bookingDates[1]}.`,
+      });
   };
 
   const handleCloseForm = () => {
