@@ -4,9 +4,11 @@ import CloseButton from './CloseButton';
 import { rustikEndpoints } from '../services/rustkEndPoints';
 import { rustikApi } from "../services/rustikApi";
 import useNotificationStore from '../store/useNotificationStore';
+import useLoaderModalStore from '../store/useLoaderModalStore';
 
 const Comments = ({ isModalOpen, setIsModalOpen }) => {
   const { setNotification } = useNotificationStore();
+  const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
   const { id } = useParams();
   const [errors, setErrors] = useState({ rating: '', review: '' });
   const [formData, setFormData] = useState({
@@ -45,7 +47,7 @@ const Comments = ({ isModalOpen, setIsModalOpen }) => {
       setErrors(validationErrors);
       return;
     }
-
+    showLoaderModal();
     try {
       const dataToSend = { 
         "score": formData.rating,
@@ -76,6 +78,7 @@ const Comments = ({ isModalOpen, setIsModalOpen }) => {
     } catch (error) {
       console.error('Error al enviar la reseña:', error);
     }
+    hideLoaderModal();
   };
 
   return(

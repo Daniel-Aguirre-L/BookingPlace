@@ -6,7 +6,6 @@ import LikeButton from "./LikeButton";
 const CardFavorites = ({favorite, refreshFavoritos}) => {
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState(false);
-  // const randomIndex = Math.floor(Math.random() * favorite?.images?.length);
   const image = favorite?.images?.[0];
 
   return (

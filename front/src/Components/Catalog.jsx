@@ -10,8 +10,6 @@ import { rustikApi } from '../services/rustikApi';
 import { rustikEndpoints } from '../services/rustkEndPoints';
 import { getRatingDescription } from '../helpers/getRatingDescription';
 import { usePagination } from '../hooks/usePagination';
-import Comments from './Comments';
-
 
 const Catalog = ({ cabin, getCabin }) => {
 

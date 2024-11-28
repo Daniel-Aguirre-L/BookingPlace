@@ -15,7 +15,6 @@ const CatalogList = ({ myCabins, page, handleShowMore, continuar, filter, handle
       console.error("Error al obtener favoritos", error);
     } 
   };
-
     
   useEffect(() => {
     getFavoritesData();

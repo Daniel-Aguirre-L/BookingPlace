@@ -1,4 +1,3 @@
-import React from "react";
 
 function Avatar({ name, size }) {
   const sizeClasses = {
