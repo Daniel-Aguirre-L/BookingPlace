@@ -7,13 +7,15 @@ import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
 import FeatureIcon from "../Components/icons/FeatureIcon";
 import FormFeature from "../Components/FormFeature";
+import { usePagination } from "../hooks/usePagination";
 
 const ManageFeatures = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentData, setCurrentData] = useState({});
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
-
+    const [features, setFeatures] = useState([]);
+    const { currentData: currentCabinList, setPaginationData,  PaginationControls } = usePagination(features, 5);    
     const handleOpenModal = () => {
         setModalOpen(true);
         window.scrollTo(0, 0);
@@ -24,7 +26,6 @@ const ManageFeatures = () => {
 
     };
 
-    const [features, setFeatures] = useState([]);
 
     const handleEditFeature = (feature) => {
         setCurrentData(feature);
@@ -60,7 +61,8 @@ const ManageFeatures = () => {
         const fetchFeatures = async () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.features);
-                setFeatures(data);
+                setFeatures(data.reverse());
+                setPaginationData(data);
 
             } catch (error) {
                 console.error("Error al llamar a la api", error);
@@ -76,7 +78,7 @@ const ManageFeatures = () => {
         <div className="animate-fadeIn" >
             <div className="container w-screen px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center">
+                    <div className="flex w-full justify-between items-center ">
                         <PageTitleAndBack title={`Mis caracteristicas`} />
                         <div className="px-5 py-4 flex justify-end">
                             <button
@@ -109,8 +111,8 @@ const ManageFeatures = () => {
                                 </tr>
                             </thead>
                             <tbody className="px-5 bg-white rounded-3xl">
-                                {features.map((feature) => (
-                                    <tr key={feature.id} className="border-b border-gray-200 border-[5px]">
+                                {currentCabinList.map((feature) => (
+                                    <tr key={feature.id} className="border-b border-gray-200 border-[5px] animate-fadeIn ">
                                         <td className="px-5 py-10 flex items-center justify-center gap-7">
                                             <div className=" text-background-dark text-5xl " >                                                                        
                                                 <FeatureIcon id={feature.icon} />                                               
@@ -142,6 +144,9 @@ const ManageFeatures = () => {
                                 <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
+                        <div className="text-background-dark">
+                            <PaginationControls />
+                        </div>
                     </div>
                 </div>
             </div>

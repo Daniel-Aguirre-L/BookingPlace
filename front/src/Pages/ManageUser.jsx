@@ -7,11 +7,14 @@ import AddProductModal from "../Components/AddProductModal";
 import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
 import Avatar from "../Components/Avatar";
+import { usePagination } from "../hooks/usePagination";
 
 const ManageUser = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
+    const [users, setUsers] = useState([]);
+    const { currentData, setPaginationData,  PaginationControls } = usePagination(users, 4);
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -19,7 +22,6 @@ const ManageUser = () => {
     }
     const handleCloseModal = () => setModalOpen(false);
 
-    const [users, setUsers] = useState([]);
 
     const handleDelete = async (id) => {
         const confirma = confirm("Confirmar eliminar usuario")
@@ -62,6 +64,7 @@ const ManageUser = () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.users);
                 setUsers(data);
+                setPaginationData(data);
 
             } catch (error) {
                 console.error("Error al llamar a la api", error);
@@ -89,7 +92,7 @@ const ManageUser = () => {
         <div className="animate-fadeIn" >
             <div className="container w-screen px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center">
+                    <div className="flex w-full justify-between items-center mb-8">
                         <PageTitleAndBack title={`Usuarios`} />
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
@@ -116,8 +119,8 @@ const ManageUser = () => {
                                 </tr>
                             </thead>
                             <tbody className="px-5 bg-white">
-                                {users.map((user) => (
-                                    <tr key={user.id} className="border-b border-gray-200 border-[5px]">
+                                {currentData.map((user) => (
+                                    <tr key={user.id} className="border-b border-gray-200 border-[5px] animate-fadeIn ">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <div className="grid grid-cols-[auto_1fr] items-center gap-10" >                                                                        
                                                 <Avatar name={user.name} size={'medium'}/>                                                 
@@ -155,6 +158,10 @@ const ManageUser = () => {
                                 <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
+                            <div className="text-background-dark">
+                                <PaginationControls />
+                            </div>
+
                     </div>
                 </div>
             </div>

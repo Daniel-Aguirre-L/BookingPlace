@@ -21,10 +21,6 @@ const FormFeature = ({ onClose, isOpen, currentData, isEditing }) => {
     }
   }, [isEditing, currentData]);
 
-  console.log({ currentData });
-  console.log({ isEditing });
-
-
   const handleFeatureChange = (e) => {
     const { name, value } = e.target;
     setFeature((prev) => ({
