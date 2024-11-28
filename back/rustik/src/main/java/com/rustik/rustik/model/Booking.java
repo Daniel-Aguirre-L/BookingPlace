@@ -28,7 +28,7 @@ public class Booking {
 
 
     @NonNull
-    private LocalDate inicialDate;
+    private LocalDate initialDate;
 
     @NonNull
     private LocalDate endDate;
