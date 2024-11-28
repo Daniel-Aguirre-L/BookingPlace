@@ -84,6 +84,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
           visible={calendarVisible}
           setVisible={setCalendarVisible}
           calendarStyles={calendarStyles}
+          hasReserves={false}
         />
       </form>
     </section>

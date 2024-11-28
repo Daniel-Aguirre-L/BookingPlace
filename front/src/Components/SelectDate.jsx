@@ -3,7 +3,7 @@ import InputField from "./InputField";
 import useNotificationStore from "../store/useNotificationStore";
 import BookingCalendar from "./BookingCalendar";
 
-const SelectDate = ({ onClose, isOpen, currentData }) => {
+const SelectDate = ({ onClose, isOpen }) => {
   const { setNotification } = useNotificationStore();
   const [bookingDates, setBookingDates] = useState([]);
   const calendarStyles = `scale-90 relative rounded-xl max-[500px]:scale-[0.75] md:right-auto transition-all duration-300 ease-in-out`;
@@ -29,13 +29,13 @@ const SelectDate = ({ onClose, isOpen, currentData }) => {
   };
 
   const handleSubmit = async (e) => {
-    setBookingDates(["",""]);
+    setBookingDates(["", ""]);
     onClose();
   };
 
   const handleCloseForm = () => {
     setFeature({ name: "", icon: null, hasQuantity: false });
-    setBookingDates(["",""]);
+    setBookingDates(["", ""]);
     onClose();
   };
 
@@ -72,28 +72,29 @@ const SelectDate = ({ onClose, isOpen, currentData }) => {
                     visible={true}
                     setVisible={() => {}}
                     calendarStyles={calendarStyles}
+                    hasReserves={true}
                   />
                   <span className="flex gap-10">
-                  <InputField
-                    id="name"
-                    name="name"
-                    placeholder="Fecha de llegada"
-                    value={bookingDates[0]}
-                    onChange={handleFeatureChange}
-                    className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black font-montserrat"
-                    readOnly
-                  />
-                  <InputField
-                    id="name"
-                    name="name"
-                    placeholder="Fecha de salida"
-                    value={bookingDates[1]}
-                    onChange={handleFeatureChange}
-                    className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black font-montserrat"
-                    readOnly
-                  />
+                    <InputField
+                      id="name"
+                      name="name"
+                      placeholder="Fecha de llegada"
+                      value={bookingDates[0]}
+                      onChange={handleFeatureChange}
+                      className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black font-montserrat"
+                      readOnly
+                    />
+                    <InputField
+                      id="name"
+                      name="name"
+                      placeholder="Fecha de salida"
+                      value={bookingDates[1]}
+                      onChange={handleFeatureChange}
+                      className="w-full border border-[#A9AEB9] rounded p-2.5 font-normal text-black font-montserrat"
+                      readOnly
+                    />
                   </span>
-                  
+
                   {errors.name && (
                     <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                   )}
