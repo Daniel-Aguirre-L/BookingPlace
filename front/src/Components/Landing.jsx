@@ -10,6 +10,11 @@ const styles = {
 function Landing({ filter, setFilter, getNameCabins }) {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [bookingDates, setBookingDates] = useState([]);
+  const calendarStyles = `rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${
+    calendarVisible
+      ? "opacity-100 scale-100 translate-y-0 visible"
+      : "opacity-0 scale-90 -translate-y-4 invisible"
+  }`;
 
   const setDate = () => {
     setCalendarVisible(true);
@@ -78,6 +83,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
           setBookingDates={setBookingDates}
           visible={calendarVisible}
           setVisible={setCalendarVisible}
+          calendarStyles={calendarStyles}
         />
       </form>
     </section>

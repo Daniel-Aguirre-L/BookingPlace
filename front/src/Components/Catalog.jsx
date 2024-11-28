@@ -10,6 +10,7 @@ import { rustikApi } from '../services/rustikApi';
 import { rustikEndpoints } from '../services/rustkEndPoints';
 import { getRatingDescription } from '../helpers/getRatingDescription';
 import { usePagination } from '../hooks/usePagination';
+import SelectDate from './SelectDate';
 
 
 const Catalog = ({ cabin }) => {
@@ -18,6 +19,7 @@ const Catalog = ({ cabin }) => {
     const url = (import.meta.env.VITE_RUSTIK_WEB || "") + "/catalogo/" + (cabin.id ?? "");
 
     const [isFavorite, setIsFavorite] = useState(false);
+    const [selectDateIsOpen, setSelectDateIsOpen] = useState(false);
 
     const { currentData, PaginationControls  } = usePagination(cabin.ratings);
 
@@ -106,11 +108,13 @@ const Catalog = ({ cabin }) => {
                             <span className="text-xl md:text-2xl">${cabin.price}</span>
                             <span className="text-sm md:text-lg font-light"> p/noche</span>
                         </h3>
-                        <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold">
+                        <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold" onClick={setSelectDateIsOpen}>
                             Reservar
                         </button>
+                        <SelectDate isOpen={selectDateIsOpen} onClose={setSelectDateIsOpen} />
                     </div>
                 </div>
+                
 
                 <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Detalles</h2>
                 <p className="py-4 text-[#EEEEEE] text-sm md:text-base">
