@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Calendar } from "@demark-pro/react-booking-calendar";
 import useNotificationStore from "../store/useNotificationStore";
 import "../calendarVariables.css";
@@ -21,6 +21,7 @@ const weekDays = [0, 1, 2];
 function BookingCalendar({ setBookingDates, visible, setVisible }) {
   const [selected, setSelected] = useState([]);
   const { setNotification } = useNotificationStore();
+  const calendarRef = useRef(null);
 
   const formatDate = (date) => {
     const formattedDate = new Intl.DateTimeFormat("es-UY", {
@@ -34,6 +35,19 @@ function BookingCalendar({ setBookingDates, visible, setVisible }) {
   };
 
   useEffect(() => {
+    // Close the calendar when clicking outside
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setVisible(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setVisible]);
+
+  useEffect(() => {
     if (visible) {
       if (selected[1]) {
         const formattedDates = selected.map(formatDate);
@@ -44,35 +58,41 @@ function BookingCalendar({ setBookingDates, visible, setVisible }) {
   }, [selected]);
 
   return (
-    <Calendar
-      selected={selected}
-      reserved={reserved}
-      range={true}
-      protection={true}
-      options={{ locale: "es-UY", weekStartsOn: 1, useAttributes: true }}
-      onChange={setSelected}
-      onOverbook={(date, type) =>
-        type=="PAST"
-          ? setNotification({
-              visibility: true,
-              type: "warning",
-              text: `La fecha seleccionada: ${formatDate(date)} no puede ser en el pasado.`,
-            })
-          : setNotification({
-              visibility: true,
-              type: "error",
-              text: `La fecha seleccionada: ${formatDate(date)} ya fue reservada.`,
-            })
-      }
-      className={`rounded-xl right-[10rem] top-[-8rem] transition-all duration-300 ease-in-out ${
-        visible
-          ? "opacity-100 scale-100 translate-y-0 visible"
-          : "opacity-0 scale-90 -translate-y-[-1rem] invisible"
-      }`}
-      disabled={(date, state) => {
-        return weekDays.includes(date.getDay());
-      }}
-    />
+    <div ref={calendarRef}>
+      <Calendar
+        selected={selected}
+        reserved={reserved}
+        range={true}
+        protection={true}
+        options={{ locale: "es-UY", weekStartsOn: 1, useAttributes: true }}
+        onChange={setSelected}
+        onOverbook={(date, type) =>
+          type == "PAST"
+            ? setNotification({
+                visibility: true,
+                type: "warning",
+                text: `La fecha seleccionada: ${formatDate(
+                  date
+                )} no puede ser en el pasado.`,
+              })
+            : setNotification({
+                visibility: true,
+                type: "error",
+                text: `La fecha seleccionada: ${formatDate(
+                  date
+                )} ya fue reservada.`,
+              })
+        }
+        className={`rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${
+          visible
+            ? "opacity-100 scale-100 translate-y-0 visible"
+            : "opacity-0 scale-90 -translate-y-4 invisible"
+        }`}
+        disabled={(date, state) => {
+          return weekDays.includes(date.getDay());
+        }}
+      />
+    </div>
   );
 }
 

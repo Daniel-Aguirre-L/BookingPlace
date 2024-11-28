@@ -23,7 +23,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
 
   return (
     <section
-      className="bg-background-dark max-w-[1600px] w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat overflow-hidden"
+      className="bg-background-dark max-w-[1600px] w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat"
       style={styles}
     >
       <h1 className="pageMargin mt-[6rem] text-primary-color font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem] montserrat ">
@@ -34,11 +34,11 @@ function Landing({ filter, setFilter, getNameCabins }) {
         Tu refugio natural, a un clic de distancia.
       </p>
       <form
-        className="pageMargin relative rounded-md bg-white flex text-[1.4rem] items-center mt-[3rem] h-[3.35rem] max-w-[50rem] font-montserrat"
+        className="pageMargin relative rounded-md bg-white md:flex text-[1.4rem] items-center mt-[3rem] md:h-[3.35rem] h-fit  max-w-[50rem] font-montserrat"
         onSubmit={handleSearch}
       >
         <input
-          className="w-full bg-transparent ml-6 text-dark-text h-[50%] outline-none overflow-hidden text-[1.2rem] "
+          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] "
           type="text"
           placeholder="Nombre de la cabaña"
           value={filter}
@@ -46,7 +46,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
           onFocus={() => (window.location.hash = "")}
         />
         <input
-          className="w-full bg-transparent ml-6 text-dark-text h-[50%] outline-none overflow-hidden text-[1.2rem] "
+          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
           type="text"
           placeholder="Fecha de Entrada"
           value={bookingDates[0]}
@@ -55,7 +55,7 @@ function Landing({ filter, setFilter, getNameCabins }) {
           readOnly
         />
         <input
-          className="w-full bg-transparent ml-5 text-dark-text h-[50%] outline-none overflow-hidden text-[1.2rem]"
+          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
           type="text"
           placeholder="Fecha de Salida"
           value={bookingDates[1]}
@@ -65,9 +65,9 @@ function Landing({ filter, setFilter, getNameCabins }) {
         />
 
         <button
-          className="bg-primary-color flex justify-center items-center h-full w-[14rem] rounded-e-md"
+          className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
           type="submit"
-        >
+        ><span className="md:hidden font-montserrat">Buscar ‌‌ </span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
         <BookingCalendar setBookingDates={setBookingDates} visible={calendarVisible} setVisible={setCalendarVisible} />
