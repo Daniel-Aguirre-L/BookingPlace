@@ -1,14 +1,32 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
+import { rustikApi } from "../services/rustikApi";
+import { rustikEndpoints } from "../services/rustkEndPoints";
 
 const CatalogList = ({ myCabins, page, handleShowMore, continuar, filter, handleOnClick }) => {
 
+  const [favorites, setFavorites] = useState([]);
+
+  const getFavoritesData = async () => {
+    try {
+      const { data } = await rustikApi.get(rustikEndpoints.favorites);
+      setFavorites(data.cabinDTOS ?? []);
+    } catch (error) {
+      console.error("Error al obtener favoritos", error);
+    } 
+  };
+
+    
+  useEffect(() => {
+    getFavoritesData();
+  }, []);
 
   return (
     <>
       <section className="pageMargin gap-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center" id="cabañas">
         {
           myCabins && myCabins.map(({ id, name, description, price, images }) => (
-            <Card key={id} title={name} price={price} images={images} id={id} >
+            <Card key={id} title={name} price={price} images={images} id={id} favorites={favorites} refreshFavoritos={getFavoritesData} >
               {`${description.slice(0, 100)}`.slice(0, 37)}{description.length > 35 && '...'}
             </Card>
           ))

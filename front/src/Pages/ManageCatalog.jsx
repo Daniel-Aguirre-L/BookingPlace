@@ -109,7 +109,7 @@ const ManageCatalog = () => {
                             </thead> 
                             <tbody className="px-5 bg-white rounded-3xl">
                                 {currentCabinList.map((cabin) => (
-                                    <tr key={cabin.id} className="border-b border-gray-200 border-[5px]">
+                                    <tr key={cabin.id} className="border-b border-gray-200 border-[5px] animate-fadeIn">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} className="grid grid-cols-[auto_1fr] items-center gap-10" >
                                                 <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>

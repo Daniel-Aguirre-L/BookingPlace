@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routeList } from "../helpers/routeList";
+import LikeButton from "./LikeButton";
 
-function Card({ title, children, price, images, id }) {
+function Card({ title, children, price, images, id, favorites, refreshFavoritos }) {
  
   const navigate = useNavigate();
 
@@ -37,11 +38,17 @@ function Card({ title, children, price, images, id }) {
           Reserva
         </button>
       </section>
-      <img
+      {
+        favorites && favorites.length > 0 &&
+        <div className="absolute top-5 right-5 hover:brightness-[75%] cursor-pointer w-8 text-4xl ">
+          <LikeButton id={id} isFavorite={favorites.some(favorite => favorite.id === id)} onUnlike={refreshFavoritos} onLike={refreshFavoritos} />
+        </div>
+      }
+      {/* <img
           src="/Icons/heart-borders.svg"
           alt="favorite"
           className="absolute top-5 right-5 hover:brightness-[75%] cursor-pointer w-8"
-        />
+        /> */}
     </div>
   );
 }

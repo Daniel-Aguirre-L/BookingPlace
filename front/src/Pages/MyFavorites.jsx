@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { rustikEndpoints } from "../services/rustkEndPoints";
-import { rustikApiForm } from "../services/rustikApi";
+import { rustikApi } from "../services/rustikApi";
 import CardFavorites from "../Components/CardFavorites";
 
 const MyFavorites = () => {
@@ -8,7 +8,7 @@ const MyFavorites = () => {
 
   const getFavoritesData = async () => {
     try {
-      const { data } = await rustikApiForm.get(rustikEndpoints.favorites);
+      const { data } = await rustikApi.get(rustikEndpoints.favorites);
       setFavorites(data.cabinDTOS ?? []);
     } catch (error) {
       console.error("Error al obtener favoritos", error);

@@ -20,10 +20,10 @@ const EmblaCategoryCarousel = ({ slides, options, getCategoryCabins }) => {
         <div className={styles["embla__container"]}>
           {slides.map((slide, index) => (
             <div
-              className={`${styles["embla__slide"]} flex-[0_0_90%] md:flex-[0_0_550px]`}
+              className={`${styles["embla__slide"]} flex-[0_0_90%] md:flex-[0_0_550px] min-h-[300px]`}
               key={index}
             >
-              <span className="relative flex items-end justify-center">
+              <span className="relative flex items-end justify-center h-full">
                 <div className="absolute w-3/4 mb-10 flex flex-col items-center text-center">
                   <h2 className="text-[2.8rem] font-semibold montserrat text-nowrap pb-3 leading-10 z-10">
                     {slide.title}
@@ -41,7 +41,7 @@ const EmblaCategoryCarousel = ({ slides, options, getCategoryCabins }) => {
                   </a>
                 </div>
                 <img
-                  className={styles["embla__slide__img_home"]}
+                  className={`${styles["embla__slide__img_home"]} h-full`}
                   src={slide.src}
                   alt={slide.title}
                 />
