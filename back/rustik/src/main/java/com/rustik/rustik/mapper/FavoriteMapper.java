@@ -10,6 +10,10 @@ public class FavoriteMapper {
 
     public static FavoriteDTO toDTO (List<Favorite> favorites){
 
+        if (favorites == null || favorites.isEmpty()) {
+            return new FavoriteDTO(null);
+        }
+
         FavoriteDTO favoriteDTO = new FavoriteDTO(favorites.get(0).getUser().getId());
 
         for (Favorite favorite : favorites) {

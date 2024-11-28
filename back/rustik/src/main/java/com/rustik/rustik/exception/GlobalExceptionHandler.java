@@ -31,17 +31,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> badRequest (BadRequestException bre){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("mensaje: " + bre.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bre.getMessage());
     }
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<String> notFound (NotFoundException nfe){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("mensaje: " + nfe.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(nfe.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("mensaje: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

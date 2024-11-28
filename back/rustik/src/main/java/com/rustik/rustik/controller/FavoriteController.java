@@ -27,6 +27,7 @@ public class FavoriteController {
         User user = userDetails.getUser();
         List<Favorite> favorites = favoriteService.getFavoritesByUser(user);
 
+
         FavoriteDTO favoriteDTO = FavoriteMapper.toDTO(favorites);
         return ResponseEntity.ok(favoriteDTO);
     }
