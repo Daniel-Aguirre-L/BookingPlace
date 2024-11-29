@@ -5,7 +5,7 @@ import BookingCalendar from "./BookingCalendar";
 
 const SelectDate = ({ onClose, isOpen }) => {
   const { setNotification } = useNotificationStore();
-  const [bookingDates, setBookingDates] = useState([]);
+  const [bookingDates, setBookingDates] = useState(["", ""]);
   const calendarStyles = `scale-90 relative rounded-xl max-[500px]:scale-[0.75] md:right-auto transition-all duration-300 ease-in-out`;
 
   const [feature, setFeature] = useState({
