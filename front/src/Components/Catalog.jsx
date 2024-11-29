@@ -30,8 +30,6 @@ const Catalog = ({ cabin, getCabin }) => {
         }
     };
 
-    console.log(cabin.ratings);
-
     useEffect(() => {
         if(!cabin.ratings) return;
         setPaginationData(cabin.ratings.sort(function(a,b){
