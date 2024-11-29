@@ -18,7 +18,7 @@ const reserved = Array.from({ length: 3 }, (_, i) => {
 
 const weekDays = [0, 1, 2];
 
-function BookingCalendar({ setBookingDates, visible, setVisible }) {
+function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles, hasReserves }) {
   const [selected, setSelected] = useState([]);
   const { setNotification } = useNotificationStore();
   const calendarRef = useRef(null);
@@ -61,7 +61,6 @@ function BookingCalendar({ setBookingDates, visible, setVisible }) {
     <div ref={calendarRef}>
       <Calendar
         selected={selected}
-        reserved={reserved}
         range={true}
         protection={true}
         options={{ locale: "es-UY", weekStartsOn: 1, useAttributes: true }}
@@ -83,14 +82,11 @@ function BookingCalendar({ setBookingDates, visible, setVisible }) {
                 )} ya fue reservada.`,
               })
         }
-        className={`rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${
-          visible
-            ? "opacity-100 scale-100 translate-y-0 visible"
-            : "opacity-0 scale-90 -translate-y-4 invisible"
-        }`}
+        className={calendarStyles}
         disabled={(date, state) => {
           return weekDays.includes(date.getDay());
         }}
+        {...(hasReserves && { reserved })}
       />
     </div>
   );
