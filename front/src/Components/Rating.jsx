@@ -13,7 +13,7 @@ const Rating = ({  score, totalRatings, getCabin}) => {
   };
   
   return (
-    <div className="flex flex-col space-y-4 border-b border-secondary-color pb-5">
+    <div className="flex flex-col space-y-4 border-b border-secondary-color pb-5 pt-5">
       <div className="flex justify-between w-full items-center ">
         <h3 className="text-xl md:text-2xl font-bold text-primary-color font-moserrat">Reseñas</h3>
       </div>

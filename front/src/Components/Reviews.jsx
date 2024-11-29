@@ -20,6 +20,9 @@ function Reviews({ review }) {
                 {review.userFullName}
               </span>
             </p>
+             <span className="text-gray-500 ">
+                {new Date(review.createdAt).toLocaleDateString()}
+              </span>
             <p className="text-light-text font-montserrat text-sm">
               {review.review}
             </p>
