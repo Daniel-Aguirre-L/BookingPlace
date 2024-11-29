@@ -52,12 +52,12 @@ export const usePagination = (data, dataPerPage = 4) => {
 
     const PaginationControls = () => {
         return (
-            <div className="flex items-center justify-center">
-                    <button onClick={prevPage} disabled={currentPage === 1} className="px-5 py-2">
+            <div className="flex items-center justify-center  text-primary-color" >
+                    <button onClick={prevPage} disabled={currentPage === 1} className="px-5 py-2 text-secondary-color ">
                         &lt;
                     </button>
                     <span >{currentPage} de {totalPages}</span>
-                    <button onClick={nextPage} disabled={currentPage === totalPages} className="px-5 py-2">
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="px-5 py-2 text-secondary-color">
                         &gt;
                     </button>
                 </div>
