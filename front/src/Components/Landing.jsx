@@ -55,23 +55,37 @@ function Landing({ filter, setFilter, getNameCabins }) {
             !bookingDates[0] ? "cursor-pointer" : null
           }`}
           type="text"
-          placeholder="Seleccione fecha de reserva"
+          placeholder="Seleccione fechas"
           value={bookingDates[0]}
           onChange={(e) => setFilter(e.target.value)}
           onClick={() => setDate()}
           readOnly
         />
         {bookingDates[0] && (
-          <input
-            className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-            type="text"
-            placeholder="Fecha de Salida"
-            value={bookingDates[1]}
-            onChange={(e) => setFilter(e.target.value)}
-            onClick={() => setDate()}
-            readOnly
-          />
+          <>
+            <input
+              className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+              type="text"
+              placeholder="Fecha de Salida"
+              value={bookingDates[1]}
+              onChange={(e) => setFilter(e.target.value)}
+              onClick={() => setDate()}
+              readOnly
+            />
+
+            <button
+              className="absolute right-[1rem] top-0 bottom-0 h-fit my-auto md:right-[4.4rem]"
+              type="button"
+              onClick={() => {
+                setBookingDates(["", ""]);
+                setCalendarVisible(false);
+              }}
+            >
+              <img src="/Icons/cancel-gray.svg" alt="" />
+            </button>
+          </>
         )}
+
         <button
           className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
           type="submit"
@@ -79,13 +93,15 @@ function Landing({ filter, setFilter, getNameCabins }) {
           <span className="md:hidden font-montserrat">Buscar ‌‌ </span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
-        <BookingCalendar
-          setBookingDates={setBookingDates}
-          visible={calendarVisible}
-          setVisible={setCalendarVisible}
-          calendarStyles={calendarStyles}
-          hasReserves={false}
-        />
+        {calendarVisible ? (
+          <BookingCalendar
+            setBookingDates={setBookingDates}
+            visible={calendarVisible}
+            setVisible={setCalendarVisible}
+            calendarStyles={calendarStyles}
+            hasReserves={false}
+          />
+        ) : null}
       </form>
     </section>
   );
