@@ -2,6 +2,14 @@ import Avatar from "./Avatar";
 import { getRatingDescription } from "../helpers/getRatingDescription";
 
 function Reviews({ review }) {
+  const formattedDate = review.createdAt
+  ? new Date(review.createdAt).toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  : "Fecha no disponible";
+
   return (
     <div className="animate-fadeIn space-y-6 ">
       <div className="flex flex-col p-4 ">
@@ -19,6 +27,9 @@ function Reviews({ review }) {
               <span className="text-light-text font-bold">
                 {review.userFullName}
               </span>
+            </p>
+            <p className="text-xs text-gray-500">
+              {formattedDate}
             </p>
             <p className="text-light-text font-montserrat text-sm">
               {review.review}
