@@ -19,7 +19,7 @@ const Rating = ({  score, totalRatings, getCabin}) => {
       </div>
       <div className="flex items-center space-x-4 ">
         <div className="text-4xl md:text-5xl font-bold text-light-text font-roboto ">
-          {score.toFixed(1)}
+          {score && score.toFixed(1)}
         </div>
         <div className="flex justify-between items-center w-full">
           <div className="flex flex-col">
