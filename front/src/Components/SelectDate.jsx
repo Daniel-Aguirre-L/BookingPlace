@@ -5,7 +5,7 @@ import BookingCalendar from "./BookingCalendar";
 
 const SelectDate = ({ onClose, isOpen }) => {
   const { setNotification } = useNotificationStore();
-  const [bookingDates, setBookingDates] = useState([]);
+  const [bookingDates, setBookingDates] = useState(["", ""]);
   const calendarStyles = `scale-90 relative rounded-xl max-[500px]:scale-[0.75] md:right-auto transition-all duration-300 ease-in-out`;
 
   const [feature, setFeature] = useState({
@@ -51,7 +51,7 @@ const SelectDate = ({ onClose, isOpen }) => {
     <div className="animate-fadeIn hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
       <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
         <div className="flex flex-col items-center justify-center p-6">
-          <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-md relative z-10">
+          <div className="w-full sm:w-full max-w-lg bg-white p-6 rounded-lg shadow-md relative z-10">
             <div className="absolute top-0 left-0 right-0 bg-primary-color p-4 rounded-t-lg text-white z-20">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-light font-montserrat">

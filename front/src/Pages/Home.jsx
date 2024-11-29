@@ -15,6 +15,7 @@ const Home = () => {
   const [cabins, setCabins] = useState([]);
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState('');
+  const [recommendedIsShown, setRecommendedIsShown] = useState(true);
   
 
 
@@ -27,6 +28,7 @@ const Home = () => {
     if (filter) {
       getRandonCabins();
       setFilter('');
+      setRecommendedIsShown(true);
     } else {
       setPage(page + 1);
       // window.scrollTo(0, window.scrollY + 700);
@@ -65,7 +67,8 @@ const Home = () => {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
       setCabins(data);
       setPage(10);
-      data ?  setFilter(name) : setFilter("not found");
+      setFilter(name);
+      data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);
     }
@@ -114,13 +117,21 @@ const Home = () => {
     <div className="animate-fadeIn " >
       <Landing filter={filter} setFilter={setFilter} getNameCabins={getNameCabins} cabinHelper={cabins.length > 0 ? cabins.map(cabin => cabin.name) : []} ></Landing>
       <EmblaCategoryCarousel slides={SLIDES} options={{ loop: true }} getCategoryCabins={getCategoryCabins} />
+      {recommendedIsShown ? (
       <Headline title={filter ? `Cabañas ${filter.toLowerCase()}` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter} >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
+      ): 
+      <Headline title={"No se encontraron cabañas"} handleOnClick={handleOnClick} filter={filter} >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
+        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      </Headline>
+    }
       <CatalogList myCabins={myCabins} page={page} continuar={myCabins.length === cabins.length} filter={filter} handleShowMore={handleShowMore} handleOnClick={handleOnClick} ></CatalogList>
-      {filter !== "not found" && (
+      {recommendedIsShown && (
       <Headline
         title={filter ? `El recomendado de ${filter.toLowerCase()}` : "El más reservado"}
         handleOnClick={handleVisitMasReservado}
