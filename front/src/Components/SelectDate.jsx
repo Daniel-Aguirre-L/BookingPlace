@@ -80,10 +80,19 @@ const SelectDate = ({ onClose, isOpen }) => {
                     calendarStyles={calendarStyles}
                     hasReserves={true}
                   />
-                  <span className="flex gap-10">
+                  
+                  <div className="flex flex-col gap-y-2">
+                  {
+                    bookingDates[0] &&
+                    <span className="flex justify-between items-center text-primary-color text-xs md:text-sm">
+                    <label htmlFor="bookingDates">Fecha de ingreso</label>
+                    <label htmlFor="bookingDates">Fecha de salida</label>
+                  </span>
+                  }
+                  <span className="flex gap-3 md:gap-10 text-sm md:text-base">
                     <InputField
-                      id="name"
-                      name="name"
+                      id="bookingDates"
+                      name="bookingDates"
                       placeholder="Fecha de llegada"
                       value={bookingDates[0]}
                       onChange={handleFeatureChange}
@@ -91,8 +100,8 @@ const SelectDate = ({ onClose, isOpen }) => {
                       readOnly
                     />
                     <InputField
-                      id="name"
-                      name="name"
+                      id="bookingDates"
+                      name="bookingDates"
                       placeholder="Fecha de salida"
                       value={bookingDates[1]}
                       onChange={handleFeatureChange}
@@ -100,6 +109,7 @@ const SelectDate = ({ onClose, isOpen }) => {
                       readOnly
                     />
                   </span>
+                  </div>
 
                   {errors.name && (
                     <p className="text-red-500 text-sm mt-1">{errors.name}</p>
