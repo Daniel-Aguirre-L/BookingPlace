@@ -10,7 +10,9 @@ const styles = {
 function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
   const [calendarVisible, setCalendarVisible] = useState(false)
   const [serchingText, setSerchingText] = useState(false);
-  const [bookingDates, setBookingDates] = useState([]);
+  const [bookingDates, setBookingDates] = useState(["", ""]);
+  const [calendarKey, setCalendarKey] = useState(0); // Unique key to force re-mount
+
   const calendarStyles = `rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${
     calendarVisible
       ? "opacity-100 scale-100 translate-y-0 visible"
@@ -19,6 +21,11 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
 
   const setDate = () => {
     setCalendarVisible(true);
+  };
+
+  const handleCloseForm = () => {
+    setBookingDates(["", ""]);
+    setCalendarKey((prevKey) => prevKey + 1);
   };
 
   const handleSearch = (e) => {
@@ -95,35 +102,46 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
                       className={`w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] ${!bookingDates[0] ? "cursor-pointer" : null
                           }`}
                       type="text"
-                      placeholder="Seleccione fecha de reserva"
+                      placeholder="Seleccione fechas"
                       value={bookingDates[0]}
-                      onChange={(e) => setFilter(e.target.value)}
                       onClick={() => setDate()}
                       readOnly
                   />
                   {bookingDates[0] && (
-                      <input
-                          className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-                          type="text"
-                          placeholder="Fecha de Salida"
-                          value={bookingDates[1]}
-                          onChange={(e) => setFilter(e.target.value)}
-                          onClick={() => setDate()}
-                          readOnly
-                      />
+                      <>
+                          <input
+                              className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
+                              type="text"
+                              placeholder="Fecha de Salida"
+                              value={bookingDates[1]}
+                              onClick={() => setDate()}
+                              readOnly
+                          />
+                          <button
+                              className="absolute right-[1rem] top-0 bottom-0 h-fit my-auto md:right-[4.4rem]"
+                              type="button"
+                              onClick={handleCloseForm}
+                          >
+                              <img src="/Icons/cancel-gray.svg" alt="" />
+                          </button>
+                      </>
                   )}
         </fieldset>
 
+        
+        
         
         
         <button
           className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
           type="submit"
         >
-          <span className="md:hidden font-montserrat">Buscar ‌‌ </span>
+          <span className="md:hidden font-montserrat">Buscar</span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
+
         <BookingCalendar
+          key={calendarKey}
           setBookingDates={setBookingDates}
           visible={calendarVisible}
           setVisible={setCalendarVisible}
