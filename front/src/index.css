@@ -46,7 +46,7 @@ button {
 
 @media not all and (min-width: 640px) {
   .pageMargin {
-    margin-inline: 3rem;
+    margin-inline: 20px;
   }
 }
 
