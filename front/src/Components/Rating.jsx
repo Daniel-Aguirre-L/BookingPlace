@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { getRatingDescription } from "../helpers/getRatingDescription";
 import Comments from "./Comments";
+import { useUser } from "../hooks/useUser";
 
 const Rating = ({  score, totalRatings, getCabin}) => {
 
   const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const { isLoggedIn } = useUser();
   const closeModal = async (value) => {
     await getCabin();
     setShowReviewsModal(value);
@@ -30,8 +32,9 @@ const Rating = ({  score, totalRatings, getCabin}) => {
           </div>
           <div className="ml-4 ">
             <button 
-              className="bg-primary-color text-light-text min-h-10 px-4 rounded font-semibold font-moserrat"
+              className="bg-primary-color text-light-text min-h-10 px-4 rounded font-semibold font-moserrat disabled:bg-dark-text"
               onClick={() => setShowReviewsModal(true)}
+              disabled={!isLoggedIn}
             >
               Dar tu reseña
             </button>
