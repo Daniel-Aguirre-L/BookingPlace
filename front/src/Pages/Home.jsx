@@ -67,8 +67,8 @@ const Home = () => {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
       setCabins(data);
       setPage(10);
-      setFilter(name)
-      data ? null : (setRecommendedIsShown(false));
+      setFilter(name);
+      data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);
     }
