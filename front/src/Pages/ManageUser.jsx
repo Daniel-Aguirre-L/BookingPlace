@@ -14,7 +14,7 @@ const ManageUser = () => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [users, setUsers] = useState([]);
-    const { currentData, setPaginationData,  PaginationControls } = usePagination(users, 4);
+    const { currentData, setPaginationData, PaginationControls } = usePagination(users, 4);
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -31,7 +31,7 @@ const ManageUser = () => {
             await rustikApi.delete(`${rustikEndpoints.users}/${id}`);
             setUsers((prevUsers) => {
                 const updatedUsers = prevUsers.filter((user) => user.id !== id);
-                setPaginationData(updatedUsers); 
+                setPaginationData(updatedUsers);
                 return updatedUsers;
             });
             setNotification({
@@ -78,44 +78,44 @@ const ManageUser = () => {
 
     }, [isModalOpen]);
 
-    const toggleAdmin =  async (userId,isAdmin) => { 
-    try {
-        showLoaderModal();
-        const { data : updatedUser } = await rustikApi.put(`${rustikEndpoints.users}/${userId}`,{isAdmin:!isAdmin});
+    const toggleAdmin = async (userId, isAdmin) => {
+        try {
+            showLoaderModal();
+            const { data: updatedUser } = await rustikApi.put(`${rustikEndpoints.users}/${userId}`, { isAdmin: !isAdmin });
 
-        setUsers((prevUsers) => {
-            const updatedUsers = prevUsers.map((user) =>
-                user.id === userId ? { ...user, isAdmin: updatedUser.isAdmin } : user
-            );
-            setPaginationData(updatedUsers); 
-            return updatedUsers;
-        });
-        
-        setNotification({
-            visibility: true,
-            type: "success",
-            text: "El rol de administrador se actualizó correctamente.",
-        });
-    } catch (error) {
-        console.error("Error al actualizar el rol de administrador", error);
-        if (error.response && error.response.data) {
-            const errorMessage = error.response.data.message || "No puedes revocar tu propio rol de administrador.";
+            setUsers((prevUsers) => {
+                const updatedUsers = prevUsers.map((user) =>
+                    user.id === userId ? { ...user, isAdmin: updatedUser.isAdmin } : user
+                );
+                setPaginationData(updatedUsers);
+                return updatedUsers;
+            });
+
             setNotification({
                 visibility: true,
-                type: "error",
-                text: errorMessage,
+                type: "success",
+                text: "El rol de administrador se actualizó correctamente.",
             });
-        } else {
-            setNotification({
-                visibility: true,
-                type: "error",
-                text: "Error al procesar la solicitud, intente más tarde.",
-            });
+        } catch (error) {
+            console.error("Error al actualizar el rol de administrador", error);
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message || "No puedes revocar tu propio rol de administrador.";
+                setNotification({
+                    visibility: true,
+                    type: "error",
+                    text: errorMessage,
+                });
+            } else {
+                setNotification({
+                    visibility: true,
+                    type: "error",
+                    text: "Error al procesar la solicitud, intente más tarde.",
+                });
+            }
+        } finally {
+            hideLoaderModal();
         }
-    } finally {
-        hideLoaderModal();
-    }
-};
+    };
 
     return (
         <div className="animate-fadeIn" >
@@ -151,8 +151,8 @@ const ManageUser = () => {
                                 {currentData.map((user) => (
                                     <tr key={user.id} className="border-b border-gray-200 border-[5px] animate-fadeIn ">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
-                                            <div className="grid grid-cols-[auto_1fr] items-center gap-10" >                                                                        
-                                                <Avatar name={user.name} size={'medium'}/>                                                 
+                                            <div className="grid grid-cols-[auto_1fr] items-center gap-10" >
+                                                <Avatar name={user.name} size={'medium'} />
                                                 <div>
                                                     <p className="text-gray-900 whitespace-no-wrap capitalize font-montserrat">{`${user.name.toLowerCase()} ${user.surname.toLowerCase()}`}</p>
                                                 </div>
@@ -172,7 +172,7 @@ const ManageUser = () => {
                                                     <img src="/Icons/Editar.svg" alt="Editar usuario" />
                                                 </button> */}
                                                 <button
-                                                    className="active:scale-90" onClick={() => toggleAdmin(user.id,user.isAdmin)}> <img src={user.isAdmin ? "/Icons/Admin.svg" : "/Icons/NoAdmin.svg"} alt={user.isAdmin ? "Admin icon" : "NoAdmin icon"} />
+                                                    className="active:scale-90" onClick={() => toggleAdmin(user.id, user.isAdmin)}> <img src={user.isAdmin ? "/Icons/Admin.svg" : "/Icons/NoAdmin.svg"} alt={user.isAdmin ? "Admin icon" : "NoAdmin icon"} />
                                                 </button>
                                                 <button
                                                     className="active:scale-90"
@@ -187,10 +187,9 @@ const ManageUser = () => {
                                 <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
-                            <div className="text-background-dark">
-                                <PaginationControls />
-                            </div>
-
+                    </div>
+                    <div className="text-background-dark">
+                        <PaginationControls />
                     </div>
                 </div>
             </div>

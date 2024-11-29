@@ -148,9 +148,9 @@ const ManageCatalog = () => {
                                  <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
-                        <div className="text-background-dark">
-                            <PaginationControls />
-                        </div>
+                    </div>
+                    <div className="text-background-dark">
+                        <PaginationControls />
                     </div>
                 </div>
             </div>

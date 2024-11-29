@@ -135,7 +135,7 @@ const Catalog = ({ cabin, getCabin }) => {
                     </ul>
                 </div>
                 <Policies />
-                <div className="p-4">
+                <div className="mt-16">
                     <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} />
                 </div>
                 <div className='transition-all' >
