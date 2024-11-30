@@ -71,7 +71,7 @@ const SelectDate = ({ onClose, isOpen }) => {
             </div>
 
             <div className="pt-16">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="relative space-y-6">
                 <div className=" flex flex-col gap-6 justify-center items-center">
                   <BookingCalendar
                     setBookingDates={setBookingDates}
@@ -81,14 +81,17 @@ const SelectDate = ({ onClose, isOpen }) => {
                     hasReserves={true}
                   />
                   
-                  <div className="flex flex-col gap-y-2">
-                  {
-                    bookingDates[0] &&
-                    <span className="flex justify-between items-center text-primary-color text-xs md:text-sm">
-                    <label htmlFor="bookingDates">Fecha de ingreso</label>
-                    <label htmlFor="bookingDates">Fecha de salida</label>
-                  </span>
-                  }
+                  <div className="relative flex flex-col gap-y-2">
+                    <span
+                      className={`absolute transform flex justify-between items-center text-primary-color w-full text-xs md:text-sm transition-all duration-300 ease-in-out ${
+                        bookingDates[0]
+                          ? "opacity-100 translate-y-[-25px] visible"
+                          : "opacity-0 -translate-y-4 invisible"
+                      }`}
+                    >
+                      <label htmlFor="bookingDates">Fecha de ingreso</label>
+                      <label htmlFor="bookingDates">Fecha de salida</label>
+                    </span>
                   <span className="flex gap-3 md:gap-10 text-sm md:text-base">
                     <InputField
                       id="bookingDates"
