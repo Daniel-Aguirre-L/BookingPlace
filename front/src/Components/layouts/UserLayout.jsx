@@ -2,6 +2,7 @@ import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import { routeList } from "../../helpers/routeList";
 import PageTitleAndBack from "../PageTitleAndBack";
+import { useEffect, useState } from "react";
 
 
 // className="grid min-h-screen grid-rows-[auto 1fr auto]"
@@ -9,11 +10,21 @@ import PageTitleAndBack from "../PageTitleAndBack";
 const UserLayout = () => {
 
   const { isLoggedIn, userLoaded, userName, userEmail } = useUser();
+  const [title, setTitle] = useState("Perfil");
  
   const path = useLocation().pathname;
   const comparePath = (path2) => {
     return path === path2;
   };
+
+  useEffect(() => {
+    if (comparePath(routeList.USER_FAVORITES)) setTitle("Favoritos");
+    else if (comparePath(routeList.USER_BOOKINGS)) setTitle("Reservas");
+    else setTitle("Perfil");
+
+  }, [path])
+  
+
   
   return (
     <>
@@ -25,7 +36,7 @@ const UserLayout = () => {
               
               <section className="w-full animate-fadeIn mb-5 md:mb-9">
                 <div className="w-full my-3 md:my-2" >
-                  <PageTitleAndBack title={`Editar perfil`} />
+                  <PageTitleAndBack title={title} />
                 </div>
                 <div className="relative mx-auto pt-16 md:pt-[89px] w-full flex" >
                   <div className="bg-primary-color w-full h-[160px] md:h-[227px] rounded-t-lg flex flex-col items-center justify-end pb-[18.5px]">
@@ -42,6 +53,7 @@ const UserLayout = () => {
                   <Link className={`montserrat text-xs md:text-sm transition-all w-full px-6 py-[14.5px] ${comparePath(routeList.USER_BOOKINGS) && "bg-primary-color text-light-text"} rounded-r-2xl`} to={routeList.USER_BOOKINGS}>Reservas</Link>
                 </div>
               </section>
+              <h2 className="montserrat text-primary-color text-3xl md:text-[33px] font-bold mb-9" >{title}</h2>
                 <Outlet />
             </div>
         )}

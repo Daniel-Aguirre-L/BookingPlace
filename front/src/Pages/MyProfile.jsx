@@ -188,7 +188,6 @@ const MyProfile = () => {
 
   return (
     <section className="w-full animate-fadeIn " >
-      <h2 className="montserrat text-primary-color text-3xl md:text-[33px] font-bold mb-4" >Perfil</h2>
       <form className="w-full" onSubmit={handleSubmit} >
         <div className="w-full bg-light-text rounded-2xl px-6 py-8 mb-6" >
           <fieldset className="w-full flex flex-col mb-8" >

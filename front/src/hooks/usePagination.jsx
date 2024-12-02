@@ -50,6 +50,11 @@ export const usePagination = (data, dataPerPage = 4) => {
 
     };
 
+    const setFirstPage = () => {
+        setCurrentPage(1);
+    };
+
+
     const PaginationControls = () => {
         return (
             <div className="flex items-center justify-center  text-primary-color" >
@@ -76,5 +81,6 @@ export const usePagination = (data, dataPerPage = 4) => {
         setCommentsPerPage,
         prevPage,
         nextPage,
+        setFirstPage,
     };
 };

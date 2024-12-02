@@ -14,12 +14,9 @@ const ManageUser = () => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [users, setUsers] = useState([]);
-    const { currentData, setPaginationData, PaginationControls } = usePagination(users, 4);
+    const { currentData, setPaginationData, PaginationControls, setFirstPage } = usePagination(users, 4);
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const handleOpenModal = () => {
-        setModalOpen(true);
-        window.scrollTo(0, 0);
-    }
     const handleCloseModal = () => setModalOpen(false);
 
 
@@ -46,28 +43,24 @@ const ManageUser = () => {
         }
     };
 
-    const handleRsendConfirmationEmail = async () => {
-        try {
-            showLoaderModal();
-            const { data } = await rustikApi.post(`${rustikEndpoints.resendConfirmationEmail}`);
-            setNotification({
-                visibility: true,
-                type: "success",
-                text: "Se ha enviado un correo de confirmación a tu correo electrónico.",
-            });
-        } catch (error) {
-            console.error("Error al enviar el correo de confirmación, intente más tarde", error);
-        } finally {
-            hideLoaderModal();
+    useEffect(() => {
+      if (searchTerm) {
+        const filter = users.filter((user) => `${user.name} ${user.surname} ${user.email} ${user.phone}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
+        if (filter.length> 0) {
+            setPaginationData(filter);
+            setFirstPage();
         }
-    };
-
+      }else{
+        setPaginationData(users);
+      }
+    }, [searchTerm]);
+    
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const { data } = await rustikApi.get(rustikEndpoints.users);
                 setUsers(data);
-                setPaginationData(data);
+                setPaginationData([...data]);
 
             } catch (error) {
                 console.error("Error al llamar a la api", error);
@@ -78,6 +71,7 @@ const ManageUser = () => {
 
     }, [isModalOpen]);
 
+    
     const toggleAdmin = async (userId, isAdmin) => {
         try {
             showLoaderModal();
@@ -119,10 +113,10 @@ const ManageUser = () => {
 
     return (
         <div className="animate-fadeIn" >
-            <div className="container w-screen px-5" >
+            <div className="container w-full px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center mb-8">
-                        <PageTitleAndBack title={`Usuarios`} />
+                    <div className="flex w-full justify-between items-center mb-12">
+                        <PageTitleAndBack title={`Usuarios`} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
                         <table className="w-full rounded-lg p-2">

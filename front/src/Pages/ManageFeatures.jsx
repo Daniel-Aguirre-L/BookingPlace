@@ -15,7 +15,9 @@ const ManageFeatures = () => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [features, setFeatures] = useState([]);
-    const { currentData: currentCabinList, setPaginationData, PaginationControls } = usePagination(features, 5);
+    const { currentData: currentCabinList, setPaginationData, PaginationControls, setFirstPage } = usePagination(features, 5);
+    const [searchTerm, setSearchTerm] = useState("");
+
     const handleOpenModal = () => {
         setModalOpen(true);
         window.scrollTo(0, 0);
@@ -73,22 +75,25 @@ const ManageFeatures = () => {
 
     }, [isModalOpen]);
 
+    useEffect(() => {
+        if (searchTerm) {
+          const filter = features.filter((feature) => `${feature.name}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
+          if (filter.length> 0) {
+            setPaginationData(filter);
+            setFirstPage();
+        }
+        }else{
+          setPaginationData(features);
+        }
+      }, [searchTerm]);
+
 
     return (
         <div className="animate-fadeIn" >
-            <div className="container w-screen px-5" >
+            <div className="container w-full px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center ">
-                        <PageTitleAndBack title={`Mis caracteristicas`} />
-                        <div className="px-5 py-4 flex justify-end">
-                            <button
-                                className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
-                                type="button"
-                                onClick={handleOpenModal}
-                            >
-                                Agregar Característica
-                            </button>
-                        </div>
+                    <div className="flex w-full justify-between items-center mb-12">
+                        <PageTitleAndBack title={`Mis caracteristicas`} searchTerm={searchTerm} setSearchTerm={setSearchTerm} buttonText="Agregar Característica" buttonOnClick={handleOpenModal} />
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
                         <table className="w-full rounded-3xl p-6">
@@ -113,7 +118,7 @@ const ManageFeatures = () => {
                             <tbody className="px-5 bg-white rounded-3xl">
                                 {currentCabinList.map((feature) => (
                                     <tr key={feature.id} className="border-b border-gray-200 border-[5px] animate-fadeIn ">
-                                        <td className="px-5 py-10 flex items-center justify-center gap-7">
+                                        <td className="px-5 py-5 flex items-center justify-center gap-7">
                                             <div className=" text-background-dark text-5xl " >
                                                 <FeatureIcon id={feature.icon} />
                                             </div>
