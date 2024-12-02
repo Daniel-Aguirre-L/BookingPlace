@@ -54,7 +54,7 @@ const AdminLayout = () => {
   return (
     <div className="flex w-screen">
       {userLoaded && !isAdmin && <Navigate to={routeList.LOGIN} />}
-      <nav className="w-60 h-svh bg-gradient-to-b from-primary-color to-background-dark flex flex-col items-center p-8 gap-12 " >
+      <nav className="w-60 h-svh bg-gradient-to-b from-primary-color to-background-dark flex flex-col items-center p-8 gap-12 border-r border-[#2D2F33]" >
         <Link to={routeList.HOME}>
           <img src="/Icons/logoSvg-white.svg" alt="icono" />
         </Link>
