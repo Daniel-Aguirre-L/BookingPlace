@@ -4,9 +4,6 @@ import { routeList } from "../../helpers/routeList";
 import PageTitleAndBack from "../PageTitleAndBack";
 import { useEffect, useState } from "react";
 
-
-// className="grid min-h-screen grid-rows-[auto 1fr auto]"
-// style={{ display: "grid", gridTemplateRows: "auto 1fr auto", minHeight: "100vh" }}
 const UserLayout = () => {
 
   const { isLoggedIn, userLoaded, userName, userEmail } = useUser();
@@ -25,7 +22,6 @@ const UserLayout = () => {
   }, [path])
   
 
-  
   return (
     <>
       {userLoaded && !isLoggedIn && <Navigate to={routeList.LOGIN} />}

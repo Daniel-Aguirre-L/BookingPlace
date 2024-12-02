@@ -182,9 +182,7 @@ const MyProfile = () => {
     }finally{
       hideLoaderModal();
     }
-    
   }
-
 
   return (
     <section className="w-full animate-fadeIn " >

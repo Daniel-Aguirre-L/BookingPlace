@@ -23,7 +23,7 @@ const Footer = () => {
           <span>Sobre Nosotros</span>
           <span>Contáctanos</span>
         </div>
-        <p>Copyright @2024 digitalhouse proyecto integrador</p>
+        <p>Copyright @2024 proyecto integrador G2</p>
       </section>
     </footer>
   );
