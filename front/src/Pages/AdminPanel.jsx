@@ -40,7 +40,6 @@ const AdminPanel = () => {
     const getPercentage = (value, total) => {
         return `${(value / total) * 100}%`;
     }
-    console.log(statistics);
 
     return (
         <div className="animate-fadeIn px-5 py-10 w-full" >

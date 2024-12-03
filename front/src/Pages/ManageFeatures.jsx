@@ -79,7 +79,7 @@ const ManageFeatures = () => {
         if (searchTerm) {
           const filter = features.filter((feature) => `${feature.name}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
           if (filter.length> 0) {
-            setPaginationData(filter);
+            setPaginationData(filter, 1);
             setFirstPage();
         }
         }else{

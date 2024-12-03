@@ -39,14 +39,15 @@ export const usePagination = (data, dataPerPage = 4) => {
         }
     };
 
-    const setPaginationData = (newData) => {
+    const setPaginationData = (newData, page = currentPage) => {
         setInitialData(newData);
         setCurrentData(
             newData && newData.length > 0 ?
             [...newData.slice(
-            (currentPage - 1) * commentsPerPage,
-            (currentPage - 1) * commentsPerPage + commentsPerPage
+            (page - 1) * commentsPerPage,
+            (page - 1) * commentsPerPage + commentsPerPage
         )]:[])
+        
 
     };
 

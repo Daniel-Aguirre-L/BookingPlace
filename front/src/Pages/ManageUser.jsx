@@ -47,7 +47,7 @@ const ManageUser = () => {
       if (searchTerm) {
         const filter = users.filter((user) => `${user.name} ${user.surname} ${user.email} ${user.phone}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
         if (filter.length> 0) {
-            setPaginationData(filter);
+            setPaginationData(filter, 1);
             setFirstPage();
         }
       }else{

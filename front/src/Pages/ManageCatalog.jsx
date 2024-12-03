@@ -73,8 +73,8 @@ const ManageCatalog = () => {
         if (searchTerm) {
             const filter = cabins.filter((cabin) => `${cabin.id} ${cabin.name} ${cabin.category} ${cabin.description}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
             if (filter.length > 0) {
-                setPaginationData(filter);
                 setFirstPage();
+                setPaginationData(filter, 1);
             }
         } else {
             setPaginationData(cabins);
