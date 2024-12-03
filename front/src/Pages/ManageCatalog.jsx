@@ -16,11 +16,13 @@ const ManageCatalog = () => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [isEditing, setIsEditing] = useState(false);
-    const [currentData, setCurrentData] = useState(null); 
+    const [currentData, setCurrentData] = useState(null);
     const [cabins, setCabins] = useState([]);
-    
+    const [searchTerm, setSearchTerm] = useState("");
+    const { currentData: currentCabinList, setPaginationData, PaginationControls, setFirstPage } = usePagination(cabins, 5);
+
     const handleOpenModal = (cabin) => {
-        if(cabin && cabin.id){
+        if (cabin && cabin.id) {
             setIsEditing(true);
             setCurrentData(cabin);
         } else {
@@ -31,8 +33,6 @@ const ManageCatalog = () => {
         window.scrollTo(0, 0);
     }
     const handleCloseModal = () => setModalOpen(false);
-
-    const { currentData: currentCabinList, setPaginationData,  PaginationControls } = usePagination(cabins, 5);    
 
     const handleDelete = async (id) => {
         const confirma = confirm("Confirmar eliminar cabaña")
@@ -69,24 +69,24 @@ const ManageCatalog = () => {
 
     }, [isModalOpen]);
 
+    useEffect(() => {
+        if (searchTerm) {
+            const filter = cabins.filter((cabin) => `${cabin.id} ${cabin.name} ${cabin.category} ${cabin.description}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
+            if (filter.length > 0) {
+                setFirstPage();
+                setPaginationData(filter, 1);
+            }
+        } else {
+            setPaginationData(cabins);
+        }
+    }, [searchTerm]);
+
     return (
         <div className="animate-fadeIn" >
-            <div className="container w-screen px-5" >
+            <div className="container w-full px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center">
-                        <div className="mb-8" >
-                            <PageTitleAndBack title={`Mis cabañas`} />
-                        </div>
-                        <div className="px-5 py-4 flex justify-end">
-                            <button
-                                className="bg-[#088395] rounded-xl py-2 px-9 max-sm:px-4 text-[#EEEEEEEE]"
-                                type="button"
-                                onClick={handleOpenModal}
-                            >
-                                Agregar Cabaña
-                            </button>
-                        </div>
-
+                    <div className="w-full mb-12">
+                        <PageTitleAndBack title={`Mis cabañas`} searchTerm={searchTerm} setSearchTerm={setSearchTerm} buttonText={"Agregar Cabaña"} buttonOnClick={handleOpenModal} />
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
                         <table className="w-full rounded-3xl p-2">
@@ -106,13 +106,13 @@ const ManageCatalog = () => {
                                         Acciones
                                     </th>
                                 </tr>
-                            </thead> 
+                            </thead>
                             <tbody className="px-5 bg-white rounded-3xl">
                                 {currentCabinList.map((cabin) => (
                                     <tr key={cabin.id} className="border-b border-gray-200 border-[5px] animate-fadeIn">
                                         <td className="px-5 py-5 flex items-center justify-start gap-7">
                                             <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} className="grid grid-cols-[auto_1fr] items-center gap-10" >
-                                                <div className="w-40 h-28 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}>    </div>
+                                                <div className="w-32 h-20 relative bg-cover bg-center bg-no-repeat rounded-lg" style={{ backgroundImage: `url(${cabin.images[0].url})` }}></div>
                                                 <div>
                                                     <p className="text-gray-900 whitespace-no-wrap font-montserrat ">{cabin.name}</p>
                                                     <p className="text-gray-900 whitespace-no-wrap text-xs font-montserrat">{cabin.description}</p>
@@ -120,9 +120,9 @@ const ManageCatalog = () => {
                                             </Link>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
-                                        <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} >
-                                            <p className="text-gray-900 whitespace-no-wrap text-center">{cabin.id}</p>
-                                        </Link>
+                                            <Link to={`${routeList.CATALOG_DETAIL}/${cabin.id}`} >
+                                                <p className="text-gray-900 whitespace-no-wrap text-center">{cabin.id}</p>
+                                            </Link>
                                         </td>
                                         <td className="px-5 py-5 min-w-40">
                                             <div className="flex justify-center items-center gap-5 my-auto ">
@@ -145,7 +145,7 @@ const ManageCatalog = () => {
                                         </td>
                                     </tr>
                                 ))}
-                                 <tr className="h-5 bg-transparent"></tr>
+                                <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
                     </div>
@@ -155,7 +155,7 @@ const ManageCatalog = () => {
                 </div>
             </div>
 
-            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal}  currentData={currentData} isEditing={isEditing} />
+            <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} currentData={currentData} isEditing={isEditing} />
         </div>
     )
 }

@@ -48,7 +48,7 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between items-center px-4 md:px-24 py-[26px]">
       <Link to="/">
-        <img src="/Icons/logoSvg.svg" alt="icono" />
+        <img src="/Icons/logoSvg.svg" alt="logo Rustik" />
       </Link>
 
       <button className="md:hidden" onClick={handleMouseEnter}>

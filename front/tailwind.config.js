@@ -34,10 +34,19 @@ export default {
           '100%': {
             opacity: 1,
           }
+        },
+        growRight: {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(0)',
+          }
         }
       },
       animation: {
         fadeIn: 'fadeIn 0.3s ease-in-out',
+        growRight: 'growRight 750ms ease-in-out forwards'
       },
     },
   },

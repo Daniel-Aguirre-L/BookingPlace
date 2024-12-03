@@ -77,7 +77,7 @@ public class ImageService {
                     image.setCabin(cabin); // Asocia la imagen a la cabaña
 
                     imageUrls.add(imageRepository.save(image)); // Guarda la imagen en la base de datos
-                    System.out.println(imageUrls.get(0));
+                    //System.out.println(imageUrls.get(0));
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -13,10 +13,16 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
   const [bookingDates, setBookingDates] = useState(["", ""]);
   const [calendarKey, setCalendarKey] = useState(0); // Unique key to force re-mount
 
-  const calendarStyles = `rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${calendarVisible
+  const calendarStyles = [
+    `relative rounded-xl transition-all duration-300 ease-in-out mr-1 ${calendarVisible
+      ? "opacity-100 scale-100 visible"
+      : "opacity-0 scale-90 w-0 invisible"
+    }`,
+    `relative rounded-xl transition-all duration-300 ease-in-out hidden md:block ${calendarVisible
       ? "opacity-100 scale-100 translate-y-0 visible"
-      : "opacity-0 scale-90 -translate-y-4 invisible"
-    }`;
+      : "opacity-0 scale-90 w-0 -translate-y-4 invisible"
+    }`
+  ]
 
   const setDate = () => {
     setCalendarVisible(true);
@@ -53,13 +59,13 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
         Tu refugio natural, a un clic de distancia.
       </p>
       <form
-        className="pageMargin relative rounded-lg bg-white text-[1.4rem] items-center mt-[3rem]  h-fit  max-w-[700px] font-montserrat"
+        className="flex flex-col md:flex-row pageMargin relative rounded-lg bg-white text-[1.4rem] items-center mt-[3rem]  h-fit  max-w-[950px] font-montserrat"
         onSubmit={handleSearch}
       >
-        <fieldset className="flex flex-col  relative w-full">
+        <fieldset className="flex flex-col md:flex-row relative w-full">
           <div className="flex items-center h-fit">
           <input
-            className="w-full px-5 text-sm sm:text-base md:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden "
+            className="w-full px-5 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden md:w-72 lg:w-96 md:border-r "
             type="text"
             placeholder="Nombre de la cabaña"
             value={filter}
@@ -92,9 +98,9 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
             </div>
           )}
           </div>
-          <div className="flex items-center h-fit" >
+          <div className="flex items-center h-fit flex-1" >
           <input
-            className={`w-full px-5 text-sm sm:text-base md:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden ${!bookingDates[0] ? "cursor-pointer" : null
+            className={`w-full px-5 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden ${!bookingDates[0] ? "cursor-pointer" : null
               }`}
             type="text"
             placeholder="Seleccione fechas"
@@ -105,7 +111,7 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
           {bookingDates[0] && (
             <>
               <input
-                className="w-full px-5 text-sm sm:text-base md:text-xl bg-transparent  text-dark-text  h-[4rem] outline-none overflow-hidden "
+                className="w-full pl-5 pr-11 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent  text-dark-text  h-[4rem] outline-none overflow-hidden md:border-l "
                 type="text"
                 placeholder="Fecha de Salida"
                 value={bookingDates[1]}
@@ -113,7 +119,7 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
                 readOnly
               />
               <button
-                className="absolute right-2 top-[83px]  h-fit  "
+                className="absolute right-2 top-[83px] md:top-5  h-fit  "
                 type="button"
                 onClick={handleCloseForm}
               >
@@ -126,21 +132,22 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
 
 
         <button
-          className="p-5 bg-primary-color flex justify-center items-center w-full rounded-b-lg"
+          className="p-5 bg-primary-color flex justify-center items-center w-full md:w-20 rounded-b-lg md:rounded-r-lg md:rounded-s-none h-[4rem]"
           type="submit"
         >
-          <span className="font-montserrat mr-4 ">Buscar</span>
+          <span className="md:hidden font-montserrat mr-4 ">Buscar</span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
-
-        <BookingCalendar
-          key={calendarKey}
-          setBookingDates={setBookingDates}
-          visible={calendarVisible}
-          setVisible={setCalendarVisible}
-          calendarStyles={calendarStyles}
-          hasReserves={false}
-        />
+        <div className="absolute left-1/2 transform -translate-x-1/2 top-[-8rem] h-1 w-auto scale-90 md:scale-100 " > 
+          <BookingCalendar
+            key={calendarKey}
+            setBookingDates={setBookingDates}
+            visible={calendarVisible}
+            setVisible={setCalendarVisible}
+            calendarStyles={calendarStyles}
+            hasReserves={false}
+          />
+        </div>
       </form>
     </section>
   );

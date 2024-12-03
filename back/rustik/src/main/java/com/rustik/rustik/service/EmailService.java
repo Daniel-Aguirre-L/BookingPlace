@@ -62,9 +62,7 @@ public class EmailService {
 
             helper.setText(body, true);
 
-
             mailSender.send(message);
-
             System.out.println("Correo de confirmación de registro enviado con éxito a " + toEmail);
         } catch (Exception e) {
             e.printStackTrace();
