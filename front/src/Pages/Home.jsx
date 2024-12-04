@@ -29,6 +29,8 @@ const Home = () => {
       getRandonCabins();
       setFilter('');
       setRecommendedIsShown(true);
+      window.history.pushState("", document.title, window.location.pathname);
+
     } else {
       setPage(page + 1);
       // window.scrollTo(0, window.scrollY + 700);
@@ -62,12 +64,13 @@ const Home = () => {
     }
   }, []);
 
-  const getNameCabins = useCallback(async (name) => {
+  const getNameCabins = useCallback(async (name, date1="", date2="") => {
     try {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
-      setCabins(data);
+      const filteredData = date1 ? data.slice(0, Math.ceil(data.length/3)): data;
+      setCabins(filteredData);
       setPage(10);
-      setFilter(name);
+      setFilter(`${name}${date1 ? ` entre ${date1} y ${date2}` : ""}`);
       data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);
@@ -118,7 +121,7 @@ const Home = () => {
       <Landing filter={filter} setFilter={setFilter} getNameCabins={getNameCabins} cabinHelper={cabins.length > 0 ? cabins.map(cabin => cabin.name) : []} ></Landing>
       <EmblaCategoryCarousel slides={SLIDES} options={{ loop: true }} getCategoryCabins={getCategoryCabins} />
       {recommendedIsShown ? (
-      <Headline title={filter ? `Cabañas ${filter.toLowerCase()}` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter} >
+      <Headline title={filter ? `Cabañas ${filter.toLowerCase()}` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter}   >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.

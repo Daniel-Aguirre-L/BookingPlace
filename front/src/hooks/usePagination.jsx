@@ -39,25 +39,31 @@ export const usePagination = (data, dataPerPage = 4) => {
         }
     };
 
-    const setPaginationData = (newData) => {
+    const setPaginationData = (newData, page = currentPage) => {
         setInitialData(newData);
         setCurrentData(
             newData && newData.length > 0 ?
             [...newData.slice(
-            (currentPage - 1) * commentsPerPage,
-            (currentPage - 1) * commentsPerPage + commentsPerPage
+            (page - 1) * commentsPerPage,
+            (page - 1) * commentsPerPage + commentsPerPage
         )]:[])
+        
 
     };
 
+    const setFirstPage = () => {
+        setCurrentPage(1);
+    };
+
+
     const PaginationControls = () => {
         return (
-            <div className="flex items-center justify-center">
-                    <button onClick={prevPage} disabled={currentPage === 1} className="px-5 py-2">
+            <div className="flex items-center justify-center  text-primary-color" >
+                    <button onClick={prevPage} disabled={currentPage === 1} className="px-5 py-2 text-secondary-color ">
                         &lt;
                     </button>
                     <span >{currentPage} de {totalPages}</span>
-                    <button onClick={nextPage} disabled={currentPage === totalPages} className="px-5 py-2">
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="px-5 py-2 text-secondary-color">
                         &gt;
                     </button>
                 </div>
@@ -76,5 +82,6 @@ export const usePagination = (data, dataPerPage = 4) => {
         setCommentsPerPage,
         prevPage,
         nextPage,
+        setFirstPage,
     };
 };

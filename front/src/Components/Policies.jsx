@@ -19,7 +19,7 @@ const Policies = () => {
                 </button>
             </div>
 
-            <h3 className="text-lg font-montserrat py-2 ">
+            <h3 className="text-lg font-montserrat py-2 font-bold">
                 Políticas de Uso de Cabañas Arrendadas
             </h3>
 

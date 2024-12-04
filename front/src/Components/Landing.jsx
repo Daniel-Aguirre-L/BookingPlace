@@ -8,16 +8,21 @@ const styles = {
 };
 
 function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
-  const [calendarVisible, setCalendarVisible] = useState(false)
+  const [calendarVisible, setCalendarVisible] = useState(false);
   const [serchingText, setSerchingText] = useState(false);
   const [bookingDates, setBookingDates] = useState(["", ""]);
   const [calendarKey, setCalendarKey] = useState(0); // Unique key to force re-mount
 
-  const calendarStyles = `rounded-xl absolute left-1/2 transform -translate-x-1/2 top-[-8rem] max-sm:scale-90 md:right-auto transition-all duration-300 ease-in-out ${
-    calendarVisible
+  const calendarStyles = [
+    `relative rounded-xl transition-all duration-300 ease-in-out mr-1 ${calendarVisible
+      ? "opacity-100 scale-100 visible"
+      : "opacity-0 scale-90 w-0 invisible"
+    }`,
+    `relative rounded-xl transition-all duration-300 ease-in-out hidden md:block ${calendarVisible
       ? "opacity-100 scale-100 translate-y-0 visible"
-      : "opacity-0 scale-90 -translate-y-4 invisible"
-  }`;
+      : "opacity-0 scale-90 w-0 -translate-y-4 invisible"
+    }`
+  ]
 
   const setDate = () => {
     setCalendarVisible(true);
@@ -30,18 +35,16 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    getNameCabins(filter);
+    getNameCabins(filter, bookingDates[0], bookingDates[1]);
     window.location.hash = "cabañas";
   };
 
-  const getSearchOptions = (text="lago") => {
+  const getSearchOptions = (text = "lago") => {
     if (!text) return [];
     return cabinHelper.filter((option) =>
       option.toLowerCase().includes(text.toLowerCase())
     );
-
-  }
-
+  };
 
   return (
     <section
@@ -56,98 +59,95 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
         Tu refugio natural, a un clic de distancia.
       </p>
       <form
-        className="pageMargin relative rounded-md bg-white md:flex text-[1.4rem] items-center mt-[3rem] md:h-[3.35rem] h-fit  max-w-[50rem] font-montserrat"
+        className="flex flex-col md:flex-row pageMargin relative rounded-lg bg-white text-[1.4rem] items-center mt-[3rem]  h-fit  max-w-[950px] font-montserrat"
         onSubmit={handleSearch}
       >
-        <fieldset className="flex relative" >
+        <fieldset className="flex flex-col md:flex-row relative w-full">
+          <div className="flex items-center h-fit">
           <input
-            className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] "
+            className="w-full px-5 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden md:w-72 lg:w-96 md:border-r "
             type="text"
             placeholder="Nombre de la cabaña"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             onFocus={() => {
-              window.location.hash = ""
+              window.location.hash = "";
               setSerchingText(true);
             }}
-            onBlur={()=>{
-              setTimeout(()=>{
+            onBlur={() => {
+              setTimeout(() => {
                 setSerchingText(false);
-              },100);
+              }, 100);
             }}
           />
-          
-          {
-            
-            serchingText && getSearchOptions(filter).length > 0 &&
-            <div className="absolute max-h-52 w-full top-10 bg-white z-20 overflow-y-scroll text-background-dark rounded-b-lg" >
-              {
-                getSearchOptions(filter).map((option, index)=>
-                  <p key={`option-${index}`}
-                  className="p-2 hover:bg-gray-300 cursor-pointer pl-6 text-base"
+
+          {serchingText && getSearchOptions(filter).length > 0 && (
+            <div className="absolute max-h-52 w-full top-10 bg-white z-20 overflow-y-scroll text-background-dark rounded-b-lg">
+              {getSearchOptions(filter).map((option, index) => (
+                <p
+                  key={`option-${index}`}
+                  className="p-2 hover:bg-gray-300 cursor-pointer pl-5 text-sm md:text-base"
                   onClick={() => {
                     setFilter(option);
                     setSerchingText(false);
                   }}
-                  >
-                    {option.toLowerCase()}
-                  </p>
-                )
-              }
-
+                >
+                  {option.toLowerCase()}
+                </p>
+              ))}
             </div>
-          }
-
-                  <input
-                      className={`w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem] ${!bookingDates[0] ? "cursor-pointer" : null
-                          }`}
-                      type="text"
-                      placeholder="Seleccione fechas"
-                      value={bookingDates[0]}
-                      onClick={() => setDate()}
-                      readOnly
-                  />
-                  {bookingDates[0] && (
-                      <>
-                          <input
-                              className="w-full bg-transparent max-md:pl-6 md:ml-6 text-dark-text md:h-[50%] h-[4rem] outline-none overflow-hidden text-[1.2rem]"
-                              type="text"
-                              placeholder="Fecha de Salida"
-                              value={bookingDates[1]}
-                              onClick={() => setDate()}
-                              readOnly
-                          />
-                          <button
-                              className="absolute right-[1rem] top-0 bottom-0 h-fit my-auto md:right-[4.4rem]"
-                              type="button"
-                              onClick={handleCloseForm}
-                          >
-                              <img src="/Icons/cancel-gray.svg" alt="" />
-                          </button>
-                      </>
-                  )}
+          )}
+          </div>
+          <div className="flex items-center h-fit flex-1" >
+          <input
+            className={`w-full px-5 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent text-dark-text h-[4rem] outline-none overflow-hidden ${!bookingDates[0] ? "cursor-pointer" : null
+              }`}
+            type="text"
+            placeholder="Seleccione fechas"
+            value={bookingDates[0]}
+            onClick={() => setDate()}
+            readOnly
+          />
+          {bookingDates[0] && (
+            <>
+              <input
+                className="w-full pl-5 pr-11 text-sm sm:text-base md:text-lg lg:text-xl bg-transparent  text-dark-text  h-[4rem] outline-none overflow-hidden md:border-l "
+                type="text"
+                placeholder="Fecha de Salida"
+                value={bookingDates[1]}
+                onClick={() => setDate()}
+                readOnly
+              />
+              <button
+                className="absolute right-2 top-[83px] md:top-5  h-fit  "
+                type="button"
+                onClick={handleCloseForm}
+              >
+                <img src="/Icons/cancel-gray.svg" alt="" />
+              </button>
+            </>
+          )}
+          </div>
         </fieldset>
 
-        
-        
-        
-        
+
         <button
-          className="bg-primary-color flex justify-center items-center h-full max-md:h-[4rem] w-full md:w-[14rem] rounded-e-md max-md:rounded-s-md"
+          className="p-5 bg-primary-color flex justify-center items-center w-full md:w-20 rounded-b-lg md:rounded-r-lg md:rounded-s-none h-[4rem]"
           type="submit"
         >
-          <span className="md:hidden font-montserrat">Buscar</span>
+          <span className="md:hidden font-montserrat mr-4 ">Buscar</span>
           <img src="./Icons/search.svg" alt="buscar" width={22} />
         </button>
-
-        <BookingCalendar
-          key={calendarKey}
-          setBookingDates={setBookingDates}
-          visible={calendarVisible}
-          setVisible={setCalendarVisible}
-          calendarStyles={calendarStyles}
-          hasReserves={false}
-        />
+        <div className="absolute left-1/2 transform -translate-x-1/2 top-[-8rem] h-1 w-auto scale-90 md:scale-100 " > 
+          <BookingCalendar
+            key={calendarKey}
+            setBookingDates={setBookingDates}
+            visible={calendarVisible}
+            setVisible={setCalendarVisible}
+            calendarStyles={calendarStyles}
+            hasReserves={false}
+          />
+        </div>
       </form>
     </section>
   );

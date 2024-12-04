@@ -31,7 +31,11 @@ const Catalog = ({ cabin, getCabin }) => {
     };
 
     useEffect(() => {
-        setPaginationData(cabin.ratings);
+        if(!cabin.ratings) return;
+        setPaginationData(cabin.ratings.sort(function(a,b){
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        }));
+
     }, [cabin])
 
     useEffect(() => {
@@ -96,7 +100,7 @@ const Catalog = ({ cabin, getCabin }) => {
                         </div>
                         <div className="flex items-center mt-2">
                             <span className="border border-[#FBFFBD] text-[#088395] font-semibold p-2 rounded mr-2">
-                                {cabin.averageScore.toFixed(1)}
+                                {cabin.averageScore && cabin.averageScore.toFixed(1)}
                             </span>
                             <span className="text-[#EEEEEE] montserrat text-sm ">{getRatingDescription(cabin.averageScore)} </span>
                             <span className="text-[#088395] ml-2 text-sm">{cabin.totalRatings} reseñas</span>
@@ -135,7 +139,7 @@ const Catalog = ({ cabin, getCabin }) => {
                     </ul>
                 </div>
                 <Policies />
-                <div className="p-4">
+                <div className="mt-16">
                     <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} />
                 </div>
                 <div className='transition-all' >

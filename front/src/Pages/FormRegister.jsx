@@ -125,7 +125,7 @@ const FormRegister = () => {
         {/* Form */}
         <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-md">
           <div className="text-center mb-4">
-            <h2 className="text-2xl font-bold font-monserrat" style={{ color: 'var(--primary-color)' }}>Crea una Cuenta</h2>
+            <h2 className="text-2xl font-bold font-monserrat text-primary-color">Crea una Cuenta</h2>
             <p className="text-xl mb-4" style={{ color: "#383737" }}>Es fácil y rápido</p>
             <hr className="w-full border-t-2 border-gray-300 mb-6" />
           </div>

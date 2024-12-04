@@ -10,14 +10,15 @@ function Headline({ title, handleOnClick, filter, children }) {
       <p className="text-xl mr-[20rem] max-xl:mr-[13rem] max-md:mr-[8.5rem]">
         {children}
       </p>
-      <a href="#cabañas">
+      
         <button
           className="alignAbsolute right-0 absolute px-[0.8rem] py-[0.6rem] border-[2px] border-light-text rounded-[0.4rem]"
+          type="button"
           onClick={handleOnClick}
         >
           {filter ? "Quitar Filtro" : "Mostrar más"}
         </button>
-      </a>
+      
     </div>
   );
 }

@@ -6,8 +6,11 @@ import BookingCalendar from "./BookingCalendar";
 const SelectDate = ({ onClose, isOpen }) => {
   const { setNotification } = useNotificationStore();
   const [bookingDates, setBookingDates] = useState(["", ""]);
-  const calendarStyles = `scale-90 relative rounded-xl max-[500px]:scale-[0.75] md:right-auto transition-all duration-300 ease-in-out`;
-
+  const calendarStyles = [
+    `scale-[0.85] relative rounded-xl max-[500px]:scale-[0.90] md:right-auto transition-all duration-300 ease-in-out`,
+    `scale-[0.85] relative rounded-xl max-[500px]:scale-[0.90] md:right-auto transition-all duration-300 ease-in-out`
+  ];
+  
   const [feature, setFeature] = useState({
     id: null,
     name: "",
@@ -50,8 +53,8 @@ const SelectDate = ({ onClose, isOpen }) => {
   return (
     <div className="animate-fadeIn hs-overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
       <div className="sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-        <div className="flex flex-col items-center justify-center p-6">
-          <div className="w-full sm:w-full max-w-lg bg-white p-6 rounded-lg shadow-md relative z-10">
+        <div className="flex flex-col items-center justify-center">
+          <div className="w-full sm:w-full max-w-lg bg-white py-6 rounded-lg shadow-md relative z-10">
             <div className="absolute top-0 left-0 right-0 bg-primary-color p-4 rounded-t-lg text-white z-20">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-light font-montserrat">
@@ -70,8 +73,8 @@ const SelectDate = ({ onClose, isOpen }) => {
               </div>
             </div>
 
-            <div className="pt-16">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="pt-14 md:pt-16 w-full">
+              <form onSubmit={handleSubmit} className="relative space-y-6 w-full">
                 <div className=" flex flex-col gap-6 justify-center items-center">
                   <BookingCalendar
                     setBookingDates={setBookingDates}
@@ -80,10 +83,22 @@ const SelectDate = ({ onClose, isOpen }) => {
                     calendarStyles={calendarStyles}
                     hasReserves={true}
                   />
-                  <span className="flex gap-10">
+                  
+                  <div className="relative flex flex-col gap-y-2">
+                    <span
+                      className={`absolute transform flex justify-between items-center text-primary-color w-full text-xs md:text-sm transition-all duration-300 ease-in-out ${
+                        bookingDates[0]
+                          ? "opacity-100 translate-y-[-25px] visible"
+                          : "opacity-0 -translate-y-4 invisible"
+                      }`}
+                    >
+                      <label htmlFor="bookingDates">Fecha de ingreso</label>
+                      <label htmlFor="bookingDates">Fecha de salida</label>
+                    </span>
+                  <span className="flex gap-3 md:gap-10 text-sm md:text-base">
                     <InputField
-                      id="name"
-                      name="name"
+                      id="bookingDates"
+                      name="bookingDates"
                       placeholder="Fecha de llegada"
                       value={bookingDates[0]}
                       onChange={handleFeatureChange}
@@ -91,8 +106,8 @@ const SelectDate = ({ onClose, isOpen }) => {
                       readOnly
                     />
                     <InputField
-                      id="name"
-                      name="name"
+                      id="bookingDates"
+                      name="bookingDates"
                       placeholder="Fecha de salida"
                       value={bookingDates[1]}
                       onChange={handleFeatureChange}
@@ -100,12 +115,13 @@ const SelectDate = ({ onClose, isOpen }) => {
                       readOnly
                     />
                   </span>
+                  </div>
 
                   {errors.name && (
                     <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                   )}
                 </div>
-                <div className="flex justify-center pb-5">
+                <div className="flex justify-center pb-5 px-5">
                   <button
                     type="submit"
                     className="w-full py-3 px-6 rounded-lg bg-primary-color text-background-white"

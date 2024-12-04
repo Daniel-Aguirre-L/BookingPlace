@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
+
 import useNotificationStore from "../store/useNotificationStore";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
+import { useUser } from "../hooks/useUser";
 
-const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) => {
-  
+const LikeButton = ({ id, isFavorite, onLike = () => { }, onUnlike = () => { } }) => {
+
   const { setNotification } = useNotificationStore();
-  //const [liked, setLiked] = useState(isFavorite);
+  const { isLoggedIn } =useUser();
 
-  
-  
 
-  
-  const removeFavorite = async () =>{
-    try {
+
+  const removeFavorite = async () => {
+    if (isLoggedIn) try {
       const response = await rustikApi.delete(`${rustikEndpoints.favorites}/${id}`);
       if (response.status >= 200 && response.status < 300) {
         onUnlike();
@@ -33,11 +32,17 @@ const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) =
         type: "error",
         text: "No se pudo remover el favorito, intenta más tarde.",
       });
+    }else{
+      setNotification({
+        visibility: true,
+        type: "warning",
+        text: "Debe iniciar sesión para habilitar favoritos.",
+      });
     }
   }
 
-  const addFavorite = async () =>{
-    try {
+  const addFavorite = async () => {
+    if (isLoggedIn) try {
       const response = await rustikApi.post(`${rustikEndpoints.favorites}/${id}`);
       if (response.status >= 200 && response.status < 300) {
         onLike();
@@ -57,6 +62,12 @@ const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) =
         text: "No se pudo agregar el favorito, intenta más tarde.",
       });
       console.error("Error en la solicitud:", error);
+    }else{
+      setNotification({
+        visibility: true,
+        type: "warning",
+        text: "Debe iniciar sesión para habilitar favoritos.",
+      });
     }
   }
 
@@ -68,7 +79,7 @@ const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) =
     }
   };
 
-  
+
 
   return (
     <button
@@ -76,15 +87,14 @@ const LikeButton = ({ id, isFavorite, onLike =() => {}, onUnlike = () => {} }) =
       onClick={toggleLike}
       className="relative cursor-pointer"
     >
-       <svg
+      <svg
         xmlns="http://www.w3.org/2000/svg"
         fill={isFavorite ? "#C70303" : "#DFDFDF"}
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke={isFavorite ? "#C70303" : "#CE1C1C"}
-        className={`inline-block w-[1em] h-[1em] cursor-pointer transition-transform ${
-          isFavorite ? "" : "hover:scale-105"
-        }`}
+        className={`inline-block w-[1em] h-[1em] cursor-pointer transition-transform ${isFavorite ? "" : "hover:scale-105"
+          }`}
         style={{
           filter: isFavorite
             ? "none"
