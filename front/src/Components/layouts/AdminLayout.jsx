@@ -59,7 +59,9 @@ const AdminLayout = () => {
           <img src="/Icons/logoSvg-white.svg" alt="icono" />
         </Link>
         <div className="flex flex-col items-center gap-2">
+          <div className="text-3xl" >
           <Avatar size={"medium"} name={userName} />
+          </div>
           <p className="capitalize text-xl" >{userName}</p>
           <Link to={routeList.USER_PROFILE} className="px-5 py-2 bg-background-dark rounded-full  text-sm ">
             Editar perfil
