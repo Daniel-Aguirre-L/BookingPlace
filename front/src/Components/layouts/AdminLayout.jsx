@@ -75,18 +75,20 @@ const AdminLayout = () => {
               )
             })
           }
+          </div>
+          <br />
+         
           <button
-            className={`flex items-center gap-3 rounded-lg text-lg px-5 py-3 transition-all hover:bg-secondary-color hover:bg-opacity-15`}
+            className={`flex w-full items-center gap-3 rounded-lg text-lg px-5 py-3 transition-all hover:bg-secondary-color hover:bg-opacity-15 `}
             onClick={logout}
           >
-            <div className="w-5">
+            <div className="w-5 ">
               <LogoutIcon />
             </div>
-            <span className="text-lg overflow-hidden " >
+            <span className="text-lg overflow-hidden" >
               Salir
             </span>
           </button>
-        </div>
       </nav>
       {
         isAdmin && (
