@@ -52,7 +52,7 @@ public class BookingService {
              booking.setUser(user);
              booking.setInitialDate(bookingDTO.getInitialDate());
              booking.setEndDate(bookingDTO.getEndDate());
-             booking.setBookingDate(LocalDate.now());
+             //booking.setBookingDate(LocalDate.now());
 
              return bookingRepository.save(booking);
         }

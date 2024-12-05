@@ -41,7 +41,7 @@ public class BookingController {
     }
 
 
-    @GetMapping ("/my-bookins")
+    @GetMapping ("/my-bookings")
     public ResponseEntity<List<BookingDTO>> getMyBookings (@AuthenticationPrincipal CustomUserDetails userDetails){
 
 

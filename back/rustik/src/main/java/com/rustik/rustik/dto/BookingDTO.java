@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class BookingDTO {
     private Double totalPrice;
 
     @JsonIgnore
-    private LocalDate bookingDate;
+    private LocalDateTime createdAt;
 
 
     public void setDates (){

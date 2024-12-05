@@ -13,10 +13,10 @@ public class BookingMapper {
         bookingDTO.setId(booking.getId());
         bookingDTO.setUser(UserMapper.toDTO(booking.getUser()));
         bookingDTO.setCabin(CabinMapper.toDTO(booking.getCabin()));
-        bookingDTO.setBookingDate(booking.getBookingDate());
+        bookingDTO.setCreatedAt(booking.getCreatedAt());
         bookingDTO.setInitialDate(booking.getInitialDate());
         bookingDTO.setEndDate(booking.getEndDate());
-        bookingDTO.setBookingDate(booking.getBookingDate());
+        bookingDTO.setCreatedAt(booking.getCreatedAt());
         bookingDTO.setDates();
         bookingDTO.setTotalPrice();
 
