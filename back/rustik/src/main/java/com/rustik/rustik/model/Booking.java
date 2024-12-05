@@ -34,5 +34,8 @@ public class Booking {
     private LocalDate endDate;
 
 
+    private LocalDate bookingDate;
+
+
 
 }
