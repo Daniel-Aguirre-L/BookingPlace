@@ -8,8 +8,10 @@ import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.BookingService;
+import com.rustik.rustik.service.EmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +27,8 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+    @Autowired
+    private EmailService emailService;
 
 
 
@@ -40,6 +44,19 @@ public class BookingController {
         );
 
         BookingDTO dto = BookingMapper.toDTO(booking);
+
+        String name = userDetails.getUser().getName();
+        String surname = userDetails.getUser().getSurname();
+
+        // Enviar correo de confirmación
+        emailService.sendBookingConfirmationEmail(
+                userDetails.getUser().getEmail(),
+                name + " " + surname,
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
 
         return ResponseEntity.ok(dto);
 
@@ -96,6 +113,14 @@ public class BookingController {
             solicitedBooking.setState(BookingState.CANCELED);
             return ResponseEntity.ok(bookingService.cancelBooking(solicitedBooking));
         }
+        emailService.sendBookingCancellationEmail(
+                user.getEmail(), // String
+                user.getName() + " " + user.getSurname(), // String
+                solicitedBooking.getCabin(), // Cabin
+                solicitedBooking.getInitialDate(), // LocalDate
+                solicitedBooking.getEndDate(), // LocalDate
+                solicitedBooking.getTotalPrice() // Double
+        );
         throw new BadRequestException("No es posible cancelar esta resserva");
     }
 
