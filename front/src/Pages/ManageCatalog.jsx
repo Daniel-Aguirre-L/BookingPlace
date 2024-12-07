@@ -69,7 +69,7 @@ const ManageCatalog = () => {
         if (selectedId) {
             setWarningIsOpen({
                 status: true,
-                message: "¿Estás seguro de que quieres eliminar esta cabaña?",
+                message: "¿Estás segur@ de que quieres eliminar esta cabaña?",
             });
         }
     }, [selectedId]);
