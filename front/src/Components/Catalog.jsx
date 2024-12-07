@@ -12,6 +12,7 @@ import { getRatingDescription } from '../helpers/getRatingDescription';
 import { usePagination } from '../hooks/usePagination';
 import SelectDate from './SelectDate';
 
+
 const Catalog = ({ cabin, getCabin }) => {
 
     const [showModal, setShowModal] = useState(false);
@@ -87,7 +88,7 @@ const Catalog = ({ cabin, getCabin }) => {
                 </div>
 
                 {/* Detalles */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center my-5 ">
+                <div className="flex flex-col md:flex-row justify-between items-start  my-9 ">
                     <div className="mb-4 md:mb-0">
                         <div className="flex flex-col">
                             <h2 className="montserrat text-2xl md:text-[33px] font-bold text-[#088395] mb-1">
@@ -105,39 +106,53 @@ const Catalog = ({ cabin, getCabin }) => {
                             <span className="text-[#EEEEEE] montserrat text-sm ">{getRatingDescription(cabin.averageScore)} </span>
                             <span className="text-[#088395] ml-2 text-sm">{cabin.totalRatings} reseñas</span>
                         </div>
+
+
+
+                        <div className="max-w-2xl mt-6  ">
+
+                            <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-2">Detalles</h2>
+                            <p className="py-4 text-[#EEEEEE] text-sm md:text-base">
+                                {cabin.description}
+                            </p>
+                        </div>
+
+
+                        <div className="flex  flex-col max-w-2xl   ">
+                            <h2 className="text-xl md:text-2xl font-bold text-[#088395] my-4">Características</h2>
+                            <div className='mb-14 ' >
+
+                                <ul className='flex flex-wrap gap-x-10 gap-y-8 '>
+                                    {cabin.cabinFeatures && cabin.cabinFeatures.sort((a, b) => b.hasQuantity - a.hasQuantity).map((feature) => (
+                                        <li key={feature.id} className="text-light-text text-lg md:text-xl flex items-center">
+                                            <span className='text-[2.5rem] text-secondary-color mr-[14px]' ><FeatureIcon id={feature.featureIcon} /></span>
+                                            <p className='text-wrap' >
+                                                {feature.featureName} {feature.quantity ? <span className='border border-secondary-color px-3 py-1 rounded-md max-h-12' > {feature.quantity}</span> : ''}
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        
                     </div>
-                    <div className="flex flex-col items-start md:items-end">
-                        <h3 className="text-lg md:text-xl font-semibold text-[#088395]">
+                    <div className="flex flex-col items-start md:items-end relative top-[-31px] z-10">
+                        {/* <h3 className="text-lg md:text-xl font-semibold text-[#088395]">
                             <span className="text-xl md:text-2xl">${cabin.price}</span>
                             <span className="text-sm md:text-lg font-light"> p/noche</span>
-                        </h3>
-                        <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold" onClick={setSelectDateIsOpen}>
+                        </h3> */}
+                        {/* <button className="mt-2 bg-[#FBFFBD] text-[#0C1123] h-10 px-4 rounded font-semibold" onClick={setSelectDateIsOpen}>
                             Reservar
-                        </button>
-                        <SelectDate isOpen={selectDateIsOpen} onClose={setSelectDateIsOpen} />
+                        </button> */}
+
+                        
+                        <SelectDate  cabin={cabin}/>
                     </div>
+                   
                 </div>
                 
-
-                <h2 className="text-xl md:text-2xl font-bold text-[#088395] mb-1">Detalles</h2>
-                <p className="py-4 text-[#EEEEEE] text-sm md:text-base">
-                    {cabin.description}
-                </p>
-
-                <h2 className="text-xl md:text-2xl font-bold text-[#088395] my-4">Características</h2>
-                <div className='mb-14' >
-
-                    <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 '>
-                        {cabin.cabinFeatures && cabin.cabinFeatures.sort((a, b) => b.hasQuantity - a.hasQuantity).map((feature) => (
-                            <li key={feature.id} className="text-light-text text-lg md:text-xl flex items-center">
-                                <span className='text-[2.5rem] text-secondary-color mr-[14px]' ><FeatureIcon id={feature.featureIcon} /></span>
-                                <p className='text-wrap' >
-                                    {feature.featureName} {feature.quantity ? <span className='border border-secondary-color px-3 py-1 rounded-md max-h-12' > {feature.quantity}</span> : ''}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+               
+              
                 <Policies />
                 <div className="mt-16">
                     <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} />
@@ -157,6 +172,7 @@ const Catalog = ({ cabin, getCabin }) => {
             </div>
             
             <CarouselModal cabin={cabin} showCarousel={showModal} onClose={() => setShowModal(false)} />
+            
         </div>
     );
 };
