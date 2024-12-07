@@ -35,6 +35,16 @@ const ManageFeatures = () => {
         setModalOpen(true);
     };
 
+    const fetchFeatures = async () => {
+        try {
+            const { data } = await rustikApi.get(rustikEndpoints.features);
+            setFeatures(data);
+            setPaginationData(data.sort((a, b) => a.name.localeCompare(b.name)));
+        } catch (error) {
+            console.error("Error al llamar a la api", error);
+        }
+    };
+
     const handleDelete = async () => {
         if (!selectedId) return;
         try {
@@ -57,6 +67,7 @@ const ManageFeatures = () => {
         } finally {
             hideLoaderModal();
             setSelectedId(null);
+            fetchFeatures();
         }
     };
 
@@ -77,16 +88,6 @@ const ManageFeatures = () => {
     }, [selectedId]);
 
     useEffect(() => {
-        const fetchFeatures = async () => {
-            try {
-                const { data } = await rustikApi.get(rustikEndpoints.features);
-                setFeatures(data);
-                setPaginationData(data.sort((a, b) => a.name.localeCompare(b.name)));
-            } catch (error) {
-                console.error("Error al llamar a la api", error);
-            }
-        };
-
         !isModalOpen && fetchFeatures();
     }, [isModalOpen]);
 

@@ -36,6 +36,16 @@ const ManageCatalog = () => {
         window.scrollTo(0, 0);
     };
 
+    const fetchCabins = async () => {
+        try {
+            const { data } = await rustikApi.get(rustikEndpoints.cabins);
+            setCabins([...data.reverse()]);
+            setPaginationData(data);
+        } catch (error) {
+            console.error("Error al llamar a la api", error);
+        }
+    };
+
     const handleCloseModal = () => setModalOpen(false);
 
     const handleDelete = async () => {
@@ -55,6 +65,7 @@ const ManageCatalog = () => {
         } finally {
             hideLoaderModal();
             setSelectedId(null); // Limpiar el ID seleccionado
+            fetchCabins();
         }
     };
 
@@ -75,16 +86,6 @@ const ManageCatalog = () => {
     }, [selectedId]);
 
     useEffect(() => {
-        const fetchCabins = async () => {
-            try {
-                const { data } = await rustikApi.get(rustikEndpoints.cabins);
-                setCabins([...data.reverse()]);
-                setPaginationData(data);
-            } catch (error) {
-                console.error("Error al llamar a la api", error);
-            }
-        };
-
         !isModalOpen && fetchCabins();
     }, [isModalOpen]);
 
