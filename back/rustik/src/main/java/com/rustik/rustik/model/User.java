@@ -23,11 +23,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
+
     @Size(min = 3, message = "El nombre debe tener al menos 3 caracteres")
     private String name;
 
-    @NotBlank(message = "El apellido no puede estar vacío")
+
     @Size(min = 3, message = "El apellido debe tener al menos 3 caracteres")
     private String surname;
 

@@ -3,6 +3,10 @@ package com.rustik.rustik.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,12 +22,22 @@ public class Cabin {
     private Long id;
 
     @Column(unique = true)
+    @NotBlank(message = "El nombre no puede estar en blanco")
     private String name;
+
+    @NotBlank(message = "La ubicación no puede estar en blanco")
     private String location;
+
+    @NotNull(message = "La capacidad no puede ser nula")
+    @Min(value = 1, message = "La capacidad debe ser al menos 1")
     private Integer capacity;
 
     @Column(length = 500)
+    @NotBlank(message = "La descripción no puede estar en blanco")
     private String description;
+
+    @NotNull(message = "El precio no puede ser nulo")
+    @Positive(message = "El precio debe ser un número positivo")
     private Double price;
 
     @Enumerated(EnumType.STRING)
@@ -41,6 +55,13 @@ public class Cabin {
     @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings = new ArrayList<>();
 
+    @OneToMany(mappedBy = "cabin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Favorite> favorites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cabin", orphanRemoval = false)
+    @JsonIgnore
+    private List<Booking> bookings = new ArrayList<>();
 
     public Cabin(String name, String location, Integer capacity, String description, Double price, CabinCategory category) {
         this.name = name;

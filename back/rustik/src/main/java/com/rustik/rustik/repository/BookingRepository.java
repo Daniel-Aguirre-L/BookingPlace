@@ -27,11 +27,14 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     List<Booking> findBookingsWithDateInRange(LocalDate fechaBusqueda);
 
 
-    @Query("SELECT b FROM Booking b WHERE b.cabin = :cabin " +
+    @Query("SELECT b FROM Booking b WHERE (:cabin IS NULL OR b.cabin = :cabin) " +
             "AND ((b.initialDate BETWEEN :initialDate AND :endDate) " +
             "OR (b.endDate BETWEEN :initialDate AND :endDate) " +
             "OR (b.initialDate <= :initialDate AND b.endDate >= :endDate))")
     Optional<List<Booking>> findExistingBookingsForCabin(@Param("cabin") Cabin cabin,
-                                               @Param("initialDate") LocalDate initialDate,
-                                               @Param("endDate") LocalDate endDate);
+                                                         @Param("initialDate") LocalDate initialDate,
+                                                         @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT b FROM Booking b WHERE b.user = :user")
+    Optional<List<Booking>> findByUserIncludingNullCabins(@Param("user") User user);
 }

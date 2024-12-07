@@ -19,7 +19,6 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn (name = "cabin_id")
-    @NonNull
     private Cabin cabin;
 
     @ManyToOne
