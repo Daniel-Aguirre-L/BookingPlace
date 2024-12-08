@@ -1,6 +1,7 @@
 package com.rustik.rustik.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.User;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +36,8 @@ public class BookingDTO {
     @JsonIgnore
     private LocalDateTime createdAt;
 
+    private BookingState state;
+
 
     public void setDates (){
         LocalDate currentDate = this.initialDate;
@@ -46,11 +49,13 @@ public class BookingDTO {
 
     }
 
-    public void setTotalPrice (){
-        this.totalPrice = (cabin.getPrice() * dates.size());
+    public void setTotalPrice() {
+        if (cabin != null && cabin.getPrice() != null) {
+            this.totalPrice = cabin.getPrice() * dates.size();
+        } else {
+            this.totalPrice = 0.0;
+        }
     }
-
-
 
 
 

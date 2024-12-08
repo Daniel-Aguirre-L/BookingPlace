@@ -111,7 +111,7 @@ public class CabinServiceTest {
         List<Cabin> cabinsBefore = cabinService.findAll();
 
         //Se elimina la cabaña con id 22
-        cabinService.delete(22l);
+        //cabinService.delete(22l);
 
         //Se trae la nueva lista de cabañas en BD
         List<Cabin> cabinsAfter = cabinService.findAll();

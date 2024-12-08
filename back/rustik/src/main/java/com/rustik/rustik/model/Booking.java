@@ -19,7 +19,6 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn (name = "cabin_id")
-    @NonNull
     private Cabin cabin;
 
     @ManyToOne
@@ -34,13 +33,20 @@ public class Booking {
     @NonNull
     private LocalDate endDate;
 
+    private Double totalPrice;
+
 
     private LocalDateTime createdAt;
+
+    private BookingState state;
 
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now(); // Si el createdAt es nulo, lo asigna al momento actual.
+        }
+        if (this.state == null){
+            this.state = BookingState.ACTIVE;
         }
     }
 
