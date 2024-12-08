@@ -8,8 +8,11 @@ import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.BookingService;
+import com.rustik.rustik.service.EmailService;
 import jakarta.validation.Valid;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,7 +28,10 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+    @Autowired
+    private EmailService emailService;
 
+    public static final Logger logger = Logger.getLogger(BookingController.class);
 
 
     @PostMapping ("/{id}")
@@ -40,6 +46,19 @@ public class BookingController {
         );
 
         BookingDTO dto = BookingMapper.toDTO(booking);
+
+        String name = userDetails.getUser().getName();
+        String surname = userDetails.getUser().getSurname();
+
+        // Enviar correo de confirmación
+        emailService.sendBookingConfirmationEmail(
+                userDetails.getUser().getEmail(),
+                name + " " + surname,
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
 
         return ResponseEntity.ok(dto);
 
@@ -66,9 +85,13 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookingDTO>> bookinsBydate (@RequestBody @Valid BookingDTO bookingDTO){
+    public ResponseEntity<List<BookingDTO>> bookinsBydate (@RequestParam("initialDate") String initialDateStr,
+                                                           @RequestParam("endDate") String endDateStr) {
+        LocalDate initialDate = LocalDate.parse(initialDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
 
-        List<BookingDTO> bookingsDTO = bookingService.findBookingByDates(bookingDTO.getInitialDate(),bookingDTO.getEndDate())
+
+        List<BookingDTO> bookingsDTO = bookingService.findBookingByDates(initialDate,endDate)
                 .stream().map(BookingMapper::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(bookingsDTO);
@@ -86,16 +109,36 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> cancelBooking (@PathVariable Long bookingId, @AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<String> cancelBooking (@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails){
 
         User user = userDetails.getUser();
 
-        Booking solicitedBooking = bookingService.findBookingById(bookingId);
+        logger.info(user);
 
-        if(solicitedBooking.getUser() == user && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
+        Booking solicitedBooking = bookingService.findBookingById(id);
+
+        logger.info(solicitedBooking.getUser());
+
+        logger.info(solicitedBooking.getUser() == user);
+
+        logger.info(LocalDate.now().plusDays(2));
+
+        logger.info(solicitedBooking.getInitialDate());
+
+        logger.info(LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate()));
+
+        if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
             solicitedBooking.setState(BookingState.CANCELED);
             return ResponseEntity.ok(bookingService.cancelBooking(solicitedBooking));
         }
+        emailService.sendBookingCancellationEmail(
+                user.getEmail(), // String
+                user.getName() + " " + user.getSurname(), // String
+                solicitedBooking.getCabin(), // Cabin
+                solicitedBooking.getInitialDate(), // LocalDate
+                solicitedBooking.getEndDate(), // LocalDate
+                solicitedBooking.getTotalPrice() // Double
+        );
         throw new BadRequestException("No es posible cancelar esta resserva");
     }
 

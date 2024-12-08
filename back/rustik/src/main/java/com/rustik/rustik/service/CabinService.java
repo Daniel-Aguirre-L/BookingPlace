@@ -3,11 +3,10 @@ package com.rustik.rustik.service;
 import com.rustik.rustik.dto.CabinDTO;
 
 import com.rustik.rustik.dto.DetailDTO;
+import com.rustik.rustik.exception.NotFoundException;
 import com.rustik.rustik.mapper.CabinMapper;
-import com.rustik.rustik.model.Cabin;
-import com.rustik.rustik.model.CabinCategory;
-import com.rustik.rustik.model.Detail;
-import com.rustik.rustik.model.Image;
+import com.rustik.rustik.model.*;
+import com.rustik.rustik.repository.BookingRepository;
 import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.DetailRepository;
 import com.rustik.rustik.repository.FeatureRepository;
@@ -28,16 +27,16 @@ public class CabinService {
 
     private final CabinRepository cabinRepository;
 
-    private final DetailRepository detailRepository;
+    private final BookingRepository bookingRepository;
     private final ImageService imageService;
     private final DetailService detailService;
     private final FeatureRepository featureRepository;
 
 
     @Autowired
-    public CabinService(CabinRepository cabinRepository, DetailRepository detailRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
+    public CabinService(CabinRepository cabinRepository,BookingRepository bookingRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
         this.cabinRepository = cabinRepository;
-        this.detailRepository = detailRepository;
+        this.bookingRepository = bookingRepository;
         this.imageService = imageService;
         this.detailService = detailService;
         this.featureRepository = featureRepository;
@@ -157,8 +156,23 @@ public class CabinService {
         return Either.right(savedCabinDTO);
     }
 
-    public void delete(Long id) {
-        cabinRepository.deleteById(id);
+    @Transactional
+    public void deleteWithCancellationLogic(Long cabinId) {
+        // Buscar la cabaña por su ID
+        Cabin cabin = cabinRepository.findById(cabinId)
+                .orElseThrow(() -> new NotFoundException("Cabaña no encontrada"));
+
+        List<Booking> bookings = bookingRepository.findByCabin(cabin)
+                .orElse(Collections.emptyList());
+
+        for (Booking booking : bookings) {
+            booking.setState(BookingState.CANCELED);
+            booking.setCabin(null);
+            bookingRepository.save(booking);
+        }
+
+        // Eliminar la cabaña
+        cabinRepository.delete(cabin);
     }
 
     public List<Cabin> saveCabins(List<Cabin> cabins) {

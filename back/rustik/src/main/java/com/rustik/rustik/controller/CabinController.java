@@ -141,7 +141,7 @@ public class CabinController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
 
-            cabinService.delete(id);
+            cabinService.deleteWithCancellationLogic(id);
             return ResponseEntity.noContent().build();
 
     }

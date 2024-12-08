@@ -49,11 +49,13 @@ public class BookingDTO {
 
     }
 
-    public void setTotalPrice (){
-        this.totalPrice = (cabin.getPrice() * dates.size());
+    public void setTotalPrice() {
+        if (cabin != null && cabin.getPrice() != null) {
+            this.totalPrice = cabin.getPrice() * dates.size();
+        } else {
+            this.totalPrice = 0.0;
+        }
     }
-
-
 
 
 
