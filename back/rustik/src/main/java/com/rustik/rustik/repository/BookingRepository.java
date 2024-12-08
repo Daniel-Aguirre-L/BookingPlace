@@ -1,6 +1,7 @@
 package com.rustik.rustik.repository;
 
 import com.rustik.rustik.model.Booking;
+import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking,Long> {
 
-    Optional<List<Booking>> findByCabinAndInitialDateLessThanEqualAndEndDateGreaterThanEqual (Cabin cabin, LocalDate initialDate, LocalDate endDate);
+    //Optional<List<Booking>> findByCabinAndInitialDateLessThanEqualAndEndDateGreaterThanEqual (Cabin cabin, LocalDate initialDate, LocalDate endDate);
 
     Optional<List<Booking>> findByUser (User user);
 
@@ -34,6 +35,11 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     Optional<List<Booking>> findExistingBookingsForCabin(@Param("cabin") Cabin cabin,
                                                          @Param("initialDate") LocalDate initialDate,
                                                          @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT b FROM Booking b WHERE (b.endDate < :initialDate OR b.initialDate > :endDate) AND b.state = :activeState")
+    Optional<List<Booking>> findBookingsFreeOnDate(@Param("initialDate") LocalDate initialDate,
+                                                  @Param("endDate") LocalDate endDate,
+                                                  @Param("activeState") BookingState activeState);
 
     @Query("SELECT b FROM Booking b WHERE b.user = :user")
     Optional<List<Booking>> findByUserIncludingNullCabins(@Param("user") User user);

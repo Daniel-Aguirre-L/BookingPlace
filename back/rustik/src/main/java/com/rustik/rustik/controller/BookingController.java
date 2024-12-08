@@ -10,6 +10,7 @@ import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.BookingService;
 import com.rustik.rustik.service.EmailService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -84,7 +85,32 @@ public class BookingController {
         return ResponseEntity.ok(bookingsDTO);
     }
 
-    @GetMapping
+    @PutMapping("/{id}")
+    public ResponseEntity<BookingDTO> updateBooking (@PathVariable Long id,
+                                                     @AuthenticationPrincipal CustomUserDetails userDetails,
+                                                     @RequestBody BookingDTO bookingDTO){
+        User user = userDetails.getUser();
+
+        Booking solicitedBooking = bookingService.findBookingById(id);
+
+        if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) &&
+                LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())
+                && solicitedBooking.getState().equals(BookingState.ACTIVE)){
+
+            Booking updateBooking = bookingService.updateBooking(BookingMapper.toExistingEntity(bookingDTO,solicitedBooking));
+
+            return ResponseEntity.ok(BookingMapper.toDTO(updateBooking));
+        }
+
+        throw new BadRequestException("No es posible modificar reservas 48hs antes de la misma.");
+
+
+
+
+    }
+
+    //NO VA, Se Busca directamente desde cabins ("/filterByDates")
+    /*@GetMapping
     public ResponseEntity<List<BookingDTO>> bookinsBydate (@RequestParam("initialDate") String initialDateStr,
                                                            @RequestParam("endDate") String endDateStr) {
         LocalDate initialDate = LocalDate.parse(initialDateStr);
@@ -95,7 +121,7 @@ public class BookingController {
                 .stream().map(BookingMapper::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(bookingsDTO);
-    }
+    } */
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/all-bookings")
@@ -113,32 +139,23 @@ public class BookingController {
 
         User user = userDetails.getUser();
 
-        logger.info(user);
 
         Booking solicitedBooking = bookingService.findBookingById(id);
 
-        logger.info(solicitedBooking.getUser());
-
-        logger.info(solicitedBooking.getUser() == user);
-
-        logger.info(LocalDate.now().plusDays(2));
-
-        logger.info(solicitedBooking.getInitialDate());
-
-        logger.info(LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate()));
-
         if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
             solicitedBooking.setState(BookingState.CANCELED);
+            emailService.sendBookingCancellationEmail(
+                    user.getEmail(), // String
+                    user.getName() + " " + user.getSurname(), // String
+                    solicitedBooking.getCabin(), // Cabin
+                    solicitedBooking.getInitialDate(), // LocalDate
+                    solicitedBooking.getEndDate(), // LocalDate
+                    solicitedBooking.getTotalPrice() // Double
+            );
+
             return ResponseEntity.ok(bookingService.cancelBooking(solicitedBooking));
         }
-        emailService.sendBookingCancellationEmail(
-                user.getEmail(), // String
-                user.getName() + " " + user.getSurname(), // String
-                solicitedBooking.getCabin(), // Cabin
-                solicitedBooking.getInitialDate(), // LocalDate
-                solicitedBooking.getEndDate(), // LocalDate
-                solicitedBooking.getTotalPrice() // Double
-        );
+
         throw new BadRequestException("No es posible cancelar esta resserva");
     }
 
