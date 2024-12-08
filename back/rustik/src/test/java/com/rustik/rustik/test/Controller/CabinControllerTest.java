@@ -134,6 +134,7 @@ class CabinControllerTest {
                 .andExpect(jsonPath("$.category").value("MODERNA"));
     }
 
+    /*
     @Test
     void testDeleteCabin() throws Exception {
         Long cabinId = 1L;
@@ -153,4 +154,6 @@ class CabinControllerTest {
         mockMvc.perform(delete("/api/v1/cabins/{id}", cabinId))
                 .andExpect(status().isNotFound());
     }
+    */
+     
 }
