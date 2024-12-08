@@ -39,6 +39,9 @@ export default {
       animation: {
         fadeIn: 'fadeIn 0.3s ease-in-out',
       },
+      screens: {
+        md870: '870px', // Define un breakpoint exacto de 450px
+      },
     },
   },
 
