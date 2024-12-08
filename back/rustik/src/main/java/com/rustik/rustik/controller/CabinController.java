@@ -22,6 +22,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -115,7 +116,7 @@ public class CabinController {
 
     @Operation(summary = "Actualizar cabaña", description = "Permite actualizar una cabaña existente .")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Cabaña actualizada exitosamente."),
+            @ApiResponse(responseCode = "200", description = "Cabaña actualizada exitosamente."),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida o datos incorrectos."),
             @ApiResponse(responseCode = "404", description = "Cabaña no encontrada.")
     })
@@ -128,14 +129,10 @@ public class CabinController {
 
             Either<List<String>, CabinDTO> result = cabinService.save(cabinDTO);
 
-            return result.fold(
-                    errors -> {
-                        return ResponseEntity.badRequest().body(errors);
-                    },
-                    cabin -> {
-                        return ResponseEntity.status(HttpStatus.CREATED).body(cabin);
-                    }
-            );
+        return result.fold(
+                errors -> ResponseEntity.badRequest().body(errors),
+                cabin -> ResponseEntity.ok().body(cabin)
+        );
     }
 
     @Operation(summary = "Eliminar cabaña", description = "Permite eliminar una cabaña.")
@@ -145,7 +142,7 @@ public class CabinController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<Void> deleteCabin(@PathVariable Long id) {
 
-            cabinService.delete(id);
+            cabinService.deleteWithCancellationLogic(id);
             return ResponseEntity.noContent().build();
 
     }
@@ -182,6 +179,20 @@ public class CabinController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(cabins);
+    }
+
+
+    @GetMapping("/filterByDates")
+    public ResponseEntity<List<CabinDTO>> getCabinsFreeByDate(@RequestParam("initialDate") String initialDateStr,
+                                                              @RequestParam("endDate") String endDateStr) {
+        LocalDate initialDate = LocalDate.parse(initialDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        List<CabinDTO> cabins = cabinService.findCabinsByDate(initialDate,endDate)
+                .stream().map(CabinMapper::toDTO).collect(Collectors.toList());
+
+        return ResponseEntity.ok(cabins);
+
     }
 
 }

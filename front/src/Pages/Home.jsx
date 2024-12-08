@@ -70,7 +70,7 @@ const Home = () => {
       const filteredData = date1 ? data.slice(0, Math.ceil(data.length/3)): data;
       setCabins(filteredData);
       setPage(10);
-      setFilter(`${name}${date1 ? `.` : ""}`);
+      setFilter(`${name}${date1 ? ` entre ${date1} y ${date2}` : ""}`);
       data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);

@@ -28,6 +28,7 @@ function App() {
         <Route element={<AuthLayout />} >
           <Route path={routeList.LOGIN} element={<LoginPage />} />
           <Route path={routeList.REGISTER} element={<FormRegister />} />
+          
         </Route>
         <Route element={<Layout />} >
           <Route path={routeList.HOME} element={<Home />} />
@@ -37,6 +38,7 @@ function App() {
             <Route path={routeList.USER_FAVORITES} element={<MyFavorites />} />
             <Route path={routeList.USER_BOOKINGS} element={<MyBookings />} />
           </Route>
+        </Route>
           <Route element={<AdminLayout />} >
             <Route path={routeList.ADMIN_PANEL} element={<AdminPanel />} />
             <Route path={routeList.ADMIN_USERS} element={<ManageUser />} />
@@ -44,7 +46,7 @@ function App() {
             <Route path={routeList.ADMIN_CATALOGS} element={<ManageCatalog />} />
             <Route path={routeList.ADMIN_FEATURES} element={<ManageFeatures />} />
           </Route>
-        </Route>
+
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

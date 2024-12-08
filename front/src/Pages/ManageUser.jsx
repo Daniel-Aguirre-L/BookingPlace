@@ -7,6 +7,7 @@ import AddProductModal from "../Components/AddProductModal";
 import useLoaderModalStore from "../store/useLoaderModalStore";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
 import Avatar from "../Components/Avatar";
+import Warning from "../Components/Warning";
 import { usePagination } from "../hooks/usePagination";
 
 const ManageUser = () => {
@@ -14,23 +15,32 @@ const ManageUser = () => {
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
     const [users, setUsers] = useState([]);
-    const { currentData, setPaginationData, PaginationControls } = usePagination(users, 4);
+    const { currentData, setPaginationData, PaginationControls, setFirstPage } = usePagination(users, 4);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [warningIsOpen, setWarningIsOpen] = useState({ status: false, message: "" });
+    const [confirm, setConfirm] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
-    const handleOpenModal = () => {
-        setModalOpen(true);
-        window.scrollTo(0, 0);
-    }
     const handleCloseModal = () => setModalOpen(false);
 
+    const fetchUsers = async () => {
+        try {
+            const { data } = await rustikApi.get(rustikEndpoints.users);
+            setUsers(data);
+            setPaginationData([...data]);
 
-    const handleDelete = async (id) => {
-        const confirma = confirm("Confirmar eliminar usuario")
-        if (!confirma) return;
+        } catch (error) {
+            console.error("Error al llamar a la api", error);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!selectedId) return;
         try {
             showLoaderModal();
-            await rustikApi.delete(`${rustikEndpoints.users}/${id}`);
+            await rustikApi.delete(`${rustikEndpoints.users}/${selectedId}`);
             setUsers((prevUsers) => {
-                const updatedUsers = prevUsers.filter((user) => user.id !== id);
+                const updatedUsers = prevUsers.filter((user) => user.id !== selectedId);
                 setPaginationData(updatedUsers);
                 return updatedUsers;
             });
@@ -43,41 +53,44 @@ const ManageUser = () => {
             console.error("Error al borrar, intente más tarde", error);
         } finally {
             hideLoaderModal();
-        }
-    };
-
-    const handleRsendConfirmationEmail = async () => {
-        try {
-            showLoaderModal();
-            const { data } = await rustikApi.post(`${rustikEndpoints.resendConfirmationEmail}`);
-            setNotification({
-                visibility: true,
-                type: "success",
-                text: "Se ha enviado un correo de confirmación a tu correo electrónico.",
-            });
-        } catch (error) {
-            console.error("Error al enviar el correo de confirmación, intente más tarde", error);
-        } finally {
-            hideLoaderModal();
+            setSelectedId(null);
+            fetchUsers();
         }
     };
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const { data } = await rustikApi.get(rustikEndpoints.users);
-                setUsers(data);
-                setPaginationData(data);
+      if (searchTerm) {
+        const filter = users.filter((user) => `${user.name} ${user.surname} ${user.email} ${user.phone}`.toLowerCase().includes(searchTerm.toLowerCase().trim()));
+        if (filter.length> 0) {
+            setPaginationData(filter, 1);
+            setFirstPage();
+        }
+      }else{
+        setPaginationData(users);
+      }
+    }, [searchTerm]);
 
-            } catch (error) {
-                console.error("Error al llamar a la api", error);
-            }
-        };
+    useEffect(() => {
+        if (confirm) {
+            handleDelete();
+            setConfirm(false);
+        }
+    }, [confirm]);
 
+    useEffect(() => {
+        if (selectedId) {
+            setWarningIsOpen({
+                status: true,
+                message: "¿Estás segur@ de que quieres eliminar este usuario?",
+            });
+        }
+    }, [selectedId]);
+    
+    useEffect(() => {
         !isModalOpen && fetchUsers();
-
     }, [isModalOpen]);
 
+    
     const toggleAdmin = async (userId, isAdmin) => {
         try {
             showLoaderModal();
@@ -119,10 +132,10 @@ const ManageUser = () => {
 
     return (
         <div className="animate-fadeIn" >
-            <div className="container w-screen px-5" >
+            <div className="container w-full px-5" >
                 <div className="py-8 animate-fadeIn">
-                    <div className="flex w-full justify-between items-center mb-8">
-                        <PageTitleAndBack title={`Usuarios`} />
+                    <div className="flex w-full justify-between items-center mb-12">
+                        <PageTitleAndBack title={`Usuarios`} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     </div>
                     <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
                         <table className="w-full rounded-lg p-2">
@@ -176,7 +189,7 @@ const ManageUser = () => {
                                                 </button>
                                                 <button
                                                     className="active:scale-90"
-                                                    onClick={() => handleDelete(user.id)}
+                                                    onClick={() => setSelectedId(user.id)}
                                                 >
                                                     <img src="/Icons/Eliminar.svg" alt="Eliminar usuario" />
                                                 </button>
@@ -195,6 +208,17 @@ const ManageUser = () => {
             </div>
 
             <AddProductModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <Warning
+                isOpen={warningIsOpen}
+                onClose={() => {
+                    setWarningIsOpen({ status: false, message: "" });
+                    setSelectedId(null);
+                }}
+                onSubmit={() => {
+                    setWarningIsOpen({ status: false, message: "" });
+                    setConfirm(true);
+                }}
+            />
         </div>
     )
 }
