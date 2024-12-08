@@ -1,5 +1,5 @@
 import { useState  } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import InputField from "../Components/InputField";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
@@ -51,11 +51,7 @@ const LoginPage = () => {
       await login(form.email, form.password);
     }
   };
-
-  if (isLoggedIn) {
-    navigate(routeList.HOME);
-  }
-
+  
 	return (
 		<>
       <section className="animate-fadeIn flex flex-col md:flex-row md:flex-row min-h-calc-100vh-minus-245 items-center md:gap-14 font-semibold my-6 mx-3" >

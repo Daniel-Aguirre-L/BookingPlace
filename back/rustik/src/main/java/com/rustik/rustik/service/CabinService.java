@@ -167,7 +167,7 @@ public class CabinService {
                 .orElse(Collections.emptyList());
 
         for (Booking booking : bookings) {
-            booking.setState(BookingState.CANCELED);
+            booking.setState(BookingState.CANCELADA);
             booking.setCabin(null);
             bookingRepository.save(booking);
         }

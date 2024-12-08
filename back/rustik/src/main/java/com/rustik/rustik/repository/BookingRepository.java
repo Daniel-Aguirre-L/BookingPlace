@@ -4,6 +4,8 @@ import com.rustik.rustik.model.Booking;
 import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +25,21 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     Optional<List<Booking>> findByCabin (Cabin cabin);
 
     Optional<List<Booking>> findByInitialDateLessThanEqualAndEndDateGreaterThanEqual (LocalDate initialDate, LocalDate endDate);
+
+    List<Booking> findByState(BookingState state);
+
+    Page<Booking> findByState(BookingState state, Pageable pageable);
+
+    Page<Booking> findAll(Pageable pageable);
+
+    @Query("SELECT b FROM Booking b " +
+            "JOIN b.cabin c " +
+            "JOIN b.user u " +
+            "WHERE (LOWER(CONCAT(c.name, ' ', c.category, ' ', c.location,' ', b.initialDate,' ', b.endDate,' ', b.state, ' ', u.email,' ', u.name,' ', u.surname)) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
+    Page<Booking> searchBookings(
+            @Param("searchTerm") String searchTerm,
+            Pageable pageable
+    );
 
     @Query("SELECT b FROM Booking b WHERE :fechaBusqueda BETWEEN b.initialDate AND b.endDate")
     List<Booking> findBookingsWithDateInRange(LocalDate fechaBusqueda);

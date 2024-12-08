@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
+import { useUser } from "../hooks/useUser";
 
 const CatalogList = ({ myCabins, page, handleShowMore, continuar, filter, handleOnClick }) => {
 
   const [favorites, setFavorites] = useState([]);
+  const { isLoggedIn } = useUser();
 
   const getFavoritesData = async () => {
     try {
@@ -17,8 +19,8 @@ const CatalogList = ({ myCabins, page, handleShowMore, continuar, filter, handle
   };
     
   useEffect(() => {
-    getFavoritesData();
-  }, []);
+    if (isLoggedIn)  getFavoritesData();
+  }, [isLoggedIn]);
 
   return (
     <>

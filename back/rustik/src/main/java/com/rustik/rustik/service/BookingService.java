@@ -11,10 +11,16 @@ import com.rustik.rustik.repository.BookingRepository;
 import com.rustik.rustik.repository.CabinRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -68,74 +74,70 @@ public class BookingService {
     }
 
     public List<Booking> findBookingByUser (User user) {
-
         List<Booking> bookings = bookingRepository.findByUser(user).orElseThrow();
-
-        for (Booking booking : bookings) {
-            if (booking.getInitialDate().isBefore(LocalDate.now())){
-                booking.setState(BookingState.CONFIRMED);
-                bookingRepository.save(booking);
-            }
-
-        }
         return bookings;
     }
 
 
     public List<Booking> findBookingByCabin (Long cabinId){
         Cabin cabin = cabinRepository.findById(cabinId).orElseThrow();
-
         List<Booking> bookings = bookingRepository.findByCabin(cabin).orElseThrow();
-
-        for (Booking booking : bookings) {
-            if (booking.getInitialDate().isBefore(LocalDate.now())){
-                booking.setState(BookingState.CONFIRMED);
-                bookingRepository.save(booking);
-            }
-
-        }
         return bookings;
     }
 
     public List<Booking> findBookingByDates (LocalDate initialDate, LocalDate endDate){
-        List<Booking> bookings = bookingRepository.findBookingsFreeOnDate(initialDate,endDate,BookingState.ACTIVE).orElseThrow();
-
-        for (Booking booking : bookings) {
-            if (booking.getInitialDate().isBefore(LocalDate.now())){
-                booking.setState(BookingState.CONFIRMED);
-                bookingRepository.save(booking);
-            }
-
-        }
+        List<Booking> bookings = bookingRepository.findBookingsFreeOnDate(initialDate,endDate,BookingState.ACTIVA).orElseThrow();
         return bookings;
     }
 
 
     public Booking findBookingById (Long bookingId ){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
-
-
-        if (booking.getInitialDate().isBefore(LocalDate.now())){
-            booking.setState(BookingState.CONFIRMED);
-            bookingRepository.save(booking);
-        }
-
         return booking;
 
     }
 
 
-    public List<Booking> findAllBookings (){
-        List<Booking> bookings = bookingRepository.findAll();
+//    public List<Booking> findAllBookings (){
+//        List<Booking> bookings = bookingRepository.findAll();
+//        return bookings;
+//    }
 
-        for (Booking booking : bookings) {
-            if (booking.getInitialDate().isBefore(LocalDate.now())){
-                booking.setState(BookingState.CONFIRMED);
-                bookingRepository.save(booking);
+    public Page<Booking> findAllBookings(String searchTerm, int page, int size){
+
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by(Sort.Order.asc("state"), Sort.Order.desc("initialDate")));
+
+        Page<Booking> bookingsPage;
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            bookingsPage = bookingRepository.findAll(pageable);
+        } else {
+            Boolean isState = false;
+            for (BookingState bookingState : BookingState.values()) {
+                if (bookingState.name().equalsIgnoreCase(searchTerm.trim())) {
+                    isState = true;
+                    break;
+                }
+            }
+            if (isState) {
+                bookingsPage = bookingRepository.findByState(BookingState.valueOf(searchTerm.toUpperCase()), pageable);
+            }else{
+                bookingsPage = bookingRepository.searchBookings(searchTerm, pageable);
             }
 
         }
-        return bookings;
+        return bookingsPage;
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // Se ejecuta a las 00:00 todos los días
+    public void automaticUpdateBookingState() {
+        List<Booking> bookings = bookingRepository.findByState(BookingState.ACTIVA);
+        for (Booking booking : bookings) {
+            if (booking.getInitialDate().isBefore(LocalDate.now()) ){
+                booking.setState(BookingState.COMPLETA);
+                bookingRepository.save(booking);
+            }
+        }
     }
 
     public String cancelBooking (Booking booking){

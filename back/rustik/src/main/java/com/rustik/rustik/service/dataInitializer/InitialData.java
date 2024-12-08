@@ -355,15 +355,14 @@ public class InitialData implements ApplicationRunner {
                 booking.setCabin(cabin);
                 booking.setUser(user);
                 booking.setInitialDate(initialDate);
-                initialDate.plusDays(2);
+                initialDate = initialDate.plusDays(2);
                 booking.setEndDate(initialDate);
+                booking.setTotalPrice(cabin.getPrice() * 2);
                 bookingRepository.save(booking);
-                initialDate.plusDays(1);
+                initialDate = initialDate.plusDays(1);
             }
-
-            baseDate.plusDays(3);
+            baseDate = baseDate.plusDays(3);
             initialDate = LocalDate.of(baseDate.getYear(), baseDate.getMonth(), baseDate.getDayOfMonth());
-
 
         }
     }

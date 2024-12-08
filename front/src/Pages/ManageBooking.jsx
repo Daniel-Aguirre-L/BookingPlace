@@ -1,12 +1,24 @@
 import { useState } from "react";
 import PageTitleAndBack from "../Components/PageTitleAndBack";
 import { usePagination } from "../hooks/usePagination";
+import { rustikApi } from "../services/rustikApi";
+import { rustikEndpoints } from "../services/rustkEndPoints";
 
 const ManageBooking = () => {
 
     const [bookings, setBookings] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const { currentData: currentCabinList, setPaginationData, PaginationControls, setFirstPage } = usePagination(bookings, 5);
+
+    const getBookings = async () => {
+        try {
+            const { data } = await rustikApi.get(rustikEndpoints.cabins);
+            
+            
+        } catch (error) {
+            console.error("Error al llamar a la api", error);
+        }
+    };
 
 
     return (
