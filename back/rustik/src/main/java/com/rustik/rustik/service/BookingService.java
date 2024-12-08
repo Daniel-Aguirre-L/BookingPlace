@@ -98,7 +98,7 @@ public class BookingService {
     }
 
     public List<Booking> findBookingByDates (LocalDate initialDate, LocalDate endDate){
-        List<Booking> bookings = bookingRepository.findByInitialDateLessThanEqualAndEndDateGreaterThanEqual(initialDate,endDate).orElseThrow();
+        List<Booking> bookings = bookingRepository.findBookingsFreeOnDate(initialDate,endDate,BookingState.ACTIVE).orElseThrow();
 
         for (Booking booking : bookings) {
             if (booking.getInitialDate().isBefore(LocalDate.now())){
@@ -141,5 +141,17 @@ public class BookingService {
     public String cancelBooking (Booking booking){
         bookingRepository.save(booking);
         return "Booking canceled";
+    }
+
+
+    public Booking updateBooking (Booking booking){
+
+        List<Booking> bookingsList = bookingRepository.findExistingBookingsForCabin(booking.getCabin(),
+                booking.getInitialDate(),booking.getEndDate()).get();
+
+        if (bookingsList.size() > 1 || bookingsList.get(0).getId() != booking.getId()){
+            throw new BadRequestException("Las fechas se superponencon otra reserva");
+        }
+        return bookingRepository.save(booking);
     }
 }

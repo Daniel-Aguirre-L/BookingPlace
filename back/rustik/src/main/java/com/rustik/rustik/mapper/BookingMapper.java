@@ -4,6 +4,8 @@ import com.rustik.rustik.dto.BookingDTO;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.model.Booking;
 
+import java.time.LocalDate;
+
 public class BookingMapper {
 
     public static BookingDTO toDTO(Booking booking) {
@@ -27,5 +29,22 @@ public class BookingMapper {
         bookingDTO.setState(booking.getState());
 
         return bookingDTO;
+    }
+
+
+    public static Booking toExistingEntity (BookingDTO bookingDTO, Booking booking){
+
+        if(bookingDTO.getInitialDate() != booking.getInitialDate() && bookingDTO.getInitialDate().isAfter(LocalDate.now())){
+            booking.setInitialDate(bookingDTO.getInitialDate());
+        }
+        if (bookingDTO.getEndDate() != booking.getEndDate() && bookingDTO.getEndDate().isAfter(bookingDTO.getEndDate())){
+            booking.setEndDate(bookingDTO.getEndDate());
+        }
+
+
+        return booking;
+
+
+
     }
 }
