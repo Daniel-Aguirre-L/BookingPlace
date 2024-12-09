@@ -18,6 +18,8 @@ export const rustikEndpoints = {
     myBookings: '/booking/my-bookings',
     booking: '/booking',
     stats: '/stats',
+    bookings: '/booking',
+    adminBookings: '/booking/all-bookings'
  
    
 }

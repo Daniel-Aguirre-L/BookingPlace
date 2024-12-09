@@ -1,10 +1,14 @@
 package com.rustik.rustik.mapper;
 
 import com.rustik.rustik.dto.BookingDTO;
+import com.rustik.rustik.dto.BookingPageDto;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.model.Booking;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookingMapper {
 
@@ -41,10 +45,23 @@ public class BookingMapper {
             booking.setEndDate(bookingDTO.getEndDate());
         }
 
-
         return booking;
 
-
-
     }
+
+    public static BookingPageDto toPageBookingDto(Page<Booking> pageBooking){
+        BookingPageDto bookingPageDTO = new BookingPageDto();
+
+        List<BookingDTO> bookingsDTO = pageBooking.getContent()
+                .stream().map(BookingMapper::toDTO).collect(Collectors.toList());
+
+        bookingPageDTO.setContent(bookingsDTO);
+        bookingPageDTO.setTotalElements(pageBooking.getTotalElements());
+        bookingPageDTO.setTotalPages(pageBooking.getTotalPages());
+        bookingPageDTO.setPageNumber(pageBooking.getNumber());
+        bookingPageDTO.setPageSize(pageBooking.getSize());
+        return bookingPageDTO;
+    }
+
+
 }

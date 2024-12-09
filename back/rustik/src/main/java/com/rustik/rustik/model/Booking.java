@@ -46,7 +46,7 @@ public class Booking {
             this.createdAt = LocalDateTime.now(); // Si el createdAt es nulo, lo asigna al momento actual.
         }
         if (this.state == null){
-            this.state = BookingState.ACTIVE;
+            this.state = BookingState.ACTIVA;
         }
     }
 

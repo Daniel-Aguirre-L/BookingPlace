@@ -14,6 +14,7 @@ const AdminPanel = () => {
         totalBookings: 0,
         topFavorites: [],
         topRating:[],
+        bookingsByState:[],
     })
     const maxFav = useMemo(() => Math.max(...statistics.topFavorites.map(favorite => favorite.val2)), [statistics.topFavorites]);
 
@@ -25,9 +26,10 @@ const AdminPanel = () => {
                 ...prevData,
                 totalUsers: data.filter(stat => stat.group ==="totalUser")[0]?.val1 ?? 0,
                 totalCabins: data.filter(stat => stat.group ==="totalCabin")[0]?.val1 ?? 0,
-                totalBookings: data.filter(stat => stat.group ==="totalBooking")[0]?.val1 ?? 0,
+                totalBookings: data.filter(stat => stat.group ==="totalActiveBooking")[0]?.val1 ?? 0,
                 topFavorites: data.filter(stat => stat.group ==="favoriteRanking") || [],
                 topRating: data.filter(stat => stat.group ==="ratingRanking") || [],
+                bookingsByState: data.filter(stat => stat.group ==="bookingsByState") || [],
             }));
           } catch (error) {
             console.error("Error al llamar a la api", error);
@@ -40,6 +42,20 @@ const AdminPanel = () => {
     const getPercentage = (value, total) => {
         return `${(value / total) * 100}%`;
     }
+
+    const getBookingsByState = (state) => {
+        const booking = statistics.bookingsByState.find(booking => booking.description === state);
+        return {
+            total: booking?.val1 ?? 0,
+            percent: ((booking?.val1 / statistics.bookingsByState.reduce((acc, curr) => (acc + curr.val1), 0) ) * 100||0).toFixed(0) ,
+        }
+    }
+    
+    const activeBookings = getBookingsByState("0");
+    const completedBookings = getBookingsByState("1");
+    const cancelledBookings = getBookingsByState("2");
+
+    
 
     return (
         <div className="animate-fadeIn px-5 py-10 w-full" >
@@ -116,6 +132,31 @@ const AdminPanel = () => {
                             
                         </div>
                     </DashBoardCard>
+                </article>
+                <article className="grid grid-cols-3 gap-7 mt-7" >
+                <DashBoardCard title="Total de usuarios registrados">
+                    <h3 className="text-center text-xl" >Reservas Activas {activeBookings.total}</h3>
+                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: `conic-gradient(from 38deg, #fbffbd ${95 - activeBookings.percent}%,  #088395 ${activeBookings.percent}% 98%, #fbffbd )` }} >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center flex-col " >
+                            <p className="text-5xl font-bold text-center montserrat" >{activeBookings.percent}%</p>
+                        </div>
+                    </div>
+                </DashBoardCard>
+                <DashBoardCard title="Total de usuarios registrados">
+                    <h3 className="text-center text-xl" >Reservas Completadas</h3>
+                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: "conic-gradient(from 38deg, #fbffbd 5%,  #088395 10% 93%, #fbffbd )" }} >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center " >
+                        </div>
+                    </div>
+                </DashBoardCard>
+                <DashBoardCard title="Total de usuarios registrados">
+                    <h3 className="text-center text-xl" >Reservas Canceladas</h3>
+                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: "conic-gradient(from 38deg, #fbffbd 5%,  #088395 10% 93%, #fbffbd )" }} >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center " >
+                        </div>
+                    </div>
+                </DashBoardCard>
+
                 </article>
             </section>
             

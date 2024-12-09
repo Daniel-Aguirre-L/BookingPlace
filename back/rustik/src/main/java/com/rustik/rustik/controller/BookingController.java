@@ -1,11 +1,13 @@
 package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.BookingDTO;
+import com.rustik.rustik.dto.BookingPageDto;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.mapper.BookingMapper;
 import com.rustik.rustik.model.Booking;
 import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.BookingService;
 import com.rustik.rustik.service.EmailService;
@@ -13,6 +15,7 @@ import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -95,7 +98,7 @@ public class BookingController {
 
         if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) &&
                 LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())
-                && solicitedBooking.getState().equals(BookingState.ACTIVE)){
+                && solicitedBooking.getState().equals(BookingState.ACTIVA)){
 
             Booking updateBooking = bookingService.updateBooking(BookingMapper.toExistingEntity(bookingDTO,solicitedBooking));
 
@@ -125,12 +128,19 @@ public class BookingController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/all-bookings")
-    public ResponseEntity<List<BookingDTO>> allBooking (){
+    public ResponseEntity<BookingPageDto> allBooking (
+            @RequestParam(defaultValue = "") String searchTerm,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+//        List<BookingDTO> bookingsDTO = bookingService.findAllBookings()
+//                .stream().map(BookingMapper::toDTO).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(bookingsDTO);
 
-        List<BookingDTO> bookingsDTO = bookingService.findAllBookings()
-                .stream().map(BookingMapper::toDTO).collect(Collectors.toList());
-
-        return ResponseEntity.ok(bookingsDTO);
+        Page<Booking> bookingsPage = bookingService.findAllBookings(searchTerm, page, size);
+        BookingPageDto bookingsPageDto = BookingMapper.toPageBookingDto(bookingsPage);
+        return ResponseEntity.ok(bookingsPageDto);
 
     }
 
@@ -142,8 +152,10 @@ public class BookingController {
 
         Booking solicitedBooking = bookingService.findBookingById(id);
 
-        if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
-            solicitedBooking.setState(BookingState.CANCELED);
+        System.out.println(user.getRole().equals(UserRole.ROLE_ADMIN));
+
+        if((solicitedBooking.getUser().getEmail().equals(user.getEmail()) || user.getRole().equals(UserRole.ROLE_ADMIN)) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
+            solicitedBooking.setState(BookingState.CANCELADA);
             emailService.sendBookingCancellationEmail(
                     user.getEmail(), // String
                     user.getName() + " " + user.getSurname(), // String

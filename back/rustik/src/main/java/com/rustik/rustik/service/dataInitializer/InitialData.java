@@ -348,6 +348,7 @@ public class InitialData implements ApplicationRunner {
     public void createBookings(List<User> users, List<Cabin> cabins){
         LocalDate initialDate = LocalDate.now().minusMonths(1);
         LocalDate baseDate = LocalDate.now().minusMonths(1);
+        Random random = new Random();
 
         for (User user: users){
             for(Cabin cabin: cabins){
@@ -355,15 +356,19 @@ public class InitialData implements ApplicationRunner {
                 booking.setCabin(cabin);
                 booking.setUser(user);
                 booking.setInitialDate(initialDate);
-                initialDate.plusDays(2);
+                initialDate = initialDate.plusDays(2);
                 booking.setEndDate(initialDate);
+                booking.setTotalPrice(cabin.getPrice() * 2);
+                if (random.nextInt(15)<2) {
+                    booking.setState(BookingState.CANCELADA);
+                } else if (initialDate.isBefore(LocalDate.now())) {
+                    booking.setState(BookingState.COMPLETA);
+                }
                 bookingRepository.save(booking);
-                initialDate.plusDays(1);
+                initialDate = initialDate.plusDays(1);
             }
-
-            baseDate.plusDays(3);
+            baseDate = baseDate.plusDays(3);
             initialDate = LocalDate.of(baseDate.getYear(), baseDate.getMonth(), baseDate.getDayOfMonth());
-
 
         }
     }
