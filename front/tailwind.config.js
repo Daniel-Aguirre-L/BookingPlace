@@ -48,6 +48,9 @@ export default {
         fadeIn: 'fadeIn 0.3s ease-in-out',
         growRight: 'growRight 750ms ease-in-out forwards'
       },
+      screens: {
+        md870: '870px', // Define un breakpoint exacto de 450px
+      },
     },
   },
 
