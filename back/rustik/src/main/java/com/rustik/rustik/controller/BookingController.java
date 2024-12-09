@@ -7,6 +7,7 @@ import com.rustik.rustik.mapper.BookingMapper;
 import com.rustik.rustik.model.Booking;
 import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.security.CustomUserDetails;
 import com.rustik.rustik.service.BookingService;
 import com.rustik.rustik.service.EmailService;
@@ -151,7 +152,9 @@ public class BookingController {
 
         Booking solicitedBooking = bookingService.findBookingById(id);
 
-        if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
+        System.out.println(user.getRole().equals(UserRole.ROLE_ADMIN));
+
+        if((solicitedBooking.getUser().getEmail().equals(user.getEmail()) || user.getRole().equals(UserRole.ROLE_ADMIN)) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
             solicitedBooking.setState(BookingState.CANCELADA);
             emailService.sendBookingCancellationEmail(
                     user.getEmail(), // String

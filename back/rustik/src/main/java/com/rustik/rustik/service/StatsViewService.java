@@ -28,6 +28,10 @@ public class StatsViewService {
         "SELECT 'ncab1' AS 'id', 'totalCabin' AS 'group', 'Total Cabañas' AS 'description', count(c.id) AS 'val1', 0 AS 'item_id', 0 AS 'val2' " +
         "FROM cabin c " +
         "UNION " +
+        "SELECT 'nboo1' AS 'id', 'totalActiveBooking' AS 'group', 'Total Reservas Activas' AS 'description', count(c.id) AS 'val1', 0 AS 'itemid', 0 AS 'val2' " +
+        "FROM booking c " +
+        "WHERE c.state = 0 " +
+        "UNION " +
         "(SELECT concat('favr', ROW_NUMBER() OVER (ORDER BY COUNT(fa.id) DESC))  AS 'id', 'favoriteRanking' AS 'group', c.name AS 'description',  ROW_NUMBER() OVER (ORDER BY COUNT(fa.id) DESC) AS 'val1', fa.cabin_id AS 'item_id', COUNT(fa.id) AS 'val2' " +
         "FROM favorite fa INNER JOIN cabin c ON fa.cabin_id = c.id " +
         "GROUP BY fa.cabin_id " +
@@ -36,7 +40,11 @@ public class StatsViewService {
         "(SELECT concat('ratr', ROW_NUMBER() OVER (ORDER BY AVG(r.score) DESC))  AS 'id', 'ratingRanking' AS 'group', c.name AS 'description',  ROUND(AVG(r.score),2) AS 'val1', r.cabin_id AS 'item_id', 0 AS 'val2' " +
         "FROM ratings r INNER JOIN cabin c ON r.cabin_id = c.id " +
         "GROUP BY r.cabin_id " +
-        "LIMIT 5) ";
+        "LIMIT 5) " +
+        "UNION " +
+        "(SELECT concat('bost', ROW_NUMBER() OVER (ORDER BY COUNT(b.id) DESC))  AS 'id', 'bookingsByState' AS 'group', b.state AS 'description',  COUNT(b.id)  AS 'val1', 0 AS 'itemid', 0 AS 'val2' " +
+        "FROM booking b " +
+        "GROUP BY b.state) ";
 
         Query dropViewQuery = entityManager.createNativeQuery("DROP VIEW IF EXISTS stats_view");
         Query createViewQUery = entityManager.createNativeQuery(sql);

@@ -16,6 +16,7 @@ export const rustikEndpoints = {
     reviews: '/reviews',
     raiting: '/ratings',
     stats: '/stats',
+    bookings: '/booking',
     adminBookings: '/booking/all-bookings'
  
    

@@ -35,7 +35,7 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     @Query("SELECT b FROM Booking b " +
             "JOIN b.cabin c " +
             "JOIN b.user u " +
-            "WHERE (LOWER(CONCAT(c.name, ' ', c.category, ' ', c.location,' ', b.initialDate,' ', b.endDate,' ', b.state, ' ', u.email,' ', u.name,' ', u.surname)) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
+            "WHERE (LOWER(CONCAT(c.name, ' ', c.category, ' ', c.location,' ', b.id,' ', b.initialDate,' ', b.endDate,' ', b.totalPrice, ' ', u.email,' ', u.name,' ', u.surname)) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
     Page<Booking> searchBookings(
             @Param("searchTerm") String searchTerm,
             Pageable pageable
