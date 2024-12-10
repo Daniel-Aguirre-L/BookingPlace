@@ -138,7 +138,7 @@ const Catalog = ({ cabin, getCabin }) => {
                         </div>
                         
                     </div>
-                    <div className="flex flex-col items-start md:items-end relative top-[-31px] z-10">
+                    <div className="flex flex-col items-start md:items-end relative top-[-31px] z-[0]">
                         {/* <h3 className="text-lg md:text-xl font-semibold text-[#088395]">
                             <span className="text-xl md:text-2xl">${cabin.price}</span>
                             <span className="text-sm md:text-lg font-light"> p/noche</span>
