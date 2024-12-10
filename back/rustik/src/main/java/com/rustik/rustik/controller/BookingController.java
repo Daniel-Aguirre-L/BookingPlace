@@ -105,6 +105,10 @@ public class BookingController {
     public ResponseEntity<BookingDTO> updateBooking (@PathVariable Long id,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails,
                                                      @RequestBody BookingDTO bookingDTO){
+
+        if (bookingDTO.getEndDate().isBefore(bookingDTO.getInitialDate())){
+            throw new BadRequestException("La fecha final debe ser posterior a la fecha inical de la reserva");
+        }
         User user = userDetails.getUser();
 
         Booking solicitedBooking = bookingService.findBookingById(id);
@@ -112,6 +116,9 @@ public class BookingController {
         if(solicitedBooking.getUser().getEmail().equals(user.getEmail()) &&
                 LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())
                 && solicitedBooking.getState().equals(BookingState.ACTIVA)){
+            if (bookingDTO.getInitialDate().isBefore(LocalDate.now().plusDays(2))){
+                throw new BadRequestException("No es posible modificar tu reserva para una fecha anterios a " + LocalDate.now().plusDays(2));
+            }
 
             Booking updateBooking = bookingService.updateBooking(BookingMapper.toExistingEntity(bookingDTO,solicitedBooking));
 
