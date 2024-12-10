@@ -43,11 +43,10 @@ public class BookingService {
 
         Cabin cabin = cabinRepository.findById(cabinId).get();
         Double price = bookingDTO.getTotalPrice();
-
-        logger.info(price.toString());
+        logger.info("Precio recibido: " + price.toString());
         bookingDTO.setCabin(CabinMapper.toDTO(cabin));
         bookingDTO.setTotalPrice();
-        logger.info(bookingDTO.getTotalPrice().toString());
+        logger.info("Precio calculado: " + bookingDTO.getTotalPrice().toString());
 
         if ( price.doubleValue() != bookingDTO.getTotalPrice().doubleValue()){
             throw new BadRequestException("Precio incorrecto");
@@ -57,7 +56,7 @@ public class BookingService {
             throw new BadRequestException("Fechas incorrectas, toda reserva debe ser posterior a " + LocalDate.now().toString());
         }
 
-        if (bookingRepository.findExistingBookingsForCabin(cabin,bookingDTO.getInitialDate(),bookingDTO.getEndDate()).get().isEmpty()){
+        if (bookingRepository.findExistingBookingsForCabin(cabin,bookingDTO.getInitialDate(),bookingDTO.getEndDate(),BookingState.ACTIVA ).get().isEmpty()){
              Booking booking = new Booking();
              booking.setCabin(cabin);
              booking.setUser(user);
@@ -74,7 +73,7 @@ public class BookingService {
     }
 
     public List<Booking> findBookingByUser (User user) {
-        List<Booking> bookings = bookingRepository.findByUser(user).orElseThrow();
+        List<Booking> bookings = bookingRepository.findByUser(user, Sort.by(Sort.Order.asc("state"), Sort.Order.desc("initialDate"))).orElseThrow();
         return bookings;
     }
 
@@ -149,7 +148,7 @@ public class BookingService {
     public Booking updateBooking (Booking booking){
 
         List<Booking> bookingsList = bookingRepository.findExistingBookingsForCabin(booking.getCabin(),
-                booking.getInitialDate(),booking.getEndDate()).get();
+                booking.getInitialDate(),booking.getEndDate(), BookingState.ACTIVA).get();
 
         if (bookingsList.size() > 1 || bookingsList.get(0).getId() != booking.getId()){
             throw new BadRequestException("Las fechas se superponencon otra reserva");

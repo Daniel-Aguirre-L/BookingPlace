@@ -42,11 +42,21 @@ export default {
           '100%': {
             transform: 'translateX(0)',
           }
+        },
+        rotate: {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(360deg)',
+          }
         }
       },
       animation: {
         fadeIn: 'fadeIn 0.3s ease-in-out',
-        growRight: 'growRight 750ms ease-in-out forwards'
+        growRight: 'growRight 750ms ease-in-out forwards',
+        rotate: 'rotate 750ms ease-in-out forwards',
+        rotateReverse: 'rotate 750ms ease-in-out reverse'
       },
       screens: {
         md870: '870px', // Define un breakpoint exacto de 450px

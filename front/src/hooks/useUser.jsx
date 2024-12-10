@@ -41,7 +41,7 @@ export const useUser = () => {
         return localStorage.setItem("token", token);
     }, []);
 
-    const login = useCallback(async (email, password) => {
+    const login = useCallback(async (email, password, onLogin = () => { }) => {
         showLoaderModal();
         try {
             const user = { email, password };
@@ -52,18 +52,19 @@ export const useUser = () => {
                 visibility: true,
                 type: "success",
                 text: `¡Bienvenid@, ${data.name}!`,
-              });
+            });
+            onLogin();
 
         } catch (error) {
-            if (error.status === 400 || error.status === 404){
+            if (error.status === 400 || error.status === 404) {
                 setNotification({
                     visibility: true,
                     type: "error",
                     text: `Credenciales Incorrectas, intente denuevo.`,
-                  });
+                });
             }
             console.error(error.message);
-        }finally{
+        } finally {
             hideLoaderModal();
         }
 
@@ -74,11 +75,11 @@ export const useUser = () => {
         useUserStore.setState((state) => ({ ...state, isLoggedIn: false, isAdmin: false, userName: '', userEmail: '' }));
     }, []);
 
-    
+
     const register = useCallback(async (name, surname, email, phone, password, repeatPassword, country) => {
         showLoaderModal();
         try {
-        const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
+            const user = { name, surname, email, phone, password, repeatPassword, country, isAdmin: false };
             const { data } = await rustikApi.post(rustikEndpoints.register, user);
             setToken(data.token);
             useUserStore.setState((state) => ({ ...state, isLoggedIn: true, isAdmin: data.isAdmin, userName: data.name.toLowerCase(), userEmail: email }));
@@ -86,17 +87,17 @@ export const useUser = () => {
                 visibility: true,
                 type: "success",
                 text: `¡Bienvenid@, ${data.name}!`,
-              });
+            });
         } catch (error) {
             if (error.status >= 400) {
                 setNotification({
                     visibility: true,
                     type: "error",
                     text: `${error.response.data} Por favor verifique los datos e intente nuevamente...`,
-                  });
+                });
             }
-            console.error({error});
-        }finally{
+            console.error({ error });
+        } finally {
             hideLoaderModal();
         }
 
@@ -109,7 +110,7 @@ export const useUser = () => {
     //     setToken(data.token);
     // }, []);
 
-    const onRefreshLoggedUser = useCallback( () => {
+    const onRefreshLoggedUser = useCallback(() => {
         useUserStore.setState((state) => ({ ...state, userLoaded: false }));
         setRefreshLoggedUser(refreshLoggedUser + 1);
     }, [refreshLoggedUser]);
@@ -127,7 +128,7 @@ export const useUser = () => {
         logout,
         register,
         onRefreshLoggedUser,
-        
+
 
     }
 }

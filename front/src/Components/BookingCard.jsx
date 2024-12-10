@@ -1,6 +1,6 @@
-import React from "react";
+
 import { CiLocationOn } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routeList } from "../helpers/routeList";
 
 const BookingCard = ({ booking, onCancel }) => {
@@ -20,17 +20,16 @@ const BookingCard = ({ booking, onCancel }) => {
       <img
         src={image?.url}
         alt={booking?.cabin?.name}
-        className="w-min-20 md870:w-20 md870:h-20 object-cover rounded-lg"
+        className="w-min-20 max-h-52 md870:w-20 md870:h-20 object-cover rounded-lg"
       />
-
       <div className="flex flex-col md870:flex-row flex-grow justify-between gap-2">
-        <div className="flex flex-col justify-center text-primary-color montserrat text-center">
-          <span className="text-xl font-bold text-primary-color montserrat w-48 truncate overflow-hidden whitespace-nowrap">{booking?.cabin?.name}</span>
+        <Link to={`${routeList.CATALOG_DETAIL}/${booking?.cabin?.id}`} className="flex flex-col justify-center text-primary-color montserrat text-center">
+          <span className="text-xl font-bold text-primary-color montserrat w-full md870:w-48 truncate overflow-hidden whitespace-nowrap">{booking?.cabin?.name}</span>
           <div className="flex gap-1.5 items-center mx-auto my-0">
-            <CiLocationOn  className="min-w-[20px]" />
-            <p className="text-sm text-[#595858] montserrat w-48 truncate overflow-hidden whitespace-nowrap">{booking?.cabin?.location}</p>
+            <CiLocationOn className="min-w-[20px]" />
+            <p className="text-sm text-[#595858] montserrat md870:w-48 truncate overflow-hidden whitespace-nowrap">{booking?.cabin?.location}</p>
           </div>
-        </div>
+        </Link>
 
         <div className="hidden md870:block w-px max-h-12 h-12 bg-[#088395] flex self-center"></div>
 
@@ -56,16 +55,25 @@ const BookingCard = ({ booking, onCancel }) => {
         </div>
 
         <div className="hidden md870:block w-px max-h-12 h-12 bg-[#088395] flex self-center"></div>
+        
 
-        <button onClick={() => onCancel(booking?.id)}>
-          <div className="flex  items-center justify-center text-[#0C1123] montserrat  text-base gap-3 ml-2">
-            <img src="/Icons/cancel-color.svg" alt="calcel" />
-            Cancelar
-          </div>
-        </button>
+          { booking?.state === "ACTIVA" ? (
+            <button onClick={() => onCancel(booking?.id)}>
+            <div className="flex  items-center justify-center  montserrat text-[#0C1123] text-base gap-3 ml-2">
+              <img src="/Icons/cancel-color.svg" alt="calcel" />
+              Cancelar
+            </div>
+          </button>
+          ):(
+            <div className="flex  items-center justify-center  montserrat text-[#0C1123] text-base gap-3 ml-2">
+              <p className={`text-xl font-semibold montserrat capitalize ${booking?.state === "COMPLETA" ? "text-primary-color ":"text-red-900" } `} >{(booking?.state ||"").toLowerCase()}</p>
+            </div>
+          )}
+            
+        
       </div>
       <button
-        className="flex items-center px-3.5 py-3.5 text-[#088395]  rounded-lg shadow border-[#088395] border-solid border"
+        className="hidden md870:flex items-center px-3.5 py-3.5 text-[#088395]  rounded-lg shadow border-[#088395] border-solid border"
         onClick={() => navigate(`${routeList.CATALOG_DETAIL}/${booking?.cabin?.id}`)}
       >
         <svg

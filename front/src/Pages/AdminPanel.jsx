@@ -136,23 +136,34 @@ const AdminPanel = () => {
                 <article className="grid grid-cols-3 gap-7 mt-7" >
                 <DashBoardCard title="Total de usuarios registrados">
                     <h3 className="text-center text-xl" >Reservas Activas {activeBookings.total}</h3>
-                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: `conic-gradient(from 38deg, #fbffbd ${95 - activeBookings.percent}%,  #088395 ${activeBookings.percent}% 98%, #fbffbd )` }} >                     
-                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center flex-col " >
+                    <div 
+                        className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold animate-rotateReverse" 
+                        style={{ background: `conic-gradient(from 38deg, #fbffbd ${95 - activeBookings.percent}%,  #088395 ${activeBookings.percent}% 98%, #fbffbd )` }} 
+                    >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center flex-col animate-rotate" >
                             <p className="text-5xl font-bold text-center montserrat" >{activeBookings.percent}%</p>
                         </div>
                     </div>
                 </DashBoardCard>
                 <DashBoardCard title="Total de usuarios registrados">
-                    <h3 className="text-center text-xl" >Reservas Completadas</h3>
-                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: "conic-gradient(from 38deg, #fbffbd 5%,  #088395 10% 93%, #fbffbd )" }} >                     
-                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center " >
+                    <h3 className="text-center text-xl" >Reservas Completadas {completedBookings.total}</h3>
+                    <div 
+                        className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold animate-rotate " 
+                        style={{ background: `conic-gradient(from 38deg, #fbffbd ${95 - completedBookings.percent}%,  #088395 ${completedBookings.percent}% 98%, #fbffbd )` }} 
+                    >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center flex-col animate-rotateReverse" >
+                            <p className="text-5xl font-bold text-center montserrat" >{completedBookings.percent}%</p>
                         </div>
                     </div>
                 </DashBoardCard>
                 <DashBoardCard title="Total de usuarios registrados">
-                    <h3 className="text-center text-xl" >Reservas Canceladas</h3>
-                    <div className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold" style={{ background: "conic-gradient(from 38deg, #fbffbd 5%,  #088395 10% 93%, #fbffbd )" }} >                     
-                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center " >
+                    <h3 className="text-center text-xl" >Reservas Canceladas {cancelledBookings.total}</h3>
+                    <div 
+                        className="w-48 h-48 p-4 mx-auto mt-5 rounded-full montserrat flex justify-center items-center text-xl font-bold animate-rotateReverse" 
+                        style={{ background: `conic-gradient(from 38deg, #088395 ${95 - cancelledBookings.percent}%,  #fbffbd ${cancelledBookings.percent}% 98%, #088395 )` }} 
+                    >                     
+                        <div className="w-full h-full rounded-full bg-background-dark flex justify-center items-center flex-col animate-rotate" >
+                            <p className="text-5xl font-bold text-center montserrat" >{cancelledBookings.percent}%</p>
                         </div>
                     </div>
                 </DashBoardCard>

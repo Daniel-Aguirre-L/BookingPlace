@@ -1,6 +1,7 @@
 package com.rustik.rustik.mapper;
 
 import com.rustik.rustik.dto.BookingDTO;
+import com.rustik.rustik.dto.BookingDatesCalendar;
 import com.rustik.rustik.dto.BookingPageDto;
 import com.rustik.rustik.dto.CabinDTO;
 import com.rustik.rustik.model.Booking;
@@ -61,6 +62,14 @@ public class BookingMapper {
         bookingPageDTO.setPageNumber(pageBooking.getNumber());
         bookingPageDTO.setPageSize(pageBooking.getSize());
         return bookingPageDTO;
+    }
+
+    public static BookingDatesCalendar toBookingDatesCalendar(Booking booking) {
+        BookingDatesCalendar bookingDatesCalendar = new BookingDatesCalendar();
+        bookingDatesCalendar.setStartDate(booking.getInitialDate());
+        bookingDatesCalendar.setEndDate(booking.getEndDate());
+        return bookingDatesCalendar;
+
     }
 
 
