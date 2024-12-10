@@ -84,8 +84,8 @@ const Comments = ({ isModalOpen, setIsModalOpen }) => {
   return(
     <>
       {isModalOpen && (
-        <div className="animate-fadeIn hs-overlay fixed top-0 left-0 w-full h-full d-flex my-0 mx-auto bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
-          <div className=" my-10 mx-auto flex flex-col md:w-601 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto h-[72vh] overflow-auto">
+        <div className="animate-fadeIn hs-overlay fixed top-[-1rem] left-0 w-full h-full d-flex my-0 mx-auto bg-black bg-opacity-50 py-8 z-50 backdrop-blur">
+          <div className=" my-10 mx-auto flex flex-col md:w-601 bg-[#EEE] border shadow-sm rounded-xl pointer-events-auto max-h-[72vh] pb-4 overflow-auto">
             <div className="sticky top-0 flex justify-between items-center py-3 px-4 border-b bg-[#088395]  rounded-t-xl">
               <h3 className="font-bold text-[#EEEEEEEE]">Deja tu Reseña</h3>
               <CloseButton onClick={()=>{

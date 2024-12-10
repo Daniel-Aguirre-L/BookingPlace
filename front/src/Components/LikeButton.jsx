@@ -89,10 +89,10 @@ const LikeButton = ({ id, isFavorite, onLike = () => { }, onUnlike = () => { } }
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill={isFavorite ? "#C70303" : "#DFDFDF"}
+        fill={isFavorite ? "#FBFFBD" : "rgba(0,0,0,0.4)"}
         viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke={isFavorite ? "#C70303" : "#CE1C1C"}
+        strokeWidth={2.2}
+        stroke={isFavorite ? "#FBFFBD" : "#FBFFBD"}
         className={`inline-block w-[1em] h-[1em] cursor-pointer transition-transform ${isFavorite ? "" : "hover:scale-105"
           }`}
         style={{
