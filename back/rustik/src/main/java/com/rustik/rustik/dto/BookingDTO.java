@@ -51,12 +51,13 @@ public class BookingDTO {
 
     public void setTotalPrice() {
         if (cabin != null && cabin.getPrice() != null) {
-            this.totalPrice = cabin.getPrice() * dates.size();
+            this.totalPrice = cabin.getPrice() * (dates.size() - 1);
         } else {
             this.totalPrice = 0.0;
         }
     }
 
-
-
+    public List<LocalDate> getDates() {
+        return dates;
+    }
 }

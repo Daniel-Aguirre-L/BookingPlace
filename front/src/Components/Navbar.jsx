@@ -116,8 +116,12 @@ const Navbar = () => {
                 <MenuOption imgUrl="/Icons/profile.svg">Mi Cuenta</MenuOption>
               </Link>
               <Link to={routeList.USER_FAVORITES}>
-                <MenuOption imgUrl="/Icons/heart.svg">Favoritos</MenuOption>
+                <MenuOption imgUrl="/Icons/heart.svg">Mis Favoritos</MenuOption>
               </Link>
+              <Link to={routeList.USER_BOOKINGS}>
+                <MenuOption imgUrl="/Icons/calendar.svg">Mis Reservas</MenuOption>
+              </Link>
+              <hr className="border-background-dark border-dotted opacity-[15%] my-4" />
               {isAdmin && (
                 <Link to={routeList.ADMIN_PANEL}>
                   <MenuOption imgUrl="/Icons/config.svg">

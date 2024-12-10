@@ -80,7 +80,6 @@ const ManageBooking = () => {
         } finally {
             hideLoaderModal();
             setSelectedId(null);
-            getBookings();
         }
     };
 
@@ -129,8 +128,8 @@ const ManageBooking = () => {
                     <div className="flex w-full justify-between items-center mb-12">
                         <PageTitleAndBack title={`Reservas`} searchTerm={searchTerm} setSearchTerm={handleSetSearchTerm} />
                     </div>
-                    <div className="container mx-auto my-4  bg-light-text rounded-3xl shadow-lg">
-                        <table className="w-full rounded-3xl p-2">
+                    <div className="container mx-auto my-4 bg-light-text rounded-3xl shadow-lg">
+                        <table className="w-full rounded-3xl p-6">
                             <thead className=" w-full h-full ">
                                 <tr>
                                     <th
@@ -234,16 +233,16 @@ const ManageBooking = () => {
                                             <div className="flex justify-center items-center gap-5 my-auto ">
                                                 <button
                                                     title="Cancelar Reserva"
-                                                    className="active:scale-90"
+                                                    className="active:scale-90 flex flex-col "
                                                     onClick={() => setSelectedId(booking.id)}
                                                 >
-                                                    <img src="/Icons/Eliminar.svg" alt="Eliminar cabaña" />
+                                                    <img src="/Icons/cancel-color.svg" alt="Eliminar cabaña" />
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
-                                    
                                 ))}
+                                <tr className="h-5 bg-transparent"></tr>
                             </tbody>
                         </table>
                     </div>

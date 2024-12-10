@@ -13,7 +13,7 @@ const CardFavorites = ({favorite, refreshFavoritos}) => {
       <img
         src={image?.url}
         alt="Imagen del producto"
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-0 group-hover:scale-0 transition-all duration-300 z-0 rounded-[0.7rem] ${
+        className={`absolute inset-0 w-full h-full object-cover brightness-[85%] group-hover:opacity-0 group-hover:scale-0 transition-all duration-300 z-0 rounded-[0.7rem] ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
         onLoad={() => setLoaded(true)}

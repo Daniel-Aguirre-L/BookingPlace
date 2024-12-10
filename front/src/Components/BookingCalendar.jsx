@@ -3,46 +3,61 @@ import { Calendar } from "@demark-pro/react-booking-calendar";
 import useNotificationStore from "../store/useNotificationStore";
 import "../calendarVariables.css";
 
-const oneDay = 86400000;
-const today = new Date().getTime() + oneDay;
-
-const reserved = Array.from({ length: 3 }, (_, i) => {
-  const daysCount = Math.floor(Math.random() * (7 - 4) + 3);
-  const startDate = new Date(today + oneDay * 8 * i);
-
-  return {
-    startDate,
-    endDate: new Date(startDate.getTime() + oneDay * daysCount),
-  };
-});
 
 const weekDays = [0, 1, 2];
 
-function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles, hasReserves }) {
+function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles, hasReserves, reserved }) {
   const [selected, setSelected] = useState([]);
   const { setNotification } = useNotificationStore();
   const calendarRef = useRef(null);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
+  const [currentMonth2, setCurrentMonth2] = useState(new Date().getMonth() + 1 === 12 ? 0 : new Date().getMonth() + 1)
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
-  const handleMonthChange = (month, year, secondCalendar = false) => {
-    if (secondCalendar){
+  const [currentYear2, setCurrentYear2] = useState(new Date().getMonth() + 1 === 12 ? new Date().getFullYear() + 1 : new Date().getFullYear())
 
-      let direction = month === currentMonth ? 0 : 1;
-      if (direction){
-        let newMonth = month === 0 && year - currentYear > 1 ? 1: month;
-        setCurrentMonth(newMonth - 1 < 0 ? 11 : newMonth-1);
-        if (newMonth-1 === 0){
-          setCurrentYear(currentYear + 1);
-        }
-      } else{
-        setCurrentMonth(currentMonth - 1 < 0 ? 11 : currentMonth - 1);
-        setCurrentYear(currentMonth - 1 < 0 ? currentYear - 1 : currentYear);
+  const handleMonthChange = (month, year) => {
+    setCurrentMonth(month);
+    setCurrentYear(year);
+  }
+  const handleMonthChange2 = (month, year) => {
+    if (currentMonth2 === 0) {
+      if (month === 11) {
+        setCurrentMonth(currentMonth - 1);
+        setCurrentYear(year);
+      } else {
+        setCurrentMonth(0);
+        setCurrentYear(year);
       }
-    }else{
-      setCurrentMonth(month === currentMonth ? currentMonth - 1 < 0 ? 11 : currentMonth - 1 : month);
-      setCurrentYear(year);
+    } else if (currentMonth2 === 1) {
+      if (month === 0) {
+        setCurrentMonth(11);
+        setCurrentYear(year - 1);
+      } else {
+        setCurrentMonth(currentMonth + 1);
+      }
+    } else if (currentMonth2 === 11) {
+      if (month === 0) {
+        setCurrentMonth(currentMonth + 1);
+      } else {
+        setCurrentMonth(currentMonth - 1);
+      }
+    } else {
+      setCurrentMonth(month > currentMonth2 ? currentMonth + 1 : currentMonth - 1);
     }
   }
+
+  useEffect(() => {
+    if (currentMonth === 11) {
+      setCurrentMonth2(0);
+      setCurrentYear2(currentYear + 1);
+    } else {
+      setCurrentMonth2(currentMonth + 1);
+      setCurrentYear2(currentYear);
+    }
+
+  }, [currentMonth, currentYear])
+
+
 
   const formatDate = (date) => {
     const formattedDate = new Intl.DateTimeFormat("es-UY", {
@@ -78,9 +93,9 @@ function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles,
     }
   }, [selected]);
 
-  
+
   return (
-    <div ref={calendarRef} className="w-full flex " >
+    <div ref={calendarRef} className="w-full flex min-h-[307px]" >
       <Calendar
         month={currentMonth}
         onMonthChange={handleMonthChange}
@@ -93,19 +108,19 @@ function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles,
         onOverbook={(date, type) =>
           type == "PAST"
             ? setNotification({
-                visibility: true,
-                type: "warning",
-                text: `La fecha seleccionada: ${formatDate(
-                  date
-                )} no puede ser en el pasado.`,
-              })
+              visibility: true,
+              type: "warning",
+              text: `La fecha seleccionada: ${formatDate(
+                date
+              )} no puede ser en el pasado.`,
+            })
             : setNotification({
-                visibility: true,
-                type: "error",
-                text: `La fecha seleccionada: ${formatDate(
-                  date
-                )} ya fue reservada.`,
-              })
+              visibility: true,
+              type: "error",
+              text: `La fecha seleccionada: ${formatDate(
+                date
+              )} ya fue reservada.`,
+            })
         }
         className={calendarStyles[0]}
         disabled={(date, state) => {
@@ -114,9 +129,9 @@ function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles,
         {...(hasReserves && { reserved })}
       />
       <Calendar
-        month={currentMonth + 1}
-        onMonthChange={(month, year) => handleMonthChange(month, year, true)}
-        year={currentMonth === 11 ? currentYear + 1 : currentYear}
+        month={currentMonth2}
+        onMonthChange={handleMonthChange2}
+        year={currentYear2}
         selected={selected}
         range={true}
         protection={true}
@@ -125,19 +140,19 @@ function BookingCalendar({ setBookingDates, visible, setVisible, calendarStyles,
         onOverbook={(date, type) =>
           type == "PAST"
             ? setNotification({
-                visibility: true,
-                type: "warning",
-                text: `La fecha seleccionada: ${formatDate(
-                  date
-                )} no puede ser en el pasado.`,
-              })
+              visibility: true,
+              type: "warning",
+              text: `La fecha seleccionada: ${formatDate(
+                date
+              )} no puede ser en el pasado.`,
+            })
             : setNotification({
-                visibility: true,
-                type: "error",
-                text: `La fecha seleccionada: ${formatDate(
-                  date
-                )} ya fue reservada.`,
-              })
+              visibility: true,
+              type: "error",
+              text: `La fecha seleccionada: ${formatDate(
+                date
+              )} ya fue reservada.`,
+            })
         }
         className={calendarStyles[1]}
         disabled={(date, state) => {

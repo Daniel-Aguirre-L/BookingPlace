@@ -1,6 +1,7 @@
 package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.BookingDTO;
+import com.rustik.rustik.dto.BookingDatesCalendar;
 import com.rustik.rustik.dto.BookingPageDto;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.mapper.BookingMapper;
@@ -87,6 +88,18 @@ public class BookingController {
 
         return ResponseEntity.ok(bookingsDTO);
     }
+
+    @GetMapping("/{id}/dates")
+    public ResponseEntity<List<BookingDatesCalendar>> bookingDatesByCabin (@PathVariable Long id){
+
+        LocalDate today = LocalDate.now();
+        List<BookingDatesCalendar> bookingDates = bookingService.findBookingByCabin(id).stream()
+                .filter(bookingDto -> bookingDto.getEndDate().isAfter(today) && bookingDto.getState().equals(BookingState.ACTIVA))
+                .map(BookingMapper::toBookingDatesCalendar).collect(Collectors.toList());
+
+        return ResponseEntity.ok(bookingDates);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<BookingDTO> updateBooking (@PathVariable Long id,
