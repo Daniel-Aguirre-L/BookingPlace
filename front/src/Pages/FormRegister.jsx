@@ -2,14 +2,14 @@ import { useState } from "react";
 import country from "../helpers/country";
 import Dropdown from '../Components/Dropdown';
 import InputField from "../Components/InputField";
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { routeList } from "../helpers/routeList";
 import { useUser } from "../hooks/useUser";
 
 
 const FormRegister = () => {
 
-  const { register } = useUser();
+  const { isLoggedIn , register } = useUser();
   const defaultValue = { email: '', password: '', passwordRepeat: '', firstName: '', lastName: '', phone: '', country: '' };
   const [form, setForm] = useState(defaultValue);
   const [errors, setErrors] = useState(defaultValue);
@@ -110,6 +110,7 @@ const FormRegister = () => {
 
   return (
     <div className="animate-fadeIn  w-full mx-auto">
+      { isLoggedIn && <Navigate to={routeList.HOME} /> }
       <div className="flex flex-col items-center justify-center p-6">
         <Link to={routeList.HOME}>
           <div className="w-full max-w-md text-center mb-6">

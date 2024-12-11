@@ -32,4 +32,18 @@ public interface CabinRepository extends JpaRepository<Cabin, Long> {
             "OR (b.initialDate <= :initialDate AND b.endDate >= :endDate)))")
     List<Cabin> findCabinsByDates(@Param("initialDate") LocalDate initialDate,
                                                 @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT c FROM Cabin c LEFT JOIN Booking b ON b.cabin = c AND (" +
+            "    (b.initialDate BETWEEN :initialDate AND :endDate) " +
+            "    OR (b.endDate BETWEEN :initialDate AND :endDate) " +
+            "    OR (b.initialDate <= :initialDate AND b.endDate >= :endDate) " +
+            ") WHERE " +
+            "(LOWER(CONCAT(c.name, ' ', c.category, ' ', c.location, ' ', c.price, ' ', c.capacity, ' ', c.description)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) " +
+            "AND b.id IS NULL")
+    List<Cabin> findCabinsByFilters(
+            @Param("searchTerm") String searchTerm,
+            @Param("endDate") LocalDate endDate,
+            @Param("initialDate") LocalDate initialDate
+    );
+
 }

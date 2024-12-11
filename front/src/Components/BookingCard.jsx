@@ -16,7 +16,12 @@ const BookingCard = ({ booking, onCancel }) => {
   }
 
   return (
-    <div className="flex flex-col md870:flex-row bg-white border rounded-2xl shadow-md overflow-hidden px-6 py-8 items-center gap-x-8">
+    <div 
+      className={`flex flex-col md870:flex-row 
+        ${ booking.state==="COMPLETA" ? "bg-[#eafff3]" : booking.state==="CANCELADA" ? "bg-[#ffe8e8]" : "bg-white"} 
+         border rounded-2xl shadow-md overflow-hidden px-6 py-8 items-center gap-x-8
+      `}
+    >
       <img
         src={image?.url}
         alt={booking?.cabin?.name}

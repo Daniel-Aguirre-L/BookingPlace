@@ -64,13 +64,16 @@ const Home = () => {
     }
   }, []);
 
-  const getNameCabins = useCallback(async (name, date1="", date2="") => {
+  const getNameCabins = useCallback(async (name="", date1="", date2="") => {
     try {
-      const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
-      const filteredData = date1 ? data.slice(0, Math.ceil(data.length/3)): data;
-      setCabins(filteredData);
-      setPage(10);
-      setFilter(`${name}${date1 ? ` entre ${date1} y ${date2}` : ""}`);
+      let initialDate = date1 ? date1.split(" ")[1] : "";
+      let endDate = date2 ? date2.split(" ")[1] : "";
+      initialDate = initialDate ? initialDate.split("/")[2] + "-" + initialDate.split("/")[1] + "-" + initialDate.split("/")[0]: ""; 
+      endDate = endDate ? endDate.split("/")[2] + "-" + endDate.split("/")[1] + "-" + endDate.split("/")[0]: "";
+      const {data} = await rustikApi.get(`${rustikEndpoints.cabinsSearch}searchTerm=${name}&initialDate=${initialDate}&endDate=${endDate}`);
+      setCabins(data);
+      setPage(20);
+      setFilter(`${name}`);
       data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);

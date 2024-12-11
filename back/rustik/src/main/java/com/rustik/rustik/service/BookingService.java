@@ -130,11 +130,13 @@ public class BookingService {
 
     @Scheduled(cron = "0 0 0 * * ?") // Se ejecuta a las 00:00 todos los días
     public void automaticUpdateBookingState() {
+        logger.info("Actualizando el estado de las reservas");
         List<Booking> bookings = bookingRepository.findByState(BookingState.ACTIVA);
         for (Booking booking : bookings) {
             if (booking.getInitialDate().isBefore(LocalDate.now()) ){
                 booking.setState(BookingState.COMPLETA);
                 bookingRepository.save(booking);
+                logger.info("Reserva actualizada: " + booking.getId() + " " + booking.getCabin().getName());
             }
         }
     }

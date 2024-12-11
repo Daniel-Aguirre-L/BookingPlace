@@ -73,7 +73,7 @@ const AdminPanel = () => {
                     <p className="montserrat text-center text-5xl font-bold mt-5" >{statistics.totalCabins}</p>
                 </DashBoardCard>
                 <DashBoardCard title="Total de reservas registradas">
-                    <h3 className="text-center text-xl" >Total Reservas</h3>
+                    <h3 className="text-center text-xl" >Total Reservas Activas</h3>
                     <p className="montserrat text-center text-5xl font-bold mt-5" >{statistics.totalBookings}</p>
                 </DashBoardCard>
                 </article>
