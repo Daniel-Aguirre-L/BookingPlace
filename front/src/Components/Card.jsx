@@ -39,7 +39,7 @@ function Card({ title, children, price, images, id, favorites, refreshFavoritos 
       </section>
       {
         favorites &&
-        <div className="absolute top-5 right-5 hover:brightness-[75%] cursor-pointer w-8 text-4xl ">
+        <div className="absolute top-5 right-5 hover:scale-125 cursor-pointer w-8 text-4xl transition-all duration-100">
           <LikeButton id={id} isFavorite={favorites.some(favorite => favorite.id === id)} onUnlike={refreshFavoritos} onLike={refreshFavoritos} />
         </div>
       }
