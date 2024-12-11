@@ -33,7 +33,7 @@ const Home = () => {
 
     } else {
       setPage(page + 1);
-      // window.scrollTo(0, window.scrollY + 700);
+      window.scrollTo(0, window.scrollY + 700);
     }
   }
 
