@@ -64,4 +64,8 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
 
     @Query("SELECT b FROM Booking b WHERE b.user = :user")
     Optional<List<Booking>> findByUserIncludingNullCabins(@Param("user") User user);
+
+    @Query("SELECT COUNT(b) > 0 FROM Booking b WHERE b.user.id = :userId AND b.cabin.id = :cabinId")
+    boolean existsByUserIdAndCabinId(@Param("userId") Long userId, @Param("cabinId") Long cabinId);
+
 }

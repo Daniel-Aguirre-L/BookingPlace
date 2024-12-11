@@ -54,7 +54,7 @@ const AdminLayout = () => {
   return (
     <div className="flex w-screen">
       {userLoaded && !isAdmin && <Navigate to={routeList.LOGIN} />}
-      <nav className="w-60 h-svh bg-gradient-to-b from-primary-color to-background-dark flex flex-col items-center p-8 gap-12 border-r border-[#2D2F33]" >
+      <nav className="max-lg:hidden w-60 h-svh bg-gradient-to-b from-primary-color to-background-dark flex flex-col items-center p-8 gap-12 border-r border-[#2D2F33]" >
         <Link to={routeList.HOME}>
           <img src="/Icons/logoSvg-white.svg" alt="icono" />
         </Link>
@@ -90,6 +90,14 @@ const AdminLayout = () => {
             </span>
           </button>
       </nav>
+      <Link 
+            to={AdminMenuOptions[5].url} 
+            className={`lg:hidden absolute items-center gap-3 rounded-lg text-lg px-5 py-5 transition-all text-background-dark shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)]"`}
+        >
+            <div className="w-[6rem]">
+                <img src="/Icons/logoSvg-white.svg" alt="" />
+            </div>
+        </Link>
       {
         isAdmin && (
           <div className="w-full ">

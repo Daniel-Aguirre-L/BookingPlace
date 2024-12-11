@@ -40,8 +40,8 @@ const SelectDate = ({cabin, bookingDates, setBookingDates, handleStartBooking}) 
       try {
         const { data } = await rustikApi.get(`${rustikEndpoints.bookings}/${cabin.id}/dates`);
         setReserved(data.map(bdate => ({
-          startDate: bdate.startDate + " 12:00:00",
-          endDate: bdate.endDate + " 12:00:00",
+          startDate: bdate.startDate + "T00:00:00",
+          endDate: bdate.endDate + "T00:00:00",
         })));
       } catch (error) {
         console.error("Error al llamar a la api", error);

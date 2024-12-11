@@ -130,11 +130,13 @@ public class BookingService {
 
     @Scheduled(cron = "0 0 0 * * ?") // Se ejecuta a las 00:00 todos los días
     public void automaticUpdateBookingState() {
+        logger.info("Actualizando el estado de las reservas");
         List<Booking> bookings = bookingRepository.findByState(BookingState.ACTIVA);
         for (Booking booking : bookings) {
             if (booking.getInitialDate().isBefore(LocalDate.now()) ){
                 booking.setState(BookingState.COMPLETA);
                 bookingRepository.save(booking);
+                logger.info("Reserva actualizada: " + booking.getId() + " " + booking.getCabin().getName());
             }
         }
     }
@@ -147,12 +149,16 @@ public class BookingService {
 
     public Booking updateBooking (Booking booking){
 
-        List<Booking> bookingsList = bookingRepository.findExistingBookingsForCabin(booking.getCabin(),
-                booking.getInitialDate(),booking.getEndDate(), BookingState.ACTIVA).get();
+        Optional<List<Booking>> bookingsList = bookingRepository.findExistingBookingsForCabin(booking.getCabin(),
+                booking.getInitialDate(),booking.getEndDate(), BookingState.ACTIVA);
 
-        if (bookingsList.size() > 1 || bookingsList.get(0).getId() != booking.getId()){
-            throw new BadRequestException("Las fechas se superponencon otra reserva");
+
+        if (!bookingsList.get().isEmpty()) {
+            if (bookingsList.get().size() > 1 || bookingsList.get().get(0).getId() != booking.getId()) {
+                throw new BadRequestException("Las fechas se superponencon otra reserva");
+            }
         }
+
         return bookingRepository.save(booking);
     }
 }

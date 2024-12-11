@@ -184,11 +184,37 @@ public class CabinController {
 
     @GetMapping("/filterByDates")
     public ResponseEntity<List<CabinDTO>> getCabinsFreeByDate(@RequestParam("initialDate") String initialDateStr,
-                                                              @RequestParam("endDate") String endDateStr) {
+                                                             @RequestParam("endDate") String endDateStr) {
         LocalDate initialDate = LocalDate.parse(initialDateStr);
         LocalDate endDate = LocalDate.parse(endDateStr);
 
         List<CabinDTO> cabins = cabinService.findCabinsByDate(initialDate,endDate)
+                .stream().map(CabinMapper::toDTO).collect(Collectors.toList());
+
+        return ResponseEntity.ok(cabins);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CabinDTO>> getCabinsByFilters(
+            @RequestParam(defaultValue = "") String searchTerm,
+            @RequestParam(defaultValue = "") String initialDate,
+            @RequestParam( defaultValue = "") String endDate
+    ) {
+        System.out.println(searchTerm);
+        System.out.println(initialDate);
+        System.out.println(endDate);
+
+        LocalDate localInitialDate = LocalDate.parse("2000-01-01");
+        LocalDate localEndDate = LocalDate.parse("2000-01-02");
+
+        if (!initialDate.isEmpty()) {
+            localInitialDate = LocalDate.parse(initialDate);
+            localEndDate = LocalDate.parse(initialDate);
+        }
+        if (!endDate.isEmpty()) localEndDate = LocalDate.parse(endDate);
+
+
+        List<CabinDTO> cabins = cabinService.findCabinsByFilters(searchTerm,localInitialDate,localEndDate)
                 .stream().map(CabinMapper::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(cabins);

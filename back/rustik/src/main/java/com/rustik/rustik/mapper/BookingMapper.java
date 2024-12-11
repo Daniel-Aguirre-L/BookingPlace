@@ -39,11 +39,19 @@ public class BookingMapper {
 
     public static Booking toExistingEntity (BookingDTO bookingDTO, Booking booking){
 
-        if(bookingDTO.getInitialDate() != booking.getInitialDate() && bookingDTO.getInitialDate().isAfter(LocalDate.now())){
+        if(bookingDTO.getInitialDate() != booking.getInitialDate() && bookingDTO.getInitialDate().isAfter(LocalDate.now().plusDays(2))){
             booking.setInitialDate(bookingDTO.getInitialDate());
         }
-        if (bookingDTO.getEndDate() != booking.getEndDate() && bookingDTO.getEndDate().isAfter(bookingDTO.getEndDate())){
+        if (bookingDTO.getEndDate() != booking.getEndDate() ){
             booking.setEndDate(bookingDTO.getEndDate());
+        }
+
+        bookingDTO.setDates();
+        bookingDTO.setCabin(CabinMapper.toDTO(booking.getCabin()));
+        bookingDTO.setTotalPrice();
+
+        if(bookingDTO.getTotalPrice() != booking.getTotalPrice() && bookingDTO.getTotalPrice() != 0.0 ) {
+            booking.setTotalPrice(bookingDTO.getTotalPrice());
         }
 
         return booking;

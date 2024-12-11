@@ -178,7 +178,11 @@ const ManageBooking = () => {
                                     </tr>
                                 }
                                 {!isLoading && bookings.map((booking) => (
-                                    <tr key={booking.id} className="border-b border-gray-200 border-[5px] animate-fadeIn">
+                                    <tr key={booking.id} 
+                                        className={`border-b border-gray-200 border-[5px] animate-fadeIn
+                                            ${ booking.state==="COMPLETA" ? "bg-[#eafff3]" : booking.state==="CANCELADA" ? "bg-[#ffe8e8]" : "bg-white"}
+                                        `}
+                                    >
                                         <td className="px-3 py-3 ">
                                             <p className="text-gray-900 text-center whitespace-no-wrap font-montserrat">
                                                 {booking.id}

@@ -1,18 +1,35 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getRatingDescription } from "../helpers/getRatingDescription";
 import Comments from "./Comments";
 import { useUser } from "../hooks/useUser";
+import { rustikApi } from "../services/rustikApi";
+import { rustikEndpoints } from "../services/rustkEndPoints";
 
-const Rating = ({  score, totalRatings, getCabin}) => {
+const Rating = ({  score, totalRatings, cabinId, getCabin}) => {
 
   const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [hasBeenHere, setHasBeenHere] = useState(false);
   const { isLoggedIn } = useUser();
   const closeModal = async (value) => {
     await getCabin();
     setShowReviewsModal(value);
-    
   };
+
+  useEffect(() => {
+    const getBokingsData = async () => {
+      try {
+        const { data } = await rustikApi.get(rustikEndpoints.myBookings);
+        if(data.some(booking => booking.cabin.id === cabinId && booking.state === "COMPLETA")) setHasBeenHere(true);
+      } catch (error) {
+        console.error("Error al obtener mis reservas", error);
+      }
+    };
+    
+    if (isLoggedIn) getBokingsData();
+    
+  }, [isLoggedIn])
+  
   
   return (
     <div className="flex flex-col space-y-4 border-b border-secondary-color pb-5 pt-5">
@@ -34,7 +51,7 @@ const Rating = ({  score, totalRatings, getCabin}) => {
             <button 
               className="bg-primary-color text-light-text min-h-10 px-4 rounded font-semibold font-moserrat disabled:bg-dark-text"
               onClick={() => setShowReviewsModal(true)}
-              disabled={!isLoggedIn}
+              disabled={!hasBeenHere}
             >
               Dar tu reseña
             </button>

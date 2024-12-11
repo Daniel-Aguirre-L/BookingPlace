@@ -58,10 +58,12 @@ const DetalleReserva = ({ bookingDates, totalBooking, capacity, isBooked, onEdit
             }
             {
               isBooked &&
-              <div>
-                <Link to={routeList.USER_BOOKINGS} className="text-background-dark" >
+              <div className="w-full flex flex-col items-center justify-center">
                 <p className="text-center text-xl font-bold text-primary-color">¡Cabaña reservada exitosamente!</p>
-                <p className="text-center text-lg font-bold text-background-dark">ir a mis reservas</p>
+                <Link to={routeList.USER_BOOKINGS} className="w-full flex justify-center mt-3"  >
+                  <span className="bg-primary-color text-lg text-light-text text-center h-10 w-full rounded font-semibold shadow-md  active:scale-95 flex items-center justify-center" >
+                    Ir a mis reservas
+                  </span>
                 </Link>
               </div>
 

@@ -16,8 +16,8 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState('');
   const [recommendedIsShown, setRecommendedIsShown] = useState(true);
+  const [recomendedCabin, setRecommendedCabin] = useState({});
   
-
 
   const handleShowMore = () => {
     setPage(page + 1);
@@ -33,12 +33,12 @@ const Home = () => {
 
     } else {
       setPage(page + 1);
-      // window.scrollTo(0, window.scrollY + 700);
+      window.scrollTo(0, window.scrollY + 700);
     }
   }
 
   const handleVisitMasReservado = () => {
-    navigate(`${routeList.CATALOG_DETAIL}/${cabins[8].id}`);
+    navigate(`${routeList.CATALOG_DETAIL}/${recomendedCabin.id}`);
   };
 
 
@@ -46,6 +46,7 @@ const Home = () => {
     try {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsRandom}?count=50`);
       setCabins(data);
+      setRecommendedCabin(data[Math.floor(Math.random() * data.length)]);
       setPage(1);
     } catch (error) {
       console.error("Error al llamar a la api", error);
@@ -57,6 +58,7 @@ const Home = () => {
     try {
       const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilter}${category}`);
       setCabins(data);
+      setRecommendedCabin(data[Math.floor(Math.random() * data.length)]);
       setPage(10);
       setFilter(category);
     } catch (error) {
@@ -64,13 +66,17 @@ const Home = () => {
     }
   }, []);
 
-  const getNameCabins = useCallback(async (name, date1="", date2="") => {
+  const getNameCabins = useCallback(async (name="", date1="", date2="") => {
     try {
-      const { data } = await rustikApi.get(`${rustikEndpoints.cabinsFilterByName}${name}`);
-      const filteredData = date1 ? data.slice(0, Math.ceil(data.length/3)): data;
-      setCabins(filteredData);
-      setPage(10);
-      setFilter(`${name}${date1 ? ` entre ${date1} y ${date2}` : ""}`);
+      let initialDate = date1 ? date1.split(" ")[1] : "";
+      let endDate = date2 ? date2.split(" ")[1] : "";
+      initialDate = initialDate ? initialDate.split("/")[2] + "-" + initialDate.split("/")[1] + "-" + initialDate.split("/")[0]: ""; 
+      endDate = endDate ? endDate.split("/")[2] + "-" + endDate.split("/")[1] + "-" + endDate.split("/")[0]: "";
+      const {data} = await rustikApi.get(`${rustikEndpoints.cabinsSearch}searchTerm=${name}&initialDate=${initialDate}&endDate=${endDate}`);
+      setCabins(data);
+      setRecommendedCabin(data[Math.floor(Math.random() * data.length)]);
+      setPage(20);
+      setFilter(`${name}`);
       data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
     } catch (error) {
       console.error("Error al llamar a la api", error);
@@ -144,7 +150,7 @@ const Home = () => {
         sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
       </Headline>
     )}
-      <DisplayCard cabin={cabins[Math.floor(Math.random() * cabins.length)]} handleOnClick={handleVisitMasReservado} ></DisplayCard>
+      <DisplayCard cabin={recomendedCabin} handleOnClick={handleVisitMasReservado} ></DisplayCard>
     </div>
 
   );
