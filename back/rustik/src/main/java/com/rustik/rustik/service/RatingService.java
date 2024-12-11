@@ -6,6 +6,7 @@ import com.rustik.rustik.mapper.RatingMapper;
 import com.rustik.rustik.model.Cabin;
 import com.rustik.rustik.model.Rating;
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.repository.BookingRepository;
 import com.rustik.rustik.repository.CabinRepository;
 import com.rustik.rustik.repository.RatingRepository;
 import com.rustik.rustik.repository.UserRepository;
@@ -23,12 +24,13 @@ public class RatingService {
 
     @Autowired
     private RatingRepository ratingRepository;
-
     @Autowired
     private CabinRepository cabinRepository;
-
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    BookingRepository bookingRepository;
 
     public List<Rating> findAll() {
         return ratingRepository.findAll();
@@ -43,21 +45,24 @@ public class RatingService {
     }
 
     public Rating save(RatingDTO ratingDTO, User user, Long cabinId) {
+        // Verificar si el usuario tiene una reserva para esta cabaña
+        boolean hasReservation = bookingRepository.existsByUserIdAndCabinId(user.getId(), cabinId);
+
+        if (!hasReservation) {
+            throw new RuntimeException("El usuario no tiene una reserva para esta cabaña y no puede comentar.");
+        }
+
         Cabin cabin = cabinRepository.findById(cabinId)
                 .orElseThrow(() -> new RuntimeException("Cabaña no encontrada"));
 
-        Optional<Rating> existingRating = ratingRepository.findByUserAndCabin(user, cabin);
+        Rating rating = ratingRepository.findByUserAndCabin(user, cabin)
+                .orElseGet(() -> RatingMapper.toEntity(ratingDTO, user, cabin));
 
-        if (existingRating.isPresent()) {
-            Rating rating = existingRating.get();
-            rating.setScore(ratingDTO.getScore());
-            rating.setReview(ratingDTO.getReview());
-            return ratingRepository.save(rating);
-        } else {
-            Rating rating = RatingMapper.toEntity(ratingDTO, user, cabin);
-            return ratingRepository.save(rating);
-        }
+        rating.setScore(ratingDTO.getScore());
+        rating.setReview(ratingDTO.getReview());
+        return ratingRepository.save(rating);
     }
+
 
     public Rating update(Long id, RatingDTO ratingDTO, User currentUser) {
 
