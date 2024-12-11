@@ -13,6 +13,7 @@ const Layout = () => {
       <main className="flex w-full max-w-[1600px] min-h-[calc(100vh-315px)]">
         <Outlet />
       </main>
+      <a href="https://wa.me/+59899391130" target="_blank"><img src="/Icons/Whatsapp.svg" alt="" className="fixed bottom-5 left-5 size-10 drop-shadow opacity-80 hover:opacity-100"/></a>
       <div className="max-w-[1600px] flex w-full">
         <Footer />
       </div>
