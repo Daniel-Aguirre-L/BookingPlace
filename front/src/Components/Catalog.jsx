@@ -45,7 +45,7 @@ const Catalog = ({ cabin, getCabin }) => {
     const handleCloseModalLogin = () => {
         setShowLoginModal(false);
     }
-
+   
     const handleStartBooking = () => {
         if (!isLoggedIn){
             setShowLoginModal(true);
@@ -56,11 +56,13 @@ const Catalog = ({ cabin, getCabin }) => {
                 text: "La fecha de salida no puede ser igual a la de ingreso.",
             });
         }else if(bookingDates[0] !== "" && bookingDates[1] !== "" ) {
-            let date1 = bookingDates[0].split(" ")[1];
-            let date2 = bookingDates[1].split(" ")[1];
-            date1 = date1.split("/")[2] + "-" + date1.split("/")[1] + "-" + date1.split("/")[0];
-            date2 = date2.split("/")[2] + "-" + date2.split("/")[1] + "-" + date2.split("/")[0];
-            setBookingDates([date1, date2]);
+            if(bookingDates[0].length>10){
+                let date1 = bookingDates[0].split(" ")[1];
+                let date2 = bookingDates[1].split(" ")[1];
+                date1 = date1.split("/")[2] + "-" + date1.split("/")[1] + "-" + date1.split("/")[0];
+                date2 = date2.split("/")[2] + "-" + date2.split("/")[1] + "-" + date2.split("/")[0];
+                setBookingDates([date1, date2]);
+            }
             setShowConfirmBooking(true);
         }
     }
@@ -69,8 +71,8 @@ const Catalog = ({ cabin, getCabin }) => {
         if(bookingDates[0] === "" || bookingDates[1] === ""){
             return -1;
         }
-        const date1 = new Date(bookingDates[0] + " 12:00:00");
-        const date2 = new Date(bookingDates[1] + " 12:00:00");
+        const date1 = new Date(bookingDates[0] + "T00:00:00");
+        const date2 = new Date(bookingDates[1] + "T00:00:00");
         const nights = Number((date2 - date1) / (1000 * 60 * 60 * 24)) 
         const total = nights * Number(cabin.price);
         
@@ -241,7 +243,7 @@ const Catalog = ({ cabin, getCabin }) => {
               
                 <Policies />
                 <div className="mt-16">
-                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} />
+                    <Rating score={cabin.averageScore} totalRatings={cabin.totalRatings} getCabin={getCabin} cabinId={cabin.id} />
                 </div>
                 <div className='transition-all' >
                 {
