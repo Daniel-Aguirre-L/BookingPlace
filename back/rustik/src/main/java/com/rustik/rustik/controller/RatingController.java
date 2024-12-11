@@ -1,11 +1,14 @@
 package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.RatingDTO;
+import com.rustik.rustik.exception.NoReservationException;
 import com.rustik.rustik.mapper.RatingMapper;
 import com.rustik.rustik.model.Rating;
 
 import com.rustik.rustik.model.User;
+import com.rustik.rustik.repository.BookingRepository;
 import com.rustik.rustik.security.CustomUserDetails;
+import com.rustik.rustik.service.BookingService;
 import com.rustik.rustik.service.RatingService;
 import com.rustik.rustik.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +36,9 @@ public class RatingController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @Operation(summary = "Obtener todos los ratings", description = "Devuelve una lista de todos los ratings.")
     @GetMapping
     public ResponseEntity<List<RatingDTO>> getAllRatings() {
@@ -54,15 +60,19 @@ public class RatingController {
     }
 
     @Operation(summary = "Crear un nuevo rating", description = "Permite crear un nuevo rating para una cabaña.")
-    @PostMapping("/{cabinId}" )
-    public ResponseEntity<RatingDTO> createRating(
+    @PostMapping("/{cabinId}")
+    public ResponseEntity<?> createRating(
             @PathVariable Long cabinId,
             @RequestBody @Valid RatingDTO ratingDTO,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-
         Long userId = customUserDetails.getUser().getId();
 
+        boolean hasReservation = bookingRepository.existsByUserIdAndCabinId(userId, cabinId);
+
+        if (!hasReservation) {
+            throw new NoReservationException("El usuario no tiene una reserva para esta cabaña y no puede comentar.");
+        }
 
         Rating rating = ratingService.save(ratingDTO, customUserDetails.getUser(), cabinId);
         RatingDTO responseDTO = RatingMapper.toDTO(rating);
