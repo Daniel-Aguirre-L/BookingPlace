@@ -1,6 +1,4 @@
-import { useState  } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import InputField from "../Components/InputField";
+import { Link, Navigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { routeList } from "../helpers/routeList";
 import LoginForm from "../Components/LoginForm";
@@ -9,7 +7,7 @@ import LoginForm from "../Components/LoginForm";
 
 
 const LoginPage = () => {
-    
+  const { isLoggedIn } = useUser();
 	return (
 		<>
       <section className="animate-fadeIn flex flex-col md:flex-row md:flex-row min-h-calc-100vh-minus-245 items-center md:gap-14 font-semibold my-6 mx-3" >
@@ -22,6 +20,7 @@ const LoginPage = () => {
           </article>
         </div>
         <article  className="flex-1 w-full">
+        {isLoggedIn && <Navigate to={routeList.HOME} />}
           <LoginForm />
         </article>
       </section>

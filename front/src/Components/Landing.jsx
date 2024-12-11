@@ -82,14 +82,15 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
           />
 
           {serchingText && getSearchOptions(filter).length > 0 && (
-            <div className="absolute max-h-52 w-full top-10 bg-white z-20 overflow-y-scroll text-background-dark rounded-b-lg">
+            <div className="absolute max-h-52 w-full top-12 bg-white z-50 overflow-y-scroll text-background-dark rounded-b-lg">
               {getSearchOptions(filter).map((option, index) => (
                 <p
                   key={`option-${index}`}
                   className="p-2 hover:bg-gray-300 cursor-pointer pl-5 text-sm md:text-base"
                   onClick={() => {
+                    console.log({option});
                     setFilter(option);
-                    setSerchingText(false);
+                    setSerchingText(true);
                   }}
                 >
                   {option.toLowerCase()}
@@ -105,7 +106,10 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
             type="text"
             placeholder="📅 Seleccione fechas "
             value={bookingDates[0]}
-            onClick={() => setDate()}
+            onClick={() => {
+              window.location.hash = "";
+              setDate();
+            }}
             readOnly
           />
           {bookingDates[0] && (
@@ -115,7 +119,10 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
                 type="text"
                 placeholder="Fecha de Salida"
                 value={bookingDates[1]}
-                onClick={() => setDate()}
+                onClick={() => {
+                  window.location.hash = "";
+                  setDate();
+                }}
                 readOnly
               />
               <button

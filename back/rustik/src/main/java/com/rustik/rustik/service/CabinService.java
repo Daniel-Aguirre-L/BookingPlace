@@ -226,4 +226,8 @@ public class CabinService {
         return cabinRepository.findCabinsByDates(inicialDate,endDate);
     }
 
+    public List<Cabin> findCabinsByFilters (String searchTerm, LocalDate inicialDate, LocalDate endDate){
+        return cabinRepository.findCabinsByFilters(searchTerm, inicialDate, endDate);
+    }
+
 }

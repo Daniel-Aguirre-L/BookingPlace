@@ -3,6 +3,7 @@ export const rustikEndpoints = {
     cabins: "/cabins",
     cabinsFilter: "/cabins/filter?categories=",
     cabinsFilterByName: "/cabins/filterByName?name=",
+    cabinsSearch: "/cabins/search?",
     cabinsRandom: "/cabins/random",
     deleteImages: "/images/eliminar-imagenes",
     login: "/auth/login",
