@@ -66,7 +66,7 @@ public class InitialData implements ApplicationRunner {
 
         //CREA USUARIO ADMIN
         User admin = new User("admin","admin","admin@admin.com","2345678","UY", UserRole.ROLE_ADMIN, userService.encodePassword("1234Admin!"));
-        User user1 = new User("user1","user1","u1@correo.com","2345677","CO", UserRole.ROLE_USER, userService.encodePassword("1234User!"));
+        User user1 = new User("user1","user1","juliancallejas@exatec.tec.mx","2345677","CO", UserRole.ROLE_USER, userService.encodePassword("1234User!"));
         User user2 = new User("user2","user2","u2@correo.com","2345676","MX", UserRole.ROLE_USER,userService.encodePassword("1234User!"));
         User user3 = new User("user3","user3","u3@correo.com","2345675","UY", UserRole.ROLE_USER,userService.encodePassword("1234User!"));
         User user4 = new User("user4","user4","u4@correo.com","2345674","CL", UserRole.ROLE_USER,userService.encodePassword("1234User!"));

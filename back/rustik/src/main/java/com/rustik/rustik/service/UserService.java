@@ -36,6 +36,9 @@ public class UserService {
     private TokenService tokenService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -81,11 +84,21 @@ public class UserService {
             throw new BadRequestException("Credenciales incorrectas");
         }
 
-
-
-
         String token = tokenService.generateToken(user);
         return new AuthUserDTO(user, token);
+    }
+
+    public Boolean resetPassword (String email)  {
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            System.out.println(email);
+            String token = tokenService.generateToken(user.get());
+            emailService.sendResetPasswordEmail(user.get().getEmail(), user.get().getUsername(), token);
+        }
+
+        return true;
     }
 
 

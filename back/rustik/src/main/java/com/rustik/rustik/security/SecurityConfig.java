@@ -34,7 +34,8 @@ public class SecurityConfig {
 
     List<String> publicPost = List.of(
             PREFIX + "/auth/login",
-            PREFIX + "/auth/register"
+            PREFIX + "/auth/register",
+            PREFIX + "/auth/reset-password"
     );
 
     List<String> publicGet = List.of(

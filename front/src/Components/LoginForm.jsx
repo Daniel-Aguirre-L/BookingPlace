@@ -68,7 +68,7 @@ const LoginForm = ({ onLogin = () => { } }) => {
       />
       {errors.password && <p className="text-red-500 text-xs text-start">{errors.password}</p>}
       <button type="submit" className="bg-[#088395] text-[#EEEEEE] rounded-lg py-2.5 px-5">Iniciar sesión</button>
-      <Link to={routeList.HOME} className="text-[#0C1123]" >¿Olvidaste tu contraseña?</Link>
+      <Link to={routeList.FORGOTPASSWORD} className="text-[#0C1123]" >¿Olvidaste tu contraseña?</Link>
       <hr className="md:w-96 w-10/12 my-5 mx-auto" />
       <button type="button"
         className="my-0 mx-auto max-w-64 bg-[#FBFFBD] py-2.5 px-5 md:px-16 text-[#0C1123] rounded-lg"
