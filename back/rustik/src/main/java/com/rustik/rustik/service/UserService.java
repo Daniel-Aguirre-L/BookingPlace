@@ -85,6 +85,7 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isPresent()) {
+            System.out.println(email);
             String token = tokenService.generateToken(user.get());
             emailService.sendResetPasswordEmail(user.get().getEmail(), user.get().getUsername(), token);
         }
