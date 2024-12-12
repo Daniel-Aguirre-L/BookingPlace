@@ -167,19 +167,9 @@ public class BookingController {
 
         if((solicitedBooking.getUser().getEmail().equals(user.getEmail()) || user.getRole().equals(UserRole.ROLE_ADMIN)) && LocalDate.now().plusDays(2).isBefore(solicitedBooking.getInitialDate())){
             solicitedBooking.setState(BookingState.CANCELADA);
-            emailService.sendBookingCancellationEmail(
-                    user.getEmail(), // String
-                    user.getName() + " " + user.getSurname(), // String
-                    solicitedBooking.getCabin(), // Cabin
-                    solicitedBooking.getInitialDate(), // LocalDate
-                    solicitedBooking.getEndDate(), // LocalDate
-                    solicitedBooking.getTotalPrice() // Double
-            );
-
             return ResponseEntity.ok(bookingService.cancelBooking(solicitedBooking));
         }
         throw new BadRequestException("No es posible cancelar esta resserva");
     }
-
 
 }

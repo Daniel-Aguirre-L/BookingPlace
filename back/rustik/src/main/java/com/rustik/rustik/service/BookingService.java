@@ -35,6 +35,9 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private  EmailService emailService;
+
 
     public static final Logger logger = Logger.getLogger(BookingService.class);
 
@@ -143,6 +146,14 @@ public class BookingService {
 
     public String cancelBooking (Booking booking){
         bookingRepository.save(booking);
+        emailService.sendBookingCancellationEmail(
+                booking.getUser().getEmail(),
+                booking.getUser().getName() + " " + booking.getUser().getSurname(),
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
         return "Booking canceled";
     }
 

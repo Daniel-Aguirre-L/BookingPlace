@@ -46,6 +46,7 @@ public class CabinController {
     @GetMapping
     public List<CabinDTO> getAllCabins() {
         return cabinService.findAll().stream()
+                .filter(cabin -> cabin.getActive())
                 .map(CabinMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -189,7 +190,8 @@ public class CabinController {
         LocalDate endDate = LocalDate.parse(endDateStr);
 
         List<CabinDTO> cabins = cabinService.findCabinsByDate(initialDate,endDate)
-                .stream().map(CabinMapper::toDTO).collect(Collectors.toList());
+                .stream().filter(cabin -> cabin.getActive())
+                .map(CabinMapper::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(cabins);
     }
@@ -200,9 +202,6 @@ public class CabinController {
             @RequestParam(defaultValue = "") String initialDate,
             @RequestParam( defaultValue = "") String endDate
     ) {
-        System.out.println(searchTerm);
-        System.out.println(initialDate);
-        System.out.println(endDate);
 
         LocalDate localInitialDate = LocalDate.parse("2000-01-01");
         LocalDate localEndDate = LocalDate.parse("2000-01-02");
@@ -215,7 +214,9 @@ public class CabinController {
 
 
         List<CabinDTO> cabins = cabinService.findCabinsByFilters(searchTerm,localInitialDate,localEndDate)
-                .stream().map(CabinMapper::toDTO).collect(Collectors.toList());
+                .stream()
+                .filter(cabin -> cabin.getActive())
+                .map(CabinMapper::toDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(cabins);
 

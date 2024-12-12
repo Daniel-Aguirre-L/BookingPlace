@@ -40,6 +40,8 @@ public class Cabin {
     @Positive(message = "El precio debe ser un número positivo")
     private Double price;
 
+    private Boolean isActive = true;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CabinCategory category; // Campo de categoría usando enum
@@ -110,4 +112,11 @@ public class Cabin {
         return "Cabin{id=" + id + ", name='" + name + "', location='" + location + "', capacity=" + capacity + ", description='" + description + "', price=" + price + ", category=" + category + "}";
     }
 
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
 }

@@ -33,6 +33,8 @@ public class CabinService {
     private final DetailService detailService;
     private final FeatureRepository featureRepository;
 
+    @Autowired
+    private BookingService bookingService;
 
     @Autowired
     public CabinService(CabinRepository cabinRepository,BookingRepository bookingRepository, ImageService imageService, DetailService detailService, FeatureRepository featureRepository) {
@@ -166,14 +168,16 @@ public class CabinService {
         List<Booking> bookings = bookingRepository.findByCabin(cabin)
                 .orElse(Collections.emptyList());
 
-        for (Booking booking : bookings) {
-            booking.setState(BookingState.CANCELADA);
-            booking.setCabin(null);
-            bookingRepository.save(booking);
-        }
 
+        for (Booking booking : bookings) {
+            if (booking.getState()==BookingState.ACTIVA){
+                bookingService.cancelBooking(booking);
+            }
+
+        }
         // Eliminar la cabaña
-        cabinRepository.delete(cabin);
+        cabin.setActive(false);
+        cabinRepository.save(cabin);
     }
 
     public List<Cabin> saveCabins(List<Cabin> cabins) {
@@ -190,6 +194,7 @@ public class CabinService {
                 .collect(Collectors.toList());
 
         return randomCabins.stream()
+                .filter(cabin -> cabin.getActive())
                 .map(cabin -> {
                     CabinDTO dto = CabinMapper.toDTO(cabin);
                     return dto;
@@ -199,6 +204,7 @@ public class CabinService {
     public List<CabinDTO> getCabinsByCategories(List<CabinCategory> categories) {
         List<Cabin>cabins = cabinRepository.findByCategoryIn(categories);
         return cabins.stream()
+                .filter(cabin -> cabin.getActive())
                 .map(cabin -> {
                     CabinDTO dto = CabinMapper.toDTO(cabin);
                     return dto;
@@ -207,6 +213,7 @@ public class CabinService {
     public List<CabinDTO> getCabinsByName(String name) {
         List<Cabin> cabins = cabinRepository.findByNameContaining(name);
         return cabins.stream()
+                .filter(cabin -> cabin.getActive())
                 .map(cabin -> CabinMapper.toDTO(cabin))
                 .collect(Collectors.toList());
     }
