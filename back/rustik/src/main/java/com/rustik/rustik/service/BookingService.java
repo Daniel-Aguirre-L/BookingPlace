@@ -35,6 +35,9 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private  EmailService emailService;
+
 
     public static final Logger logger = Logger.getLogger(BookingService.class);
 
@@ -42,6 +45,9 @@ public class BookingService {
     public Booking postBooking (User user, Long cabinId, BookingDTO bookingDTO){
 
         Cabin cabin = cabinRepository.findById(cabinId).get();
+        if ( cabin.getIsActive() == false){
+            throw new BadRequestException("Cabaña inactiva");
+        }
         Double price = bookingDTO.getTotalPrice();
         logger.info("Precio recibido: " + price.toString());
         bookingDTO.setCabin(CabinMapper.toDTO(cabin));
@@ -142,7 +148,16 @@ public class BookingService {
     }
 
     public String cancelBooking (Booking booking){
+        booking.setState(BookingState.CANCELADA);
         bookingRepository.save(booking);
+        emailService.sendBookingCancellationEmail(
+                booking.getUser().getEmail(),
+                booking.getUser().getName() + " " + booking.getUser().getSurname(),
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
         return "Booking canceled";
     }
 
@@ -158,7 +173,16 @@ public class BookingService {
                 throw new BadRequestException("Las fechas se superponencon otra reserva");
             }
         }
+        emailService.sendBookingUpdateEmail(
+                booking.getUser().getEmail(),
+                booking.getUser().getName() + " " + booking.getUser().getSurname(),
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
 
         return bookingRepository.save(booking);
+
     }
 }

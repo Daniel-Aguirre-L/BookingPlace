@@ -2,6 +2,7 @@ package com.rustik.rustik.controller;
 
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
+import com.rustik.rustik.dto.ResetPasswordDTO;
 import com.rustik.rustik.dto.UserDTO;
 import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.exception.NotFoundException;
@@ -67,6 +68,18 @@ public class AuthController {
         try {
             AuthUserDTO authUserDTO = userService.logIn(logInDTO);
             return ResponseEntity.ok(authUserDTO);
+        } catch (BadRequestException e){
+            throw e;
+        }
+
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Boolean> resetPassword (@RequestBody ResetPasswordDTO resetPassword)  {
+
+        try {
+            Boolean isReset = userService.resetPassword(resetPassword.getEmail());
+            return ResponseEntity.ok(isReset);
         } catch (BadRequestException e){
             throw e;
         }

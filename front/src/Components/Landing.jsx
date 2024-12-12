@@ -1,9 +1,16 @@
 import { useState } from "react";
 import BookingCalendar from "./BookingCalendar";
 
+const getDayOrNight = () => {
+  const currentHour = new Date().getHours();
+  return (currentHour >= 6 && currentHour < 18) ? "day" : "night";
+  //return (currentHour >= 6 && currentHour < 18) ? "./img/landing.png" : "./img/landing_1.png"; 
+  //return (currentHour >= 6 && currentHour < 18) ? "./img/landing.png" : "./img/landing_1.png"; 
+};
+
 const styles = {
   background:
-    'linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url("./img/landing.png")',
+    `linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url('${getDayOrNight()==="day" ? "./img/landing.png" : "./img/landing_1.png" }')`,
   backgroundSize: "cover",
 };
 
@@ -51,7 +58,7 @@ function Landing({ filter, setFilter, getNameCabins, cabinHelper }) {
       className="bg-background-dark max-w-[1600px] w-full max-md:mt-[-7rem] mt-[-6rem] mb-[7rem] h-[100vh] max-h-[60rem] flex flex-col justify-center montserrat"
       style={styles}
     >
-      <h1 className="pageMargin mt-[6rem] text-primary-color font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem] montserrat ">
+      <h1 className={`pageMargin mt-[6rem] ${getDayOrNight()==="day" ? "text-primary-color":  "text-secondary-color"} font-bold text-[3.3rem] w-fit leading-[4rem] max-sm:text-[2.5rem] montserrat `}>
         Escapa a la Naturaleza y <br />
         Reserva tu Cabaña ideal
       </h1>

@@ -8,6 +8,7 @@ export const rustikEndpoints = {
     deleteImages: "/images/eliminar-imagenes",
     login: "/auth/login",
     register: "/auth/register",
+    fotgotPassword: "/auth/reset-password",
     validateToken: "/auth/validate-token",
     users: "/users",
     myUser: "/users/my-user",

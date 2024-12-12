@@ -34,7 +34,8 @@ public class SecurityConfig {
 
     List<String> publicPost = List.of(
             PREFIX + "/auth/login",
-            PREFIX + "/auth/register"
+            PREFIX + "/auth/register",
+            PREFIX + "/auth/reset-password"
     );
 
     List<String> publicGet = List.of(
@@ -42,7 +43,9 @@ public class SecurityConfig {
             PREFIX + "/cabins/search",
             PREFIX + "/details",
             PREFIX + "/details/{id}",
-            PREFIX + "/features"
+            PREFIX + "/features",
+            PREFIX + "/booking/{id}/**"
+
     );
 
     @Bean

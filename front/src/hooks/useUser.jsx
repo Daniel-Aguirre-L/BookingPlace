@@ -5,7 +5,7 @@ import { rustikEndpoints } from "../services/rustkEndPoints";
 import useNotificationStore from "../store/useNotificationStore";
 import useLoaderModalStore from "../store/useLoaderModalStore";
 
-// import { routeList } from "../helpers/routeList";
+
 
 
 export const useUser = () => {
@@ -103,6 +103,21 @@ export const useUser = () => {
 
     }, []);
 
+    const resetPassword = useCallback(async ( email ) => {
+        showLoaderModal();
+        try {
+            
+            const { data } = await rustikApi.post(rustikEndpoints.fotgotPassword, { email });
+            console.info("Correo de verificación enviado...");
+            
+        } catch {
+            console.info("Correo de verificación enviado...");
+        } finally {
+            hideLoaderModal();
+        }
+
+    }, []);
+
 
     // const refreshToken = useCallback(async () => {
     //     const token = getToken();
@@ -127,6 +142,7 @@ export const useUser = () => {
         login,
         logout,
         register,
+        resetPassword,
         onRefreshLoggedUser,
 
 
