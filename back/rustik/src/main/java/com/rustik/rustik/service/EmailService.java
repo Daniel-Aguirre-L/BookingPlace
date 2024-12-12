@@ -204,28 +204,26 @@ public class EmailService {
             logger.info("Enlace generado: " + resetPasswordUrl);
 
             String body = String.format(
-                    "<html><body>" +
-                            "<div style='margin: 0 auto; background-color: #DEDEDE; color:#0C1123; width: 100%%; max-width: 600px; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'>" +
-                            "<div style='margin: 0 auto; width: 100%%; text-align: center; font-size: 16px;'>" +
-                            "<img src='http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360711/Rustik-logo/ulwcjystr37bqblnje3p.png' alt='Rustik'>" +
+                    "<html>" + "<body style='background: radial-gradient(circle at 50%% 10%%, #088395 26%%, #ffffff 100%%); display: flex; justify-content: center; align-items: center; margin: 0;'>" + "<div id='main-container' style='margin: 0 auto; background-color: #088395; max-width: 80%%; width: 100%%; border-radius: 20px; text-align: center; transform: scale(0.5); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);'>" + "<div id='header' style='background-image: url(https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968034/fondo_email_kdwqsa.png); background-size: cover; margin: 0 auto; width: 100%%; height: 160px; border-radius: 20px 20px 0 0;'>" +
+                            "<img id='logo-top' style='margin: 40px' src='https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968360/rustikwhite_eytcbr.png' alt='Rustik' />" + "</div>" +
+                            "<div id='content' style='margin: 30px auto; background-color: #f3f4f6; color: #0c1123; width: 100%%; max-width: 70%%; padding: 20px; border-radius: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); font-family: Arial, sans-serif;'>" + "<h1 id='greeting' style='text-align: center; color: #088395'>¡Hola, %s!</h1>" + "<p id='message' style='font-size: 16px; text-align: center'>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en Rustik. Si fuiste tú quien lo solicitó, haz clic en el siguiente enlace para crear una nueva contraseña:</p>" +
+                            "<a href='%s' style='font-size: 16px; color: #088395; text-decoration: none;'>Restablecer mi contraseña en Rustik</a>" +
+                            "<p id='message' style='font-size: 16px; text-align: center'>Si no solicitaste este cambio, no es necesario que hagas nada. Tu contraseña seguirá siendo la misma y no se realizarán modificaciones en tu cuenta.</p>" + "<p id='confirmation' style='font-size: 16px; text-align: center; margin-top: 20px;'><strong>¿No puedes hacer clic en el enlace?</strong></p>" + "<p id='details-link' style='font-size: 16px; text-align: center'>Copia y pega la siguiente URL en tu navegador para restablecer tu contraseña:</p>" + "<p id='details-link' style='font-size: 16px; text-align: center; margin: 5px 0;'>%s</p>" +
+                            "<p id='details-link' style='font-size: 16px; text-align: center'>Este enlace expirará en 24 horas, así que asegúrate de utilizarlo dentro de ese plazo.</p>" + "<p id='details-link' style='font-size: 16px; text-align: center; margin-top: 20px;'>Si tienes alguna duda, no dudes en contactarnos a través de nuestro <a href='mailto:%s' style='color: #088395; text-decoration: none;'>email de soporte</a>. ¡Estamos aquí para ayudarte!</p>" +
+                            "<br />" + "<p id='signature' style='font-size: 16px; text-align: center;'>Saludos,</p>" +
+                            "<p id='signature' style='font-size: 16px; text-align: center;'>El equipo de <strong>Rustik</strong></p>" +
+                            "<br />" +
                             "</div>" +
-                            "<h1>¡Hola, %s!</h1>" +
-                            "<p style='font-size: 16px;'>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en Rustik. Si fuiste tú quien lo solicitó, haz clic en el siguiente enlace para crear una nueva contraseña:</p>" +
-                            "<a style='font-size: 16px;' href='%s'>Restablecer mi contraseña en Rustik</a>" +
-                            "<p style='font-size: 16px;'>Si no solicitaste este cambio, no es necesario que hagas nada. Tu contraseña seguirá siendo la misma y no se realizarán modificaciones en tu cuenta.</p>" +
-                            "<p style='font-size: 16px; margin-top: 20px;'><strong>¿No puedes hacer clic en el enlace?</strong></p>" +
-                            "<p style='font-size: 16px;'>Copia y pega la siguiente URL en tu navegador para restablecer tu contraseña:</p>" +
-                            "<p style='font-size: 16px; margin: 5px 0;'>%s</p>" +
-                            "<p style='font-size: 16px;'>Este enlace expirará en 24 horas, así que asegúrate de utilizarlo dentro de ese plazo.</p>" +
-                            "<p style='font-size: 16px; margin-top: 20px;'>Si tienes alguna duda, no dudes en contactarnos a través de nuestro <a href='mailto:%s'>email de soporte</a>. ¡Estamos aquí para ayudarte!</p>" +
-                            "<br>" +
-                            "<p style='font-size: 16px;'>Saludos,</p>" +
-                            "<p style='font-size: 16px;'>El equipo de <strong>Rustik</strong></p>" +
-                            "<br>" +
-                            "<div style='margin: 0 auto; width: 100%%; text-align: center;'>" +
-                            "<img src='http://res.cloudinary.com/dmu6eqzqy/image/upload/v1731360812/Rustik-logo/o1sepuqvrih5biexqajy.png' alt='Rustik' style='height: 40px;' />" +
+                            "<div id='footer' style='padding: 30px;'>" +
+                            "<img id='logo-bottom' src='https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968007/RKshort_tb6jga.png' alt='Rustik' style='height: 30px' />" + "<div style='margin-top: 20px'>" +
+                            "<a href='https://facebook.com' target='_blank' style='text-decoration: none; font-size: 0'><img src='https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968007/facebookicon_czkgi5.png' alt='Facebook' style='width: 20px; margin: 0 10px' /></a>" +
+                            "<a href='https://instagram.com' target='_blank' style='text-decoration: none; font-size: 0'><img src='https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968007/instaicon_rs0eng.png' alt='Instagram' style='width: 20px; margin: 0 10px' /></a>" +
+                            "<a href='https://twitter.com' target='_blank' style='text-decoration: none; font-size: 0'><img src='https://res.cloudinary.com/dmu6eqzqy/image/upload/v1733968034/twitterXicon_hxwrnm.png' alt='Twitter' style='width: 20px; margin: 0 10px' /></a>" +
                             "</div>" +
-                            "</body></html>",
+                            "</div>" +
+                            "</div>" +
+                            "</body>" +
+                            "</html>",
                     username, resetPasswordUrl, resetPasswordUrl, SPRING_MAIL_USERNAME
             );
             helper.setText(body, true);
