@@ -17,6 +17,8 @@ import Layout from "./Components/layouts/Layout";
 import AdminLayout from "./Components/layouts/AdminLayout";
 import AuthLayout from "./Components/layouts/AuthLayout";
 import UserLayout from "./Components/layouts/UserLayout";
+import ForgotPasswordPage from "./Pages/ForgotPasswordPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
 
 
 
@@ -28,7 +30,8 @@ function App() {
         <Route element={<AuthLayout />} >
           <Route path={routeList.LOGIN} element={<LoginPage />} />
           <Route path={routeList.REGISTER} element={<FormRegister />} />
-          
+          <Route path={routeList.FORGOTPASSWORD} element={<ForgotPasswordPage />} />
+          <Route path={routeList.RESETPASSWORD} element={<ResetPasswordPage />} />
         </Route>
         <Route element={<Layout />} >
           <Route path={routeList.HOME} element={<Home />} />

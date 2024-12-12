@@ -73,6 +73,18 @@ public class AuthController {
 
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<Boolean> resetPassword (@RequestBody String email)  {
+
+        try {
+            Boolean isReset = userService.resetPassword(email);
+            return ResponseEntity.ok(isReset);
+        } catch (BadRequestException e){
+            throw e;
+        }
+
+    }
+
     @SecurityRequirement(name = "bearer")
     @GetMapping("/validate-token")
     public ResponseEntity<AuthUserDTO> validateToken (@RequestHeader ("Authorization") String authHeader, @AuthenticationPrincipal CustomUserDetails userDetails){

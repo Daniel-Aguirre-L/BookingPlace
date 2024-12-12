@@ -11,5 +11,7 @@ export const routeList = {
     ADMIN_FEATURES:"/administracion/features",
     LOGIN: "/login",
     REGISTER: "/register",
+    FORGOTPASSWORD: "/forgot-password",
+    RESETPASSWORD: "/reset-password",
     
 }
