@@ -45,6 +45,9 @@ public class BookingService {
     public Booking postBooking (User user, Long cabinId, BookingDTO bookingDTO){
 
         Cabin cabin = cabinRepository.findById(cabinId).get();
+        if ( cabin.getIsActive() == false){
+            throw new BadRequestException("Cabaña inactiva");
+        }
         Double price = bookingDTO.getTotalPrice();
         logger.info("Precio recibido: " + price.toString());
         bookingDTO.setCabin(CabinMapper.toDTO(cabin));

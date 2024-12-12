@@ -76,8 +76,8 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
 
     return (
 
-        <div className='animate-fadeIn fixed top-0 left-0 w-full h-full flex justify-center items-center backdrop-blur z-50' >
-            <div className='bg-black bg-opacity-70 p-3 md:p-10 rounded-xl relative w-full md:w-auto'>
+        <div className='animate-fadeIn fixed  top-0 left-0 w-full min-h-full flex justify-center items-center backdrop-blur z-50' > 
+            <div className='bg-black bg-opacity-70 p-3 md:p-10 rounded-xl relative w-full md:w-auto h-svh overflow-y-auto '>
                 <div className='w-full flex justify-end ' >
                 <button
                     type="button"

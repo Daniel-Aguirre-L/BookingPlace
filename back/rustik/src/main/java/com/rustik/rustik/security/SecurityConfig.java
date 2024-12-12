@@ -43,7 +43,9 @@ public class SecurityConfig {
             PREFIX + "/cabins/search",
             PREFIX + "/details",
             PREFIX + "/details/{id}",
-            PREFIX + "/features"
+            PREFIX + "/features",
+            PREFIX + "/booking/{id}/**"
+
     );
 
     @Bean
