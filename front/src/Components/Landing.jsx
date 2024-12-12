@@ -3,7 +3,7 @@ import BookingCalendar from "./BookingCalendar";
 
 const styles = {
   background:
-    'linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url("./img/landing.png")',
+    'linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url("./img/landing_1.png")',
   backgroundSize: "cover",
 };
 

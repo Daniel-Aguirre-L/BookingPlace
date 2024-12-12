@@ -140,7 +140,7 @@ const Home = () => {
       {(recommendedIsShown && myCabins.length>1) && (
       <Headline
       handleOnClick={handleVisitMasReservado}
-      title={filter ? `El recomendado de "${filter.toLowerCase()}"` : "El más reservado"}
+      title={filter ? `La recomendada de "${filter.toLowerCase()}"` : "La más reservada"}
       >
         {filter ? 'Hemos encontrado la mejor opción para ti: Sabemos lo importante que es encontrar un lugar que se ajuste a tus necesidades y preferencias, por eso hemos revisado cuidadosamente las opciones disponibles para presentarte esta increíble cabaña.' : `Descubre la cabaña más reservada del sitio: el refugio preferido para escapadas,
          vacaciones y momentos inolvidables, donde cada detalle está pensado para ofrecer 
