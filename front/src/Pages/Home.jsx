@@ -77,7 +77,7 @@ const Home = () => {
       setRecommendedCabin(data[Math.floor(Math.random() * data.length)]);
       setPage(20);
       setFilter(`${name}`);
-      data ? setRecommendedIsShown(true) : (setRecommendedIsShown(false));
+      data.length==0 ? setRecommendedIsShown(false) : (setRecommendedIsShown(true));
     } catch (error) {
       console.error("Error al llamar a la api", error);
     }
@@ -127,27 +127,24 @@ const Home = () => {
       <Landing filter={filter} setFilter={setFilter} getNameCabins={getNameCabins} cabinHelper={cabins.length > 0 ? cabins.map(cabin => cabin.name) : []} ></Landing>
       <EmblaCategoryCarousel slides={SLIDES} options={{ loop: true }} getCategoryCabins={getCategoryCabins} />
       {recommendedIsShown ? (
-      <Headline title={filter ? `Cabañas ${filter.toLowerCase()}` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter}   >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      <Headline title={filter ? `Resultados de la búsqueda: "${filter.toLowerCase()}"` : "Nuestras Cabañas"} handleOnClick={handleOnClick} filter={filter}   >
+        Estos son los resultados que hemos encontrado utilizando los filtros que seleccionaste.
       </Headline>
       ): 
       <Headline title={"No se encontraron cabañas"} handleOnClick={handleOnClick} filter={filter} >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+        No se encontraron cabañas disponibles con los filtros especificados.
+         Por favor, intenta nuevamente con diferentes criterios de búsqueda.
       </Headline>
     }
       <CatalogList myCabins={myCabins} page={page} continuar={myCabins.length === cabins.length} filter={filter} handleShowMore={handleShowMore} handleOnClick={handleOnClick} ></CatalogList>
-      {recommendedIsShown && (
+      {(recommendedIsShown && myCabins.length>1) && (
       <Headline
-        title={filter ? `El recomendado de ${filter.toLowerCase()}` : "El más reservado"}
-        handleOnClick={handleVisitMasReservado}
+      handleOnClick={handleVisitMasReservado}
+      title={filter ? `La recomendada de "${filter.toLowerCase()}"` : "La más reservada"}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor
-        sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+        {filter ? 'Hemos encontrado la mejor opción para ti: Sabemos lo importante que es encontrar un lugar que se ajuste a tus necesidades y preferencias, por eso hemos revisado cuidadosamente las opciones disponibles para presentarte esta increíble cabaña.' : `Descubre la cabaña más reservada del sitio: el refugio preferido para escapadas,
+         vacaciones y momentos inolvidables, donde cada detalle está pensado para ofrecer 
+         la máxima comodidad y relajación, rodeado de paisajes impresionantes y la tranquilidad que solo la naturaleza puede brindar.`}
       </Headline>
     )}
       <DisplayCard cabin={recomendedCabin} handleOnClick={handleVisitMasReservado} ></DisplayCard>
