@@ -3,18 +3,22 @@ package com.rustik.rustik.service;
 import com.rustik.rustik.dto.AuthUserDTO;
 import com.rustik.rustik.dto.LogInDTO;
 import com.rustik.rustik.exception.BadRequestException;
+import com.rustik.rustik.model.Booking;
+import com.rustik.rustik.model.BookingState;
 import com.rustik.rustik.model.User;
 import com.rustik.rustik.model.UserRole;
 import com.rustik.rustik.repository.UserRepository;
 import com.rustik.rustik.security.TokenService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +27,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    @Lazy
+    private BookingService bookingService;
 
     @Autowired
     private TokenService tokenService;
@@ -133,7 +141,15 @@ public class UserService {
     public Boolean deleteLogic (User user){
         user.setIsActive(false);
         User deleteUser = userRepository.save(user);
-        return deleteUser.getIsActive();
+
+        List<Booking> bookings = bookingService.findBookingByUser(user);
+
+        for (Booking booking : bookings) {
+            if (booking.getState()== BookingState.ACTIVA){
+                bookingService.cancelBooking(booking);
+            }
+        }
+            return deleteUser.getIsActive();
     }
 
 }

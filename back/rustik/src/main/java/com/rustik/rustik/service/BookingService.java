@@ -145,6 +145,7 @@ public class BookingService {
     }
 
     public String cancelBooking (Booking booking){
+        booking.setState(BookingState.CANCELADA);
         bookingRepository.save(booking);
         emailService.sendBookingCancellationEmail(
                 booking.getUser().getEmail(),
@@ -169,7 +170,16 @@ public class BookingService {
                 throw new BadRequestException("Las fechas se superponencon otra reserva");
             }
         }
+        emailService.sendBookingUpdateEmail(
+                booking.getUser().getEmail(),
+                booking.getUser().getName() + " " + booking.getUser().getSurname(),
+                booking.getCabin(),
+                booking.getInitialDate(),
+                booking.getEndDate(),
+                booking.getTotalPrice()
+        );
 
         return bookingRepository.save(booking);
+
     }
 }
