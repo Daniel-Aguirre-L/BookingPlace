@@ -1,9 +1,14 @@
 import { useState } from "react";
 import BookingCalendar from "./BookingCalendar";
 
+const getDayOrNight = () => {
+  const currentHour = new Date().getHours();
+  return (currentHour >= 6 && currentHour < 18) ? "./img/landing.png" : "./img/landing_1.png"; 
+};
+
 const styles = {
   background:
-    'linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url("./img/landing_1.png")',
+    'linear-gradient(0deg, rgba(12, 17, 35, 1) 0%, rgba(0, 0, 0, 0) 30%), url("'+getDayOrNight()+'")',
   backgroundSize: "cover",
 };
 
