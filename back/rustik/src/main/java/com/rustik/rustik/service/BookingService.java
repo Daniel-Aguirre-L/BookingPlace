@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -163,6 +164,7 @@ public class BookingService {
 
 
     public Booking updateBooking (Booking booking){
+
 
         Optional<List<Booking>> bookingsList = bookingRepository.findExistingBookingsForCabin(booking.getCabin(),
                 booking.getInitialDate(),booking.getEndDate(), BookingState.ACTIVA);

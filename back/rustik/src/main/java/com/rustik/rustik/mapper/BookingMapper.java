@@ -4,6 +4,7 @@ import com.rustik.rustik.dto.BookingDTO;
 import com.rustik.rustik.dto.BookingDatesCalendar;
 import com.rustik.rustik.dto.BookingPageDto;
 import com.rustik.rustik.dto.CabinDTO;
+import com.rustik.rustik.exception.BadRequestException;
 import com.rustik.rustik.model.Booking;
 import org.springframework.data.domain.Page;
 
@@ -46,9 +47,16 @@ public class BookingMapper {
             booking.setEndDate(bookingDTO.getEndDate());
         }
 
+        Double dtoPrices = bookingDTO.getTotalPrice();
         bookingDTO.setDates();
         bookingDTO.setCabin(CabinMapper.toDTO(booking.getCabin()));
         bookingDTO.setTotalPrice();
+
+        System.out.println(dtoPrices);
+        System.out.println(bookingDTO.getTotalPrice());
+        if (bookingDTO.getTotalPrice().doubleValue() != dtoPrices.doubleValue()){
+            throw new BadRequestException("El precio indicado no es el correspondiente");
+        }
 
         if(bookingDTO.getTotalPrice() != booking.getTotalPrice() && bookingDTO.getTotalPrice() != 0.0 ) {
             booking.setTotalPrice(bookingDTO.getTotalPrice());
