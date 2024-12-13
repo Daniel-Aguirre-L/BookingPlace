@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import useNotificationStore from '../store/useNotificationStore';
 import SelectDate from './SelectDate';
 import DetalleReserva from './DetalleReserva';
@@ -13,6 +13,7 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
     const [bookingDates, setBookingDates] = useState([booking.initialDate || "", booking.endDate || ""]);
     const { setNotification } = useNotificationStore();
     const { showLoaderModal, hideLoaderModal } = useLoaderModalStore();
+    const divPickerDateRef = useRef(null);
 
     const handleStartBooking = () => {
         if (bookingDates[0] === bookingDates[1]) {
@@ -33,6 +34,15 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
         }
     }
 
+    const handleClickOutside = useCallback(
+      (e) => {
+        if (divPickerDateRef.current && !divPickerDateRef.current.contains(e.target)) {
+          onClose();
+      }},
+      [],
+    )
+       
+    
     const getTotalBooking = () => {
         if (bookingDates[0] === "" || bookingDates[1] === "") {
             return -1;
@@ -76,8 +86,13 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
 
     return (
 
-        <div className='animate-fadeIn fixed  top-0 left-0 w-full min-h-full flex justify-center items-center backdrop-blur z-50' > 
-            <div className='bg-black bg-opacity-70 p-3 md:p-10 rounded-xl relative w-full md:w-auto h-svh overflow-y-auto '>
+        <div 
+            className='animate-fadeIn fixed  top-0 left-0 w-full min-h-full flex justify-center items-center backdrop-blur z-50 ' 
+            onClick={handleClickOutside } 
+        > 
+            <div 
+                className='bg-black bg-opacity-70 p-3 md:p-10 rounded-xl relative w-full md:w-auto h-svh overflow-y-auto '  
+            >
                 <div className='w-full flex justify-end ' >
                 <button
                     type="button"
@@ -105,6 +120,10 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
                 </div>
                 <h3 className="text-center text-2xl mt-5">Edita las fechas de tu reserva</h3>
                 <h4 className="text-center text-xl mb-5">en: {cabin.name || ""}</h4>
+                <div
+                    ref={divPickerDateRef}
+                    className='h-full overflow-y-auto'
+                >
                 {
                     !showConfirmBooking ? (
                         <SelectDate cabin={cabin} bookingDates={bookingDates} setBookingDates={setBookingDates} handleStartBooking={handleStartBooking} />
@@ -118,6 +137,7 @@ const EditBookingDateModal = ({ booking, onClose = () => { } }) => {
                         />
                     )
                 }
+                </div>
 
             </div>
         </div>
