@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavoriteService {
@@ -25,6 +26,12 @@ public class FavoriteService {
     public Boolean addCabinFavourite (User user, Long cabinId){
 
         Cabin cabin = cabinRepository.findById(cabinId).orElseThrow(() -> new NotFoundException("Cabaña no existe"));
+
+        Optional<Favorite> existingFavorite = favoriteRepository.findByUserAndCabin(user,cabin);
+
+        if(existingFavorite.isPresent()){
+            return true;
+        }
 
         Favorite favorite = new Favorite(user, cabin);
 
