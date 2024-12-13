@@ -83,7 +83,7 @@ const LikeButton = ({ id, isFavorite, onLike = () => { }, onUnlike = () => { } }
     }
     setTimeout(() => {
       setIsDisable(false);
-    }, 1500);
+    }, 800);
   };
 
   return (
