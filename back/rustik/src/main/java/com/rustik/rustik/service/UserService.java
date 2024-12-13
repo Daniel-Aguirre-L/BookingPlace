@@ -95,7 +95,8 @@ public class UserService {
         if (user.isPresent()) {
             System.out.println(email);
             String token = tokenService.generateToken(user.get());
-            emailService.sendResetPasswordEmail(user.get().getEmail(), user.get().getUsername(), token);
+            String fullName = user.get().getName() + " " + user.get().getSurname();
+            emailService.sendResetPasswordEmail(user.get().getEmail(), fullName, token);
         }
 
         return true;
