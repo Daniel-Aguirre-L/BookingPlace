@@ -47,9 +47,10 @@ public class FavoriteService {
     public Boolean deleteFavoriteCabin (User user, Long cabinId){
 
         Cabin cabin = cabinRepository.findById(cabinId).orElseThrow(() -> new NotFoundException("Cabaña no existe"));
-        Favorite favorite = favoriteRepository.findByUserAndCabin(user,cabin).orElseThrow(() -> new BadRequestException("Cabaña indicada no era favorita"));
-
-        favoriteRepository.deleteById(favorite.getId());
+        List<Favorite> favorites = favoriteRepository.findAllByUserAndCabin(user,cabin);
+        for (Favorite favorite : favorites) {
+            favoriteRepository.delete(favorite);
+        }
 
         return true;
     }

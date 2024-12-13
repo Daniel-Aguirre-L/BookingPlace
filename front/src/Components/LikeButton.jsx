@@ -3,11 +3,13 @@ import useNotificationStore from "../store/useNotificationStore";
 import { rustikApi } from "../services/rustikApi";
 import { rustikEndpoints } from "../services/rustkEndPoints";
 import { useUser } from "../hooks/useUser";
+import { useState } from "react";
 
 const LikeButton = ({ id, isFavorite, onLike = () => { }, onUnlike = () => { } }) => {
 
   const { setNotification } = useNotificationStore();
   const { isLoggedIn } =useUser();
+  const [isDisable, setIsDisable] = useState(false);
 
 
 
@@ -72,14 +74,17 @@ const LikeButton = ({ id, isFavorite, onLike = () => { }, onUnlike = () => { } }
   }
 
   const toggleLike = () => {
+    if (isDisable) return;
+    setIsDisable(true);
     if (!isFavorite && onLike) {
       addFavorite();
     } else if (isFavorite && onUnlike) {
       removeFavorite();
     }
+    setTimeout(() => {
+      setIsDisable(false);
+    }, 1500);
   };
-
-
 
   return (
     <button
